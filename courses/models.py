@@ -87,17 +87,17 @@ class ItemBase(models.Model):
         return self.title
 
 
-class Text(models.Model):
+class Text(ItemBase):
     content = models.TextField()
 
 
-class File(models.Model):
+class File(ItemBase):
     file = models.FileField(upload_to="files")
 
 
-class Image(models.Model):
+class Image(ItemBase):
     file = models.FileField(upload_to="images")
 
 
-class Video(models.Model):
+class Video(ItemBase):
     url = models.URLField()
