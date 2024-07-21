@@ -44,14 +44,3 @@ class CourseViewSet(viewsets.ReadOnlyModelViewSet):
     )
     def contents(self, request, *args, **kwargs):
         return self.retrieve(request, *args, **kwargs)
-
-
-# class CourseEnrollView(APIView):
-#     authentication_classes = [BasicAuthentication]
-#     permission_classes = [IsAuthenticated]
-
-
-#     def post(self, request, pk, format=None):
-#         course = get_object_or_404(Course, pk=pk)
-#         course.students.add(request.user)
-#         return Response({"enrolled": True})
