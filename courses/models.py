@@ -3,6 +3,7 @@ from django.conf import settings
 from django.contrib.contenttypes.fields import GenericForeignKey
 from django.contrib.contenttypes.models import ContentType
 from django.template.loader import render_to_string
+from django.urls import reverse
 
 from .fields import OrderField
 
@@ -18,6 +19,9 @@ class Subject(models.Model):
     def __str__(self):
         return self.title
 
+    # def get_absolute_url(self):
+    #     return reverse("subject", args=[self.slug])
+
 
 class Course(models.Model):
     owner = models.ForeignKey(
@@ -29,18 +33,29 @@ class Course(models.Model):
         Subject, related_name="courses", on_delete=models.CASCADE
     )
     title = models.CharField(max_length=200)
+    image = models.ImageField(default="images/default/default.jpg", upload_to="images")
     slug = models.SlugField(max_length=200, unique=True)
     overview = models.TextField()
     created = models.DateTimeField(auto_now_add=True)
     students = models.ManyToManyField(
         settings.AUTH_USER_MODEL, related_name="courses_joined", blank=True
     )
+    price = models.DecimalField(max_digits=10, decimal_places=2)
+    updated = models.DateTimeField(auto_now=True)
 
     class Meta:
         ordering = ["-created"]
+        indexes = [
+            models.Index(fields=["id", "slug"]),
+            models.Index(fields=["title"]),
+            models.Index(fields=["created"]),
+        ]
 
     def __str__(self):
         return self.title
+
+    def get_absolute_url(self):
+        return reverse("course_detail", kwargs={"slug": self.slug})
 
 
 class Module(models.Model):

@@ -226,6 +226,18 @@ class CourseDetailView(DetailView):
     model = Course
     template_name = "courses/course/detail.html"
 
+    # render a form for user to add to cart
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context["enroll_form"] = CourseEnrollForm(initial={"course": self.object})
+        return context
+
+
+class CourseDetailView2(TemplateResponseMixin, View):
+    model = Course
+    template_name = "courses/course/detail.html"
+
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context["enroll_form"] = CourseEnrollForm(initial={"course": self.object})

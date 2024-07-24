@@ -14,8 +14,15 @@
                 {{ object.modules.count }} modules.
                 Instructor: {{ object.owner.get_full_name }}         
         </p>
+            <img src="{{ object.image }}" alt="{{ object.title }}" />
+            <p>Price: GH{{ object.price }}</p>
+        <form action="{% url 'cart:cart_add' course.id %}" method="post">
+                {% csrf_token %}
+                <input type='submit' value='Add to Cart' />
+
+            </form>
         {{ object.overview|linebreaks }}
-        {% if request.user.is_authenticated %}
+        {% comment %} {% if request.user.is_authenticated %}
             <form action="{% url 'student_enroll_course' %}" method="post">
                 {{ enroll_form }}
                 {% csrf_token %}
@@ -24,7 +31,7 @@
             {% else %}
             <a href="{% url 'student_registration' %}" class="button"> Register to enroll 
             </a>
-            {% endif %}
+            {% endif %} {% endcomment %}
     </div>
     {% endwith %}
 {% endblock %}

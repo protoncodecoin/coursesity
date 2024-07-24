@@ -1,0 +1,50 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}
+    Your Cart
+{% endblock %}
+
+{% block content %}
+    <h1>Your Cart</h1>
+    <table class="cart">
+        <thead>
+            <tr>
+                <th>Image</th>
+                <th>Course</th>
+                <th>Remove</th>
+                <th>Price</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for item in cart %}
+            {% with course=item.course %}
+                <tr>
+                    <td>
+                        <a href="{{ course.get_absolute_url }}">
+                            <img src="{{ course.image.url }}" alt="{{ course.title }}">
+                        </a>
+                    </td>
+                    <td>{{ course.title  }}</td>
+                    <td>
+                        <form action="{% url 'cart:cart_remove' course.id %}" method="post">
+                            {% csrf_token %}
+                            <input type="submit" value="Remove">
+                        </form>
+                    </td>
+                    <td class="num">GH{{ item.price }}</td>
+                </tr>
+                        <a href="{% url 'course_list_subject' course.subject.slug %}">Continue Browsing Courses</a>
+                {% endwith %}
+            {% endfor %}
+            <tr class="total">
+                <td>Total</td>
+                <td colspan="4"></td>
+                <td class="num"> GH{{ cart.get_total_price }}</td>
+            </tr>
+        </tbody>
+    </table>
+     <p class="text-right">
+        <a href="#" class="button">Checkout</a>
+     </p>
+{% endblock %}
