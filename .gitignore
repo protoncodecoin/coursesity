@@ -2,3 +2,6 @@ db.sqlite3
 env/
 __pycache__/
 media/
+media/images/
+coursite_env/
+.media/
