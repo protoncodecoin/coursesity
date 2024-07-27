@@ -1,0 +1,74 @@
+{% extends "base.html" %}
+{% block title %}
+    Sign up
+{% endblock %}
+{% block content %}
+    <h1>
+        Sign Up
+    </h1>
+    <div class="module">
+        <p>Enter your details to create an account:</p>
+
+           {% for message in messages %}
+                <div class="alert {{ message.tags }}">
+                <span class="closebtn" onclick="this.parentElement.style.display='none';"
+                    >&times;</span
+                >
+                {{ message }}
+                </div>
+            {% endfor %}
+
+        {% comment %} <form method="post">
+            {{ form.as_p }}
+            {% csrf_token %}
+            <p><input type="submit" value="Create my account"></p>
+        </form> {% endcomment %}
+
+        <form method="post">
+            <label for="first-name">First Name</label>
+            <br>
+            <input type="text" name="firstName" id="first-name">
+            <br>
+            <br>
+
+            <label for="last-name">Last Name</label>
+            <br>
+            <input type="text" name="lastName" id="last-name">
+            <br>
+            <br>
+
+            <label for="email">Email</label>
+            <br>
+            <input type="email" name="email" id="email">
+
+            <br>
+            <br>
+            <label for="instructor">Become an instructor</label>
+            <br>
+            <input type="checkbox" name="is_instructor" id="instructor">
+
+            <br>
+            <br>
+
+
+            <label for="password">Passoword</label>
+            <br>
+            <input type="password" name="password1" id="password">
+
+            <br>
+            <br>
+
+            <label for="confirm-password">Confirm Passoword</label>
+            <br>
+            <input type="password" name="password2" id="confirm-password">
+
+
+            <br>
+            <br>
+            <input type="submit" value="Login">
+
+            {% csrf_token %}
+        </form>
+    </div>
+    <p>No Account? <a href="{% url 'login' %}"> Login!</a></p>
+{% endblock %}

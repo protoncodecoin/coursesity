@@ -11,7 +11,13 @@
       <a href="/" class="logo">Coursity</a>
       <ul class="menu">
         {% if request.user.is_authenticated %}
-          <li><a href="{% url "logout" %}">Sign out</a></li>
+          <li>
+            <form action="{% url 'logout' %}" method="post">
+              <input type="submit" value="sign out">
+
+           {% csrf_token %}
+            </form>
+          </li>
         {% else %}
           <li><a href="{% url "login" %}">Sign in</a></li>
         {% endif %}

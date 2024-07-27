@@ -1,0 +1,21 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <title>ACTIVATION FAILED</title>
+  </head>
+  <body>
+    <div class="password-reset-title">
+      <h2 class="logo">Coursesity</h2>
+
+      {% autoescape off %}
+      <p>Account activation failed</p>
+      <a href="{% url 'user_registration' %}">Go back</a>
+
+      {% endautoescape %}
+    </div>
+  </body>
+</html>

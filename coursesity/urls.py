@@ -26,7 +26,7 @@ from courses.views import CourseListView
 urlpatterns = [
     path("api/", include("courses.api.urls", namespace="api")),
     path("__debug__/", include("debug_toolbar.urls")),
-    path("accounts/login/", auth_views.LoginView.as_view(), name="login"),
+    path("accounts/", include("users.urls")),
     path("accounts/logout/", auth_views.LogoutView.as_view(), name="logout"),
     path("admin/", admin.site.urls),
     path("course/", include("courses.urls")),

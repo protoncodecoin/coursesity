@@ -1,4 +1,4 @@
-from django.contrib.auth.forms import UserCreationForm
+# from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth import authenticate, login
 from django.urls import reverse_lazy
 from django.views.generic.edit import CreateView
@@ -11,56 +11,97 @@ from django.conf import settings
 from django.shortcuts import render, redirect
 from django.contrib.auth import get_user_model
 from django.views.generic.base import TemplateResponseMixin, View
+from django.contrib import messages
+from django.core.exceptions import ValidationError
+from django.contrib.auth.password_validation import validate_password
 
 from courses.models import Course
+
+from users.forms import CustomUserCreationForm
 
 # Create your views here.
 
 
 # class StudentLoginView(TemplateResponseMixin, View):
-#     template_name = "students/student/registration.html"
+#     template_name = "students/student/login.html"
+
+#     def get(self, request, *args, **kwargs):
+#         return self.render_to_response({})
 
 #     def post(self, request, *args, **kwargs):
 #         email = request.POST.get("email")
 #         password = request.POST.get("password")
 
-#         # check if user is in databse
-#         user = get_user_model()
-#         existing_user = user.objects.filter(email=email).exists()
-#         if existing_user:
-#             auth_user = authenticate(request, email, password)
+#         # authenticate user
+#         user = authenticate(request, email=email, password=password)
 
-#             if auth_user is not None:
+#         if user and user.is_active:
+#             login(request, user)
+#             return redirect("student_course_list")
+        
+#         messages.error(request, "Invalid credentials provided")
+#         return redirect("student_registration")
+    
 
-#                 login(request, auth_user)
+# class StudentRegistrationView2(TemplateResponseMixin, View):
+#     template_name = "students/student/registration.html"
 
-#                 return redirect()
+#     def get(self, request, *args, **kwargs):
+#         return self.render_to_response({})
+    
+
+#     def post(self, request, *args, **kwargs):
+#         first_name = request.POST.get("firstName")
+#         last_name = request.POST.get("last_name")
+#         email = request.POST.get("email")
+#         password1 = request.POST.get("password1")
+#         password2 = request.POST.get("password2")
+
+#         # validate email
+#         if get_user_model().objects.filter(email=email).exists():
+#             messages.error(request, "Email is already registered")
+#             return redirect("student_registration")
+
+#         # validate password
+#         if password1 != password2:
+#             messages.error(request, "Passwords do not match!")
+#             return redirect("student_registration")
+        
+#         try:
+#             validate_password(password1)
+#         except ValidationError as e:
+#             messages.error(request, str(e))
+#             return redirect("student_registration")
+        
+#         return redirect("student_course_list")
 
 
-class StudentRegistrationView(CreateView):
-    template_name = "students/student/registration.html"
-    form_class = UserCreationForm
-    success_url = reverse_lazy("student_course_list")
 
-    def form_valid(self, form):
-        result = super().form_valid(form)
-        cd = form.cleaned_data
-        user = authenticate(username=cd["username"], password=cd["password1"])
 
-        # get session and store session
-        cart = self.request.session.get(settings.CART_SESSION_ID, [])
+# class StudentRegistrationView(CreateView):
+#     template_name = "students/student/registration.html"
+#     form_class = CustomUserCreationForm
+#     success_url = reverse_lazy("student_course_list")
 
-        login(self.request, user)
+#     def form_valid(self, form):
+#         result = super().form_valid(form)
+#         cd = form.cleaned_data
+#         user = authenticate(username=cd["email"], password=cd["password1"])
 
-        # Restore the cart data to the new session
-        if cart:
-            self.request.session = cart
+#         # get session and store session
+#         cart = self.request.session.get(settings.CART_SESSION_ID, [])
 
-            next_url = self.request.session.get("next", "orders:order_create")
+#         login(self.request, user)
 
-            return redirect(next_url)
+#         # Restore the cart data to the new session
+#         if cart:
+#             self.request.session = cart
 
-        return result
+#             next_url = self.request.session.get("next", "orders:order_create")
+
+#             return redirect(next_url)
+
+#         return result
 
 
 class StudentEnrollCourseView(LoginRequiredMixin, FormView):

@@ -1,0 +1,41 @@
+{% extends 'base.html' %}
+
+{% block title %}
+    Login
+{% endblock %}
+
+{% block content %}
+       <p>{% for message in messages %}
+            <div class="alert {{ message.tags }}">
+            <span class="closebtn" onclick="this.parentElement.style.display='none';"
+                >&times;</span
+            >
+            {{ message }}
+            </div>
+        {% endfor %}</p>
+
+
+        <form method="post">
+            <label for="email">Email</label>
+        <br>
+        <input type="email" name="email" id="email" required>
+        
+        <br>
+        <br>
+        
+        <label for="password">Passoword</label>
+        <br>
+        <input type="password" name="password" id="password" required>
+        
+        
+        <br>
+        <br>
+        <input type="submit" value="Login">
+        {% csrf_token %}
+    </form>
+    <br>
+    <br>
+    <br>
+    <br>
+    <p>Don't have an account<a href="{% url 'user_registration' %}"> Sign up?</a></p>
+{% endblock %}

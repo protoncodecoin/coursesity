@@ -10,6 +10,7 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/5.0/ref/settings/
 """
 
+import os
 from pathlib import Path
 from django.urls import reverse_lazy
 
@@ -33,6 +34,7 @@ ALLOWED_HOSTS = []
 
 INSTALLED_APPS = [
     "daphne",
+    "users.apps.UsersConfig",
     "courses.apps.CoursesConfig",
     "students.apps.StudentsConfig",
     "orders.apps.OrdersConfig",
@@ -178,3 +180,16 @@ CHANNEL_LAYERS = {
 
 
 CART_SESSION_ID = "cart"  # key to store sthe cart in the user session
+
+
+# custom user model to replace django user model
+AUTH_USER_MODEL = 'users.CustomUser'
+
+# EMAIL CONFIGURATION
+EMAIL_BACKEND = "django.core.mail.backends.console.EmailBackend"
+# EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"
+EMAIL_HOST = "smtp.gmail.com"
+EMAIL_PORT = os.environ.get("EMAIL_PORT")
+EMAIL_HOST_USER = os.environ.get("EMAIL_HOST_USER")
+EMAIL_HOST_PASSWORD = os.environ.get("EMAIL_HOST_PASSWORD")
+EMAIL_USE_TLS = True
