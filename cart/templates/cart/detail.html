@@ -6,45 +6,54 @@
 {% endblock %}
 
 {% block content %}
-    <h1>Your Cart</h1>
-    <table class="cart">
-        <thead>
-            <tr>
-                <th>Image</th>
-                <th>Course</th>
-                <th>Remove</th>
-                <th>Price</th>
-            </tr>
-        </thead>
-        <tbody>
+        <table>
+            <h1>Your Cart </h1>
+        <tr>
+            <th>Image</th>
+            <th>Course</th>
+            <th>Remove</th>
+            <th>Price</th>
+        </tr>
             {% for item in cart %}
             {% with course=item.course %}
-                <tr>
-                    <td>
-                        <a href="{{ course.get_absolute_url }}">
-                            <img src="{{ course.image.url }}" alt="{{ course.title }}">
-                        </a>
-                    </td>
-                    <td>{{ course.title  }}</td>
-                    <td>
-                        <form action="{% url 'cart:cart_remove' course.id %}" method="post">
-                            {% csrf_token %}
-                            <input type="submit" value="Remove">
-                        </form>
-                    </td>
-                    <td class="num">GH{{ item.price }}</td>
-                </tr>
-                        <a href="{% url 'course_list_subject' course.subject.slug %}">Continue Browsing Courses</a>
-                {% endwith %}
-            {% endfor %}
-            <tr class="total">
-                <td>Total</td>
-                <td colspan="4"></td>
-                <td class="num"> GH{{ cart.get_total_price }}</td>
-            </tr>
-        </tbody>
+        <tr>
+            <td>
+                <a href="{{ course.get_absolute_url }}">
+                    <img src="{{ course.image.url }}" alt="{{ course.title }}">
+                </a>
+            </td>
+
+            <td>
+                {{ course.title }}
+            </td>
+
+            <td>
+                <form action="{% url 'cart:cart_remove' course.id %}" method="post">
+                    {% csrf_token %}
+                    <input type="submit" value="Remove">
+                </form>
+            </td>
+
+            <td>
+                <p>GH<span>{{ course.price }}</span></p>
+            </td>
+        </tr>
+        {% endwith %}
+        {% endfor %}
     </table>
-     <p class="text-right">
-        <a href="#" class="button">Checkout</a>
-     </p>
+
+    <div class="total-price-container">
+        <div class="total-label">
+            Total
+        </div>
+
+        <div class="price-num">
+            <p>GH<span>{{ cart.get_total_price }}</span></p>
+        </div>
+    </div>
+
+    <div class="checkout-btn">
+        {% comment %} <a href="#" class="btn">Continue Browsing Courses</a> {% endcomment %}
+        <a href="#" class="btn ck-out">Checkout Courses</a>
+    </div>
 {% endblock %}

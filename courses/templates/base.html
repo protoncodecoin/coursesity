@@ -15,6 +15,18 @@
         {% else %}
           <li><a href="{% url "login" %}">Sign in</a></li>
         {% endif %}
+
+        {% with total_items=cart|length %}
+        {% if total_items > 0 %}
+         <h2>{{ total_items }} </h2>
+        Your cart:
+        <a href="{% url 'cart:cart_detail' %}">
+          {{ total_items }} course {{ total_items|pluralize }}, GH {{ cart.get_total_price }}
+        </a>
+        {% else %}
+          Your cart is empty
+        {% endif %}
+        {% endwith %}
       </ul>
     </div>
     <div id="content">
