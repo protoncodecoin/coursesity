@@ -35,6 +35,7 @@ INSTALLED_APPS = [
     "daphne",
     "courses.apps.CoursesConfig",
     "students.apps.StudentsConfig",
+    "orders.apps.OrdersConfig",
     "chat.apps.ChatConfig",
     "cart.apps.CartConfig",
     "django.contrib.admin",

@@ -54,6 +54,6 @@
 
     <div class="checkout-btn">
         {% comment %} <a href="#" class="btn">Continue Browsing Courses</a> {% endcomment %}
-        <a href="#" class="btn ck-out">Checkout Courses</a>
+        <a href="{% url 'orders:order_create' %}" class="btn ck-out">Checkout Courses</a>
     </div>
 {% endblock %}

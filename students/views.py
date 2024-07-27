@@ -7,10 +7,34 @@ from django.views.generic.edit import FormView
 from .forms import CourseEnrollForm
 from django.views.generic.list import ListView
 from django.views.generic.detail import DetailView
+from django.conf import settings
+from django.shortcuts import render, redirect
+from django.contrib.auth import get_user_model
+from django.views.generic.base import TemplateResponseMixin, View
 
 from courses.models import Course
 
 # Create your views here.
+
+
+# class StudentLoginView(TemplateResponseMixin, View):
+#     template_name = "students/student/registration.html"
+
+#     def post(self, request, *args, **kwargs):
+#         email = request.POST.get("email")
+#         password = request.POST.get("password")
+
+#         # check if user is in databse
+#         user = get_user_model()
+#         existing_user = user.objects.filter(email=email).exists()
+#         if existing_user:
+#             auth_user = authenticate(request, email, password)
+
+#             if auth_user is not None:
+
+#                 login(request, auth_user)
+
+#                 return redirect()
 
 
 class StudentRegistrationView(CreateView):
@@ -23,7 +47,19 @@ class StudentRegistrationView(CreateView):
         cd = form.cleaned_data
         user = authenticate(username=cd["username"], password=cd["password1"])
 
+        # get session and store session
+        cart = self.request.session.get(settings.CART_SESSION_ID, [])
+
         login(self.request, user)
+
+        # Restore the cart data to the new session
+        if cart:
+            self.request.session = cart
+
+            next_url = self.request.session.get("next", "orders:order_create")
+
+            return redirect(next_url)
+
         return result
 
 

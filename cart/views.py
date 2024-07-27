@@ -26,5 +26,4 @@ def cart_remove(request, course_id):
 
 def cart_detail(request):
     cart = Cart(request)
-    print(len(cart))
     return render(request, "cart/detail.html", {"cart": cart})

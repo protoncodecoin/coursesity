@@ -1,0 +1,39 @@
+{% extends 'base.html' %}
+
+{% block title %} 
+    Checkout
+{% endblock %}
+
+{% block content  %}
+    
+        <div style="float:right; padding-right:70px;">
+            <h3>Your Order</h3>
+
+            <ul>
+                {% for item in cart %}
+                    <li> {{ item.course.title }}
+                        <span>GH{{ item.total_price }}</span>
+                    </li>
+                {% endfor %}
+            </ul>
+            <p>Total: GH{{ cart.get_total_price }}</p>
+        </div>
+        <h2>
+        Checkout
+    </h2>
+    <form method="post">
+        {% csrf_token %}
+        <label for="first-name">First Name</label>
+        <input type="text" name="firstName" id="first-name">
+
+        <label for="last-name">Last Name</label>
+        <input type="text" name="lastName" id="last-name">
+
+        <label for="email">Email</label>
+        <input type="email" name="email" id="email">
+
+        <input type="submit" value="Place Order">
+    </form>
+
+    
+{% endblock %}
