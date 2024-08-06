@@ -4,4 +4,4 @@ __pycache__/
 media/
 media/images/
 coursite_env/
-.media/
+./media/

@@ -14,6 +14,9 @@ import os
 from pathlib import Path
 from django.urls import reverse_lazy
 
+from dotenv import load_dotenv
+
+load_dotenv()
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -183,7 +186,7 @@ CART_SESSION_ID = "cart"  # key to store sthe cart in the user session
 
 
 # custom user model to replace django user model
-AUTH_USER_MODEL = 'users.CustomUser'
+AUTH_USER_MODEL = "users.CustomUser"
 
 # EMAIL CONFIGURATION
 EMAIL_BACKEND = "django.core.mail.backends.console.EmailBackend"
@@ -193,3 +196,38 @@ EMAIL_PORT = os.environ.get("EMAIL_PORT")
 EMAIL_HOST_USER = os.environ.get("EMAIL_HOST_USER")
 EMAIL_HOST_PASSWORD = os.environ.get("EMAIL_HOST_PASSWORD")
 EMAIL_USE_TLS = True
+
+# LOGGING
+LOGGING = {
+    "version": 1,
+    "disable_existing_loggers": False,
+    "handlers": {
+        "file": {
+            "class": "logging.FileHandler",
+            "filename": os.environ.get("DEBUG_LOG_FILE"),
+            "level": os.environ.get("DEBUG_LOG_LEVEL"),
+            "formatter": "simple",
+        },
+        "console": {
+            "class": "logging.StreamHandler",
+            "level": os.environ.get("DEBUG_LOG_LEVEL"),
+            "formatter": "simple",
+        },
+    },
+    "loggers": {
+        "": {
+            "level": os.environ.get("DEBUG_LOG_LEVEL"),
+            "handlers": ["file"],
+        }
+    },
+    "formatters": {
+        "simple": {
+            "format": "{asctime}:{levelname} {message}",
+            "style": "{",
+        },
+        "verbose": {
+            "format": "{asctime}:{levelname} - {name} {module}.py (line {lineno:d}). {message}",
+            "style": "{",
+        },
+    },
+}
