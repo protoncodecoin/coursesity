@@ -198,36 +198,36 @@ EMAIL_HOST_PASSWORD = os.environ.get("EMAIL_HOST_PASSWORD")
 EMAIL_USE_TLS = True
 
 # LOGGING
-LOGGING = {
-    "version": 1,
-    "disable_existing_loggers": False,
-    "handlers": {
-        "file": {
-            "class": "logging.FileHandler",
-            "filename": os.environ.get("DEBUG_LOG_FILE"),
-            "level": os.environ.get("DEBUG_LOG_LEVEL"),
-            "formatter": "simple",
-        },
-        "console": {
-            "class": "logging.StreamHandler",
-            "level": os.environ.get("DEBUG_LOG_LEVEL"),
-            "formatter": "simple",
-        },
-    },
-    "loggers": {
-        "": {
-            "level": os.environ.get("DEBUG_LOG_LEVEL"),
-            "handlers": ["file"],
-        }
-    },
-    "formatters": {
-        "simple": {
-            "format": "{asctime}:{levelname} {message}",
-            "style": "{",
-        },
-        "verbose": {
-            "format": "{asctime}:{levelname} - {name} {module}.py (line {lineno:d}). {message}",
-            "style": "{",
-        },
-    },
-}
+# LOGGING = {
+#     "version": 1,
+#     "disable_existing_loggers": False,
+#     "handlers": {
+#         "file": {
+#             "class": "logging.FileHandler",
+#             "filename": os.environ.get("DEBUG_LOG_FILE"),
+#             "level": os.environ.get("DEBUG_LOG_LEVEL"),
+#             "formatter": "simple",
+#         },
+#         "console": {
+#             "class": "logging.StreamHandler",
+#             "level": os.environ.get("DEBUG_LOG_LEVEL"),
+#             "formatter": "simple",
+#         },
+#     },
+#     "loggers": {
+#         "": {
+#             "level": os.environ.get("DEBUG_LOG_LEVEL"),
+#             "handlers": ["file"],
+#         }
+#     },
+#     "formatters": {
+#         "simple": {
+#             "format": "{asctime}:{levelname} {message}",
+#             "style": "{",
+#         },
+#         "verbose": {
+#             "format": "{asctime}:{levelname} - {name} {module}.py (line {lineno:d}). {message}",
+#             "style": "{",
+#         },
+#     },
+# }
