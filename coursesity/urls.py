@@ -25,6 +25,7 @@ from courses.views import CourseListView
 
 urlpatterns = [
     path("api/", include("courses.api.urls", namespace="api")),
+    path("assignments/", include("quiz.urls")),
     path("__debug__/", include("debug_toolbar.urls")),
     path("accounts/", include("users.urls")),
     path("accounts/logout/", auth_views.LogoutView.as_view(), name="logout"),

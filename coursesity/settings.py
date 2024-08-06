@@ -43,6 +43,7 @@ INSTALLED_APPS = [
     "orders.apps.OrdersConfig",
     "chat.apps.ChatConfig",
     "cart.apps.CartConfig",
+    "quiz.apps.QuizConfig",
     "django.contrib.admin",
     "django.contrib.auth",
     "django.contrib.contenttypes",
