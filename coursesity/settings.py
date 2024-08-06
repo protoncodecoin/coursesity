@@ -30,7 +30,7 @@ SECRET_KEY = "django-insecure-mkf^t=9!eojqz4ch(c^vonpwr9_w!_0cu*&xcelt+-hwyzw!8r
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ["mysite.com", "localhost", "127.0.0.1"]
 
 
 # Application definition
@@ -53,6 +53,8 @@ INSTALLED_APPS = [
     "debug_toolbar",
     "redisboard",
     "rest_framework",
+    "social_django",
+    "django_extensions",
 ]
 
 MIDDLEWARE = [
@@ -88,6 +90,13 @@ TEMPLATES = [
 
 WSGI_APPLICATION = "coursesity.wsgi.application"
 
+AUTHENTICATION_BACKENDS = {
+    "django.contrib.auth.backends.ModelBackend",
+    "users.authentication.EmailAuthBackend",
+    "social_core.backends.google.GoogleOAuth2",
+}
+
+# SOCIAL_AUTH_JSONFIELD_ENABLED = True # When using PostgreSQL, it’s recommended to use the built-in JSONB field to store the extracted extra_data.
 
 # Database
 # https://docs.djangoproject.com/en/5.0/ref/settings/#databases
@@ -196,6 +205,23 @@ EMAIL_PORT = os.environ.get("EMAIL_PORT")
 EMAIL_HOST_USER = os.environ.get("EMAIL_HOST_USER")
 EMAIL_HOST_PASSWORD = os.environ.get("EMAIL_HOST_PASSWORD")
 EMAIL_USE_TLS = True
+
+# GOOGLE OAUTH\
+SOCIAL_AUTH_GOOGLE_OAUTH2_KEY = os.environ.get("GOOGLE_OAUTH2_KEY")
+SOCIAL_AUTH_GOOGLE_OAUTH2_SECRET = os.environ.get("GOOGLE_OAUTH2_SECRET")
+
+SOCIAL_AUTH_PIPELINE = [
+    "social_core.pipeline.social_auth.social_details",
+    "social_core.pipeline.social_auth.social_uid",
+    "social_core.pipeline.social_auth.auth_allowed",
+    "social_core.pipeline.social_auth.social_user",
+    "social_core.pipeline.user.get_username",
+    "social_core.pipeline.user.create_user",
+    "users.authentication.create_profile",
+    "social_core.pipeline.social_auth.associate_user",
+    "social_core.pipeline.social_auth.load_extra_data",
+    "social_core.pipeline.user.user_details",
+]
 
 # LOGGING
 LOGGING = {

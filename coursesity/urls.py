@@ -34,6 +34,7 @@ urlpatterns = [
     path("chat/", include("chat.urls", namespace="chat")),
     path("cart/", include("cart.urls", namespace="cart")),
     path("orders/", include("orders.urls", namespace="orders")),
+    path("social-auth/", include("social_django.urls", namespace="social")),
     path("", CourseListView.as_view(), name="course_list"),
 ]
 
