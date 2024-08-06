@@ -38,4 +38,10 @@
     <br>
     <br>
     <p>Don't have an account<a href="{% url 'user_registration' %}"> Sign up?</a></p>
+
+    <br>
+    <br>
+    <br>
+    <p>sign up with google </p>
+    <a href={% url 'social:begin' 'google-oauth2' %}>Sign with Google</a>
 {% endblock %}
