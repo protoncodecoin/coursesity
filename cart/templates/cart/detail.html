@@ -56,4 +56,11 @@
         {% comment %} <a href="#" class="btn">Continue Browsing Courses</a> {% endcomment %}
         <a href="{% url 'orders:order_create' %}" class="btn ck-out">Checkout Courses</a>
     </div>
+
+    <h2>Recommended Courses</h2>
+    {% if recommended_courses %}
+        {% for c in recommended_courses %}
+            <p>{{c.title}}</p>
+        {% endfor %}
+    {% endif %}
 {% endblock %}

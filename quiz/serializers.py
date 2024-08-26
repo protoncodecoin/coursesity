@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from .models import Quiz, Question, Answer
+from .models import Quiz, Question, Answer, Score
 
 
 class QuizSerializer(serializers.HyperlinkedModelSerializer):
@@ -18,6 +18,7 @@ class QuizSerializer(serializers.HyperlinkedModelSerializer):
             "course",
             "title",
             "description",
+            "pass_score",
             "created_at",
             "questions",
         ]
@@ -36,6 +37,7 @@ class QuestionSerializer(serializers.HyperlinkedModelSerializer):
             "id",
             "quiz",
             "text",
+            "score",
             "created_at",
             "answers",
         ]
@@ -54,4 +56,17 @@ class AnswerSerializer(serializers.HyperlinkedModelSerializer):
             "question",
             "text",
             "is_correct",
+        ]
+
+
+class SaveScoreSerializer(serializers.HyperlinkedModelSerializer):
+
+    class Meta:
+        model = Score
+
+        fields = [
+            "id",
+            "user",
+            "score",
+            "taken_at",
         ]

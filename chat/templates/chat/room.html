@@ -7,7 +7,7 @@
     <div id="chat">
         {% for message in latest_messages %}
             <div class="message {% if message.user == request.user %} me {% else %} other {% endif %}">
-                <strong>{{ message.user.username }} </strong>
+                <strong>{{ message.user.first_name }} {{ message.user.last_name }}</strong>
                 <span class="date">
                     {{ message.sent_on|date:"Y.m.d H:i A"}}
                 </span>
@@ -25,7 +25,7 @@
 {% block include_js %}
 
     {{ course.id|json_script:"course-id"}}
-    {{ request.user.username|json_script:"request-user"}}
+    {{ request.user.id|json_script:"request-user"}}
 
 {% endblock %}
 
@@ -33,6 +33,8 @@
 
     const courseId = JSON.parse(document.getElementById('course-id').textContent);
     const requestUser = JSON.parse(document.getElementById("request-user").textContent);
+
+    console.log(requestUser)
     
     const url = 'ws://' + window.location.host + '/ws/chat/room/' + courseId + "/";
     const chatSocket = new WebSocket(url);
@@ -44,7 +46,7 @@
         const dateOptions = {hour: 'numeric', minute: 'numeric', hour12: true};
         const datetime = new Date(data.datetime).toLocaleString('en', dateOptions);
 
-        const isMe = data.user === requestUser;
+        const isMe = data.user_id === requestUser;
         const source = isMe ? 'me' : 'other';
         const name =  isMe ? 'Me' : data.user;
 

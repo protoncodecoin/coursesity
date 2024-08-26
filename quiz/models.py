@@ -14,6 +14,7 @@ class Quiz(models.Model):
     description = models.TextField(blank=True, null=True)
     created_at = models.DateTimeField(auto_now_add=True)
     is_done = models.BooleanField(default=False)
+    pass_score = models.IntegerField(default=90)
 
     def __str__(self):
         return self.title
@@ -23,6 +24,7 @@ class Question(models.Model):
     quiz = models.ForeignKey(Quiz, on_delete=models.CASCADE, related_name="questions")
     text = models.TextField()
     created_at = models.DateTimeField(auto_now_add=True)
+    score = models.IntegerField(default=5)
 
     def __str__(self):
         return self.text

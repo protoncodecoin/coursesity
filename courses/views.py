@@ -14,6 +14,7 @@ from django.db.models import Count
 from django.core.cache import cache
 
 from braces.views import CsrfExemptMixin, JsonRequestResponseMixin
+from courses.recommender import Recommender
 from students.forms import CourseEnrollForm
 
 
@@ -40,7 +41,7 @@ class OwnerEditMixin:
 
 class OwnerCourseMixin(OwnerMixin, LoginRequiredMixin, PermissionRequiredMixin):
     model = Course
-    fields = ["subject", "title", "slug", "overview"]
+    fields = ["subject", "title", "slug", "overview", "price"]
     success_url = reverse_lazy("manage_course_list")
 
 
@@ -230,7 +231,13 @@ class CourseDetailView(DetailView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context["enroll_form"] = CourseEnrollForm(initial={"course": self.object})
+        # context["enroll_form"] = CourseEnrollForm(initial={"course": self.object})
+        course_obj = self.object.id
+        print(course_obj, "this is the course obj")
+        course = Course.objects.get(id=course_obj)
+        r = Recommender()
+        recommended_courses = r.suggest_courses_for([course], 4)
+        context["recommended_courses"] = recommended_courses
         return context
 
 

@@ -1,6 +1,7 @@
 from django.shortcuts import render, get_object_or_404, redirect
 from django.views.decorators.http import require_POST
 from courses.models import Course
+from courses.recommender import Recommender
 from .cart import Cart
 
 
@@ -26,4 +27,19 @@ def cart_remove(request, course_id):
 
 def cart_detail(request):
     cart = Cart(request)
-    return render(request, "cart/detail.html", {"cart": cart})
+
+    r = Recommender()
+    cart_courses = [item["course"] for item in cart]
+    if cart_courses:
+        recommended_courses = r.suggest_courses_for(cart_courses, max_results=4)
+    else:
+        recommended_courses = []
+
+    return render(
+        request,
+        "cart/detail.html",
+        {
+            "cart": cart,
+            "recommended_courses": recommended_courses,
+        },
+    )

@@ -62,8 +62,6 @@ class UserRegisterView(TemplateResponseMixin, View):
         password1 = request.POST.get("password1")
         password2 = request.POST.get("password2")
 
-        logger.info("In in registration view")
-
         # validate email
         try:
             existing_user = get_user_model().objects.get(email=email)
@@ -136,8 +134,14 @@ class UserRegisterView(TemplateResponseMixin, View):
             subject = "Welcome to Coursesity"
             message = f"Hello {myuser.first_name}!\n\nThank you for choosing Coursesity. There are exciting opportunities awaiting you!"
             from_email = settings.EMAIL_HOST_USER
-            to_list = [myuser.email]
-            send_mail(subject, message, from_email, to_list, fail_silently=False)
+            to_list = ["sistercharmings@gmail.com"]
+            send_mail(
+                subject,
+                message,
+                "princeaffumasante@gmail.com",
+                to_list,
+                fail_silently=False,
+            )
 
             # send email confirmation link
             current_site = get_current_site(request)

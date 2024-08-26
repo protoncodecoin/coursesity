@@ -44,6 +44,7 @@ INSTALLED_APPS = [
     "chat.apps.ChatConfig",
     "cart.apps.CartConfig",
     "quiz.apps.QuizConfig",
+    "payment.apps.PaymentConfig",
     "django.contrib.admin",
     "django.contrib.auth",
     "django.contrib.contenttypes",
@@ -145,9 +146,11 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/5.0/howto/static-files/
 
 STATIC_URL = "static/"
+STATIC_ROOT = BASE_DIR / "static"
 
 MEDIA_URL = "media/"
 MEDIA_ROOT = BASE_DIR / "media"
+
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.0/ref/settings/#default-auto-field
@@ -199,8 +202,8 @@ CART_SESSION_ID = "cart"  # key to store sthe cart in the user session
 AUTH_USER_MODEL = "users.CustomUser"
 
 # EMAIL CONFIGURATION
-EMAIL_BACKEND = "django.core.mail.backends.console.EmailBackend"
-# EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"
+# EMAIL_BACKEND = "django.core.mail.backends.console.EmailBackend"
+EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"
 EMAIL_HOST = "smtp.gmail.com"
 EMAIL_PORT = os.environ.get("EMAIL_PORT")
 EMAIL_HOST_USER = os.environ.get("EMAIL_HOST_USER")
@@ -258,3 +261,19 @@ SOCIAL_AUTH_PIPELINE = [
 #         },
 #     },
 # }
+
+REST_FRAMEWORK = {
+    "DEFAULT_PERMISSION_CLASSES": ("rest_framework.permissions.DjangoModelPermissions",)
+}
+
+
+# STRIPE
+STRIPE_PUBLISHABLE_KEY = os.environ.get("STRIPE_PUBLISHABLE_KEY")
+STRIPE_SECRET_KEY = os.environ.get("STRIPE_SECRET_KEY")
+STRIPE_API_VERSION = "2024-04-10"
+STRIPE_WEBHOOK_SECRET = os.environ.get("STRIPE_WEBHOOK_SECRET")
+
+# Redis Settings
+REDIS_HOST = "localhost"
+REDIS_PORT = 6379
+REDIS_DB = 1
