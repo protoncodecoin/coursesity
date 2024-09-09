@@ -42,6 +42,7 @@ class Course(models.Model):
     )
     price = models.DecimalField(max_digits=10, decimal_places=2)
     updated = models.DateTimeField(auto_now=True)
+    certification = models.BooleanField(default=True)
 
     class Meta:
         ordering = ["-created"]
@@ -56,6 +57,9 @@ class Course(models.Model):
 
     def get_absolute_url(self):
         return reverse("course_detail", kwargs={"slug": self.slug})
+
+    def courses_created_by_instructor(self):
+        return self.owner.courses_created.count()
 
 
 class Module(models.Model):

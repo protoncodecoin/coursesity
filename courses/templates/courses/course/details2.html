@@ -1,0 +1,205 @@
+{% extends 'base2.html' %}
+{% load static %}
+
+{% block title %} {{ object.title }} {% endblock %}
+
+{% block content %}
+
+    <!-- COURSE BANNER -->
+    <section class="banner">
+      <div class="banner-left">
+        {% comment %} <h4>Lorem ipsum dolor sit, amet consectetur adipisicing elit.</h4> {% endcomment %}
+
+        <h1>{{ object.title }}</h1>
+
+        <p>
+          {{ object.overview }}
+        </p>
+
+        <p>Created by: <a href="#">{{ object.owner.get_full_name }}</a></p>
+
+        <p>Last Updated: {{ object.updated }}, 💬 English, 📋 No Captions</p>
+      </div>
+
+      <div class="banner-right">
+        <img src="{{ object.image.url }}" alt="" />
+
+        <h2 class="price">GH:{{object.price}}</h2>
+
+        <button>Add To Cart</button>
+
+        <h4>Course Includes:</h4>
+
+        <p>
+          📚 {{ object.modules.count }} Module{{ object.modules.count | pluralize }} <br />
+          🎓 Certficate after Completion
+        </p>
+      </div>
+    </section>
+
+    <!-- COURSE DESCRIPTIOM -->
+    {% comment %} <section class="course-description">
+      <h2>Course Descriptiom</h2>
+
+      <p>
+        Lorem ipsum dolor sit amet consectetur adipisicing elit. Nihil deserunt
+        sapiente at beatae perspiciatis voluptate corrupti inventore. Totam iure
+        in incidunt fugit, impedit enim perspiciatis nostrum officia? Vero omnis
+        soluta vitae, repellat inventore quidem, tempora delectus neque enim
+        officia perspiciatis accusantium qui consequatur obcaecati laudantium
+        possimus in iure beatae? Minima. <br />
+        Lorem ipsum dolor sit, amet consectetur adipisicing elit. Laudantium
+        doloribus, cum incidunt nihil perferendis debitis, reiciendis rem saepe
+        recusandae odio obcaecati aperiam dignissimos ratione inventore
+        molestias, accusantium autem ex magni vero. Consequuntur distinctio quam
+        incidunt sequi nesciunt necessitatibus aliquid impedit! Provident
+        pariatur tenetur totam, culpa voluptatem qui itaque. Illum, blanditiis.
+      </p>
+    </section> {% endcomment %}
+
+    <!-- What youll learn -->
+    {% comment %} <section class="learn">
+      <h1>What You'll Learn</h1>
+      <ul>
+        <li>How To setup a trading account on various trading sites</li>
+        <li>How To invest in trending markets</li>
+        <li>How to make profits with minimal capital</li>
+        <li>Trading strategies of top traders</li>
+        <li>How to setup trading bots</li>
+        <li>Ways to invest your crypto gains in more sustainable portfolios</li>
+      </ul>
+    </section> {% endcomment %}
+
+    <!-- COURSE CONTENT -->
+    {% comment %} <section class="course-content">
+      <h1>Contents of This Course</h1>
+
+      <button class="accordion-btn">
+        <h3>Lesson 1: How to setup a trading account | 45mins</h3>
+        <!-- <span>&dArr;</span> -->
+        <span>🔽</span>
+      </button>
+      <div class="panel">
+        Lorem ipsum, dolor sit amet consectetur adipisicing elit. Assumenda
+        laboriosam at ipsa exercitationem ab vero officia ut laudantium eveniet
+        maiores.
+      </div>
+
+      <button class="accordion-btn">
+        <h3>Lesson 1: How to setup a trading account | 25mins</h3>
+        <span>🔽</span>
+      </button>
+      <div class="panel">
+        Lorem ipsum, dolor sit amet consectetur adipisicing elit. Assumenda
+        laboriosam at ipsa exercitationem ab vero officia ut laudantium eveniet
+        maiores.
+      </div>
+
+      <button class="accordion-btn">
+        <h3>Lesson 1: How to setup a trading account | 1Hr 3mins</h3>
+        <span>🔽</span>
+      </button>
+      <div class="panel">
+        Lorem ipsum, dolor sit amet consectetur adipisicing elit. Assumenda
+        laboriosam at ipsa exercitationem ab vero officia ut laudantium eveniet
+        maiores.
+      </div>
+
+      <button class="accordion-btn">
+        <h3>Lesson 1: How to setup a trading account | 1Hr 17mins</h3>
+        <span>🔽</span>
+      </button>
+      <div class="panel">
+        Lorem ipsum, dolor sit amet consectetur adipisicing elit. Assumenda
+        laboriosam at ipsa exercitationem ab vero officia ut laudantium eveniet
+        maiores.
+      </div>
+    </section> {% endcomment %}
+
+    <section class="instructor-profile">
+      <div class="top">
+        <h2><a href="">{{ object.owner.get_full_name }}</a></h2>
+        <h4>Professor at <a href="">Academy of Cat Traders</a></h4>
+      </div>
+
+      <div class="middle">
+        <img src="{{ object.owner.photo.url }}" alt="Profile of {{ object.owner.get_full_name }}" />
+        <div class="stats">
+          <p><span>📚</span> {{object.courses_created_by_instructor }} course{{object.courses_created_by_instructor | pluralize}}</p>
+          <p><span>🎓</span> {{object.owner.get_total_number_of_enrolled_student}} Enrollments</p>
+          <p><span>🕔</span> Instructor for {{ object.owner.instructor_profile.years_of_experience }} month</p>
+        </div>
+      </div>
+
+      <p class="about">
+        {{ object.owner.instructor_profile.biography }}
+      </p>
+    </section>
+
+    <section class="similar-courses discover">
+      <h1>Recommended Courses</h1>
+
+      
+      <div class="field-content">
+        {% if recommended_courses %}
+          {% for course in recommended_courses %}
+          <a href="{% url 'course_detail' course.slug %}" class="course">
+          <div class="course">
+            <img src="{{ course.image.url }}" alt="Image of {{ course.image.url }}" />
+            <div class="info">
+              <div class="info-top">
+                <p>{{ course.owner.get_full_name }}</p>
+                <p>{{ course.modules.count }} Module{{ course.modules.count | pluralize }}</p>
+              </div>
+              <p class="info-bottom">{{ course.title }}</p>
+            </div>
+          </div>
+           </a>
+          {% endfor %}
+
+        {% endif %}
+
+        {% comment %} <div class="course">
+          <img src="/Assets/223023222_571328.jpg" alt="" />
+          <div class="info">
+            <div class="info-top">
+              <p>14Hrs 27Mins</p>
+              <p>16 Lessons</p>
+            </div>
+            <p class="info-bottom">The Cause and Effect Theory</p>
+          </div>
+        </div>
+
+        <div class="course">
+          <img src="/Assets/223023222_571328.jpg" alt="" />
+          <div class="info">
+            <div class="info-top">
+              <p>3Hrs 0Mins</p>
+              <p>7 Lessons</p>
+            </div>
+            <p class="info-bottom">How To Make Money in Crypto</p>
+          </div>
+        </div>
+
+        <div class="course">
+          <img src="/Assets/223023222_571328.jpg" alt="" />
+          <div class="info">
+            <div class="info-top">
+              <p>3Hrs 0Mins</p>
+              <p>7 Lessons</p>
+            </div>
+            <p class="info-bottom">How To Make Money in Crypto</p>
+          </div>
+        </div> {% endcomment %}
+      </div>
+    </section>
+
+    <div class="cart-footer" id="cart-footer">
+      <h3 id="buy-text">Buy course now!</h3>
+
+      <button id="add-to-cart">Add to Cart</button>
+    </div>
+
+
+{% endblock %}
+

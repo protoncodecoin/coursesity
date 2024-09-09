@@ -4,7 +4,7 @@ from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin
 
 from .forms import CustomUserCreationForm, CustomUserChangeForm
-from .models import CustomUser, Profile
+from .models import CustomUser, InstructorProfile, Profile
 
 
 class CustomUserAdmin(UserAdmin):
@@ -19,6 +19,7 @@ class CustomUserAdmin(UserAdmin):
         "is_active",
         "is_instructor",
         "is_disabled",
+        "photo",
     )
     list_filter = ("email", "is_staff", "is_active", "is_instructor", "is_disabled")
     fieldsets = (
@@ -31,6 +32,9 @@ class CustomUserAdmin(UserAdmin):
                     "is_active",
                     "is_instructor",
                     "is_disabled",
+                    "photo",
+                    # "first_name",
+                    # "last_name",
                     "groups",
                     "user_permissions",
                 )
@@ -49,6 +53,7 @@ class CustomUserAdmin(UserAdmin):
                     "is_staff",
                     "is_active",
                     "is_disabled",
+                    "photo",
                     "groups",
                     "user_permissions",
                 ),
@@ -67,4 +72,13 @@ class ProfileAdmin(admin.ModelAdmin):
     list_display = [
         "id",
         "user",
+    ]
+
+
+@admin.register(InstructorProfile)
+class InstructorProfileAdmin(admin.ModelAdmin):
+    list_display = [
+        "user",
+        "years_of_experience",
+        "biography",
     ]

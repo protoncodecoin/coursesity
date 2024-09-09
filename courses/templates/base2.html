@@ -1,0 +1,101 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Coursiy |{% block title %} {% endblock %}</title>
+  {% if active == "index" %}
+    <link rel="stylesheet" href="{% static 'css/list.css' %}">
+    {% elif active == "detail"%}
+     <link rel="stylesheet" href="{% static 'css/detail.css' %}">
+  {% endif %}
+  <link rel="icon" type="image/x-icon" href="{% static 'icons/coursitylogo.png' %}" />
+</head>
+<body>
+  
+  <!-- <nav>
+    <a href="index.html"><img src="/Icons/coursitytextlogo2.png" alt="Coursity" class="header-logo"></a>
+
+    <div class="searchbar">
+      <img src="/Icons/searchico.svg" alt="" class="search-icon">
+      <input type="search" placeholder="Search">
+    </div>
+
+    <div>
+      <div class="cart-user">
+        <img src="/Icons/cartico.svg" alt="Cart Icon" class="cart-icon">
+        
+        <button type="button" class="user">Log In</button>
+           
+      </div>
+      
+      <div class="more-drop">
+          <img src="/Icons/hamburger.svg" alt="menu icon" class="menu-icon">
+          <div class="more-dropdown">
+            <a href="#">Categories</a>
+            <a href="#">Learining</a>
+            <a href="#">Cart</a>
+            <a href="#">Log In</a>
+          </div>
+      </div>
+    </div>
+  </nav> -->
+
+  <nav>
+    <a href="{% url 'course_list' %}"><img src="{% static 'icons/coursitytextlogo2.png' %}" alt="Coursity" class="header-logo"></a>
+
+    <div class="searchbar">
+      <img src="{% static 'icons/searchico.svg' %}" alt="" class="search-icon">
+      <input type="search" placeholder="Search">
+    </div>
+
+    <div class="nav-links" id="navLinks">
+      <span class="fa" onclick="hideMenu()">X</span>
+      <div class="cart-user">
+        <p>{{ request.user.get_full_name }}</p>
+        <img src="{% static 'icons/cartico.svg' %}" alt="Cart Icon" class="cart-icon">
+        <form method="post" action="{% url 'login' %}">
+          {% csrf_token %}
+          {% if request.user.is_authenticated %}
+            <button type="submit" class="user">Log Out</button>
+          {% else %}
+            <button type="submit" class="user">Log In</button>
+            {% endif %}
+          
+        </form>
+           
+      </div>
+      
+      <div class="more-drop">
+          
+          <div class="more-dropdown">
+            <a href="#">Categories</a>
+            <a href="#">Learning</a>
+            <a href="#">Cart</a>
+            <a href="#">Log In</a>
+          </div>
+      </div>
+    </div>
+
+    <img src="{% static 'icons/hamburger.svg' %}" onclick="showMenu()" alt="menu icon" class="menu-icon fa">
+  </nav>
+
+  <div class="secondary-nav">
+    <ul>
+      <li><a href="#">Categories</a></li>
+      <li><a href="#">Learining</a></li>
+    </ul>
+  </div>
+
+  {% block content %}
+
+  {% endblock %}
+
+  {% block include_js %}
+
+  {% endblock %}
+  </body>
+</html>

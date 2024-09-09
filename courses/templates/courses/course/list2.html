@@ -1,0 +1,156 @@
+{% extends 'base2.html' %}
+{% load static %}
+
+{% block title %} 
+    {% if subject %}
+        {{ subject.title }} courses
+
+    {% else %}
+        All courses 
+    {% endif %}
+{% endblock %}
+
+
+{% block content %}
+
+
+  <section class="hero-section">
+    <!-- <div class="overlay"></div> -->
+    <div class="banner">
+      <img src="{% static 'assets/banner.png' %}" alt="Class Learning" class="">
+      <h1>
+        Best Online Platform for Learning
+      </h1>
+    </div>
+    <h3>
+      Trusted By Millions of Learners
+    </h3>
+  </section>
+
+  <section class="discover">
+    <h1>Discover Amazing Courses</h1>
+    <ul class="fields">
+      <li {% if not subject %} class="field-item active" {% else %} class="field-item active"  {% endif %}>All</li>
+
+      {% for s in subjects %}
+        
+      <li class="field-item">{{ s.title }}</li>
+        
+      {% endfor %}
+      {% comment %} <li class="field-item">Programming</li>
+      <li class="field-item">Science</li>
+      <li class="field-item">Math</li>
+      <li class="field-item">History</li>
+      <li class="field-item">Language</li>
+      <li class="field-item">Engineering</li> {% endcomment %}
+    </ul>
+    
+    <div class="field-content">
+
+        {% for course in courses %}
+
+            {% with subject=course.subject %}
+
+                <a href="{% url 'course_detail' course.slug %}" class="course all {{ course.subject|lower }}">
+                    <img src="{{ course.image.url }}" alt="">
+                    <div class="info">
+                    <div class="info-top">
+                        <p>{{ course.total_modules }} modules</p>
+                        <p> Instructor: {{ course.owner.get_full_name }}</p>
+                    </div>
+                    <p class="info-bottom">
+                        {{ course.title }}
+                    </p>
+                    </div>
+                </a>
+            {% endwith %}
+
+      {% endfor %}
+    </div>
+  </section>
+  
+  {% endblock %}
+
+  {% block include_js %}
+    <!-- Tab component Show/HIde -->
+<!-- <script>
+  const tab = document.querySelectorAll('.field-item');
+  const tabContainer = document.querySelector(".field-content");
+
+  const courses = tabContainer.getElementsByTagName('a')
+
+  const populateField = (e) => {
+    
+        for (let i = 0; i < tab.length; i++) {
+           tab[i].classList.remove('active')
+        }
+        e.classList.add('active')
+
+        let tabName = e.textContent.toLowerCase()
+
+        for (let i = 0; i < courses.length; i++) {
+          if (courses[i].classList.contains(tabName)) {
+            continue
+          } else {courses[i].classList.add('hidden')}
+        }
+
+  }
+
+  tab.forEach((e) => {
+    e.addEventListener('click', () => {
+      populateField(e)
+    })
+  })
+
+</script> -->
+
+<script>
+  const tabs = document.querySelectorAll('.field-item');
+  const tabContainer = document.querySelector('.field-content');
+  const courses = tabContainer.getElementsByTagName('a');
+
+  console.log(tabContainer)
+  console.log(courses)
+
+  const populateField = (e) => {
+    // Remove 'active' class from all tabs
+    tabs.forEach(tab => tab.classList.remove('active'));
+
+    // Add 'active' class to the clicked tab
+    e.classList.add('active');
+
+    // Get the tab name in lowercase
+    const tabName = e.textContent.toLowerCase();
+
+    // Show or hide the courses based on the tab name
+    Array.from(courses).forEach(course => {
+      if (course.classList.contains(tabName)) {
+        course.classList.remove('hidden'); // Show the matching course
+      } else {
+        course.classList.add('hidden'); // Hide non-matching courses
+      }
+    });
+  };
+
+  tabs.forEach(tab => {
+    tab.addEventListener('click', () => populateField(tab));
+  });
+</script>
+
+
+
+<!-- Toggle navbar js -->
+<script>
+  let navLinks = document.getElementById("navLinks");
+
+  function showMenu() {
+    navLinks.style.right = "0";
+  }
+
+  function hideMenu() {
+    navLinks.style.right = "-200px";
+  }
+</script>
+
+
+  {% endblock %}

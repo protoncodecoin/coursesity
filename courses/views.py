@@ -191,7 +191,7 @@ class ContentOrderView(CsrfExemptMixin, JsonRequestResponseMixin, View):
 
 class CourseListView(TemplateResponseMixin, View):
     model = Course
-    template_name = "courses/course/list.html"
+    template_name = "courses/course/list2.html"
 
     def get(self, request, subject=None):
         subjects = cache.get("all_subjects")
@@ -219,13 +219,14 @@ class CourseListView(TemplateResponseMixin, View):
                 "subjects": subjects,
                 "subject": subject,
                 "courses": courses,
+                "active": "index",
             }
         )
 
 
 class CourseDetailView(DetailView):
     model = Course
-    template_name = "courses/course/detail.html"
+    template_name = "courses/course/details2.html"
 
     # render a form for user to add to cart
 
@@ -233,11 +234,11 @@ class CourseDetailView(DetailView):
         context = super().get_context_data(**kwargs)
         # context["enroll_form"] = CourseEnrollForm(initial={"course": self.object})
         course_obj = self.object.id
-        print(course_obj, "this is the course obj")
         course = Course.objects.get(id=course_obj)
         r = Recommender()
         recommended_courses = r.suggest_courses_for([course], 4)
         context["recommended_courses"] = recommended_courses
+        context["active"] = "detail"  # load specific css
         return context
 
 
