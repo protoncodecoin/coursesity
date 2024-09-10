@@ -33,7 +33,9 @@ class Course(models.Model):
         Subject, related_name="courses", on_delete=models.CASCADE
     )
     title = models.CharField(max_length=200)
-    image = models.ImageField(default="images/default/default.jpg", upload_to="images")
+    image = models.ImageField(
+        default="images/default/default.jpg", upload_to="images/courses/%Y/%m/%d"
+    )
     slug = models.SlugField(max_length=200, unique=True)
     overview = models.TextField()
     created = models.DateTimeField(auto_now_add=True)

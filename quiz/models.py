@@ -1,7 +1,7 @@
 from django.db import models
 from django.conf import settings
 
-from courses.models import Subject, Course
+from courses.models import Module, Subject, Course
 
 
 # Create your models here.
@@ -9,7 +9,15 @@ class Quiz(models.Model):
     # subject = models.ForeignKey(
     #     Subject, on_delete=models.CASCADE, related_name="quizes"
     # )
+    owner = models.ForeignKey(
+        settings.AUTH_USER_MODEL,
+        on_delete=models.CASCADE,
+        related_name="quizzes_created",
+    )
     course = models.ForeignKey(Course, on_delete=models.CASCADE, related_name="quizzes")
+    # module = models.ForeignKey(
+    #     Module, on_delete=models.CASCADE, related_name="quiz_module"
+    # )
     title = models.CharField(max_length=255)
     description = models.TextField(blank=True, null=True)
     created_at = models.DateTimeField(auto_now_add=True)
@@ -19,15 +27,22 @@ class Quiz(models.Model):
     def __str__(self):
         return self.title
 
+    class Meta:
+        verbose_name = "Quiz"
+        verbose_name_plural = "Quizzes"
+
 
 class Question(models.Model):
     quiz = models.ForeignKey(Quiz, on_delete=models.CASCADE, related_name="questions")
-    text = models.TextField()
+    module = models.ForeignKey(
+        Module, on_delete=models.CASCADE, related_name="quiz_module"
+    )
+    question_text = models.TextField()
     created_at = models.DateTimeField(auto_now_add=True)
     score = models.IntegerField(default=5)
 
     def __str__(self):
-        return self.text
+        return self.question_text
 
 
 class Answer(models.Model):

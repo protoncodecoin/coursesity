@@ -86,7 +86,11 @@
   <div class="secondary-nav">
     <ul>
       <li><a href="#">Categories</a></li>
-      <li><a href="#">Learining</a></li>
+      {% if request.user.is_instructor %}
+        <li><a href="{% url 'manage_course_list' %}">Courses Created</a></li>
+      {% else %}
+        <li><a href="{% url 'student_course_list' %}">Learining</a></li>
+      {% endif %}
     </ul>
   </div>
 

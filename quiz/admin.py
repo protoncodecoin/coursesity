@@ -10,16 +10,21 @@ class QuizAdmin(admin.ModelAdmin):
     list_filter = ["created_at"]
 
 
+# @admin.register(Answer)
+# class AnswerAdmin(admin.ModelAdmin):
+#     list_display = ["text", "question", "is_correct"]
+#     list_filter = ["is_correct"]
+
+
+class AnswerInline(admin.StackedInline):
+    model = Answer
+
+
 @admin.register(Question)
 class QuestionAdmin(admin.ModelAdmin):
-    list_display = ["text", "quiz", "created_at"]
+    list_display = ["question_text", "quiz", "created_at"]
     list_filter = ["created_at"]
-
-
-@admin.register(Answer)
-class AnswerAdmin(admin.ModelAdmin):
-    list_display = ["text", "question", "is_correct"]
-    list_filter = ["is_correct"]
+    inlines = [AnswerInline]
 
 
 @admin.register(Score)

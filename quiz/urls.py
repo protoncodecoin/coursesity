@@ -1,13 +1,10 @@
-from django.urls import path, include
-from rest_framework.routers import DefaultRouter
-from .views import QuizViewSet, QuestionViewSet, AnswerViewSet, SaveScoreView
+from django.urls import path
 
-router = DefaultRouter()
-router.register(r"quizzes", QuizViewSet)
-router.register(r"questions", QuestionViewSet)
-router.register(r"answers", AnswerViewSet)
+from . import views
 
 urlpatterns = [
-    path("", include(router.urls)),
-    path("save-score/", SaveScoreView.as_view(), name="save-score"),
+    path("mine/", views.ManageQuizListView.as_view(), name="manage_quiz_list"),
+    path("create/", views.QuizCreateView.as_view(), name="quiz_create"),
+    path("<pk>/edit/", views.QuizUpdateView.as_view(), name="quiz_edit"),
+    path("<pk>/delete/", views.QuizDeleteView.as_view(), name="quiz_delete"),
 ]

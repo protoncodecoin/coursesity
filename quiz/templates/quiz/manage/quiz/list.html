@@ -1,0 +1,29 @@
+{% extends "base.html" %}
+
+{% block title %}My Quizzes{% endblock %}
+
+{% block content %}
+  <h1>My Quizzes</h1>
+  <div class="module">
+    {% for quiz in object_list %}
+      <div class="course-info">
+        <h3>Course: {{ quiz.course.title }}</h3>
+        <h3>{{ quiz.title }}</h3>
+        <p>
+          <a href="{% url "quiz_edit" quiz.id %}">Edit</a>
+          <a href="{% url "quiz_delete" quiz.id %}">Delete</a>
+          {% comment %} <a href="{% url "course_module_update" course.id %}">Edit modules</a> {% endcomment %}
+          {% comment %} {% if course.modules.count > 0 %}
+            <a href="{% url "module_content_list" course.modules.first.id %}">
+            Manage contents</a>
+          {% endif %} {% endcomment %}
+        </p>
+      </div>
+    {% empty %}
+      <p>You haven't created any courses yet.</p>
+    {% endfor %}
+    <p>
+      <a href="{% url "quiz_create" %}" class="button">Create new Quiz for a Course</a>
+    </p>
+  </div>
+{% endblock %}
