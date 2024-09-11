@@ -147,7 +147,6 @@ nav .fa {
   body::before {
     height: 62px;
   }
-
   .main-nav {
     padding: 5px 5%;
   }
@@ -297,54 +296,18 @@ nav .fa {
   }
 }
 
-/* Discover SECTION */
+/* My Courses SECTION */
 
-.discover {
+.my-courses {
   position: relative;
   width: 90%;
   margin: 10vh auto;
   padding: 10px;
 }
 
-.discover h1 {
+.my-courses h1 {
   font-size: 2.3rem;
   text-align: center;
-}
-
-.fields {
-  display: flex;
-  align-items: start;
-  gap: 10px;
-  overflow-x: scroll;
-}
-
-.fields::-webkit-scrollbar {
-  display: none;
-}
-
-.fields li {
-  padding: 5px 30px;
-  list-style: none;
-  color: #5962d4;
-  font-size: 1.2rem;
-  transition: 0.3s;
-  font-weight: 600;
-  cursor: pointer;
-}
-
-.active::after,
-.fields li:hover:after {
-  content: "";
-  width: 100%;
-  height: 2px;
-  display: block;
-  background: #5962d4;
-  margin: auto;
-  transition: 0.3s;
-}
-
-.fields li:hover {
-  transform: scale(1.1);
 }
 
 .field-content {
@@ -359,7 +322,6 @@ nav .fa {
   display: flex;
   align-items: center;
   gap: 10px;
-  /* flex-basis: 32%; */
   transition: 0.3s;
 }
 
@@ -397,24 +359,21 @@ nav .fa {
   width: 185px;
 }
 
-/* DISCOVER MEDIA QUERIES */
+/* my-courses MEDIA QUERIES */
 
 @media (max-width: 700px) {
-  .discover {
+  .my-courses {
     width: 95%;
     margin: 3vh auto;
   }
 
-  .discover h1 {
+  .my-courses h1 {
     font-size: 1.6rem;
-  }
-
-  .fields li {
-    padding: 5px 10px;
   }
 
   .field-content {
     grid-template-columns: auto;
+    gap: 25px;
   }
 
   .course img {

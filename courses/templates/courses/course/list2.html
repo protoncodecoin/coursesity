@@ -15,7 +15,6 @@
 
 
   <section class="hero-section">
-    <!-- <div class="overlay"></div> -->
     <div class="banner">
       <img src="{% static 'assets/banner.png' %}" alt="Class Learning" class="">
       <h1>
@@ -47,12 +46,11 @@
     
     <div class="field-content">
 
-        {% for course in courses %}
+      {% for course in courses %}
+        {% with subject=course.subject %}
 
-            {% with subject=course.subject %}
-
-                <a href="{% url 'course_detail' course.slug %}" class="course all {{ course.subject|lower }}">
-                    <img src="{{ course.image.url }}" alt="">
+          <a href="{% url 'course_detail' course.slug %}" class="course all  {{ course.subject|lower }}">
+              <img src="{{ course.image.url }}" alt="">
                     <div class="info">
                     <div class="info-top">
                         <p>{{ course.total_modules }} modules</p>
@@ -61,13 +59,165 @@
                     <p class="info-bottom">
                         {{ course.title }}
                     </p>
-                    </div>
-                </a>
-            {% endwith %}
-
-      {% endfor %}
+            </div>
+          </a>
+          {% endwith %}
+        {% endfor %}
     </div>
   </section>
+
+  {% if recently_added %}
+      <section class="my-courses discover">
+      <h1>Recently Added</h1>
+
+      {% for r in recently_added %}
+
+      <div class="field-content">
+        <a href="{% url 'course_detail' r.slug %}" class="course all language">
+          <img src="{{ r.image.url }}" alt="{{ r.title }}" />
+          <div class="info">
+            <div class="info-top">
+              <p>{{ r.owner.get_full_name }}</p>
+              <p>{{ r.modules.count }}</p>
+            </div>
+            <p class="info-bottom">{{ r.title }}</p>
+          </div>
+        </a>
+
+      </div>
+      {% endfor %}
+    </section>
+    {% endif %}
+
+    {% if popular_courses %}
+    <section class="my-courses discover">
+        <h1>Popular Courses </h1>
+      {% for pop in popular_courses %}
+
+        <div class="field-content">
+          <a href="{% url 'course_detail' pop.slug %}" class="course all language">
+            <img src="{{ pop.image.url }}" alt="Image of {{ pop.title }}" />
+            <div class="info">
+              <div class="info-top">
+                <p>{{ pop.owner.get_full_name }}</p>
+                <p>{{ pop.modules.count }}</p>
+              </div>
+              <p class="info-bottom">{{ pop.title }}</p>
+            </div>
+          </a>
+        </div>
+
+        {% endfor %}
+      </section>
+    {% endif %}
+
+
+      <section class="my-courses discover">
+      <h1>Highly Rated</h1>
+
+      <div class="field-content">
+        <a href="/coursepage.html" class="course all language">
+          <img src="{% static 'assets/banner.png'%}" alt="" />
+          <div class="info">
+            <div class="info-top">
+              <p>3Hrs 0Mins</p>
+              <p>7 Lessons</p>
+            </div>
+            <p class="info-bottom">Advanced Public Relations</p>
+          </div>
+        </a>
+
+        <a href="/coursepage.html" class="course all design">
+          <img src="{% static 'assets/banner.png'%}" alt="" />
+          <div class="info">
+            <div class="info-top">
+              <p>14Hrs 27Mins</p>
+              <p>16 Lessons</p>
+            </div>
+            <p class="info-bottom">Art & Design</p>
+          </div>
+        </a>
+
+        <a href="/coursepage.html" class="course all">
+          <img src="{% static 'assets/banner.png'%}" alt="" />
+          <div class="info">
+            <div class="info-top">
+              <p>3Hrs 0Mins</p>
+              <p>7 Lessons</p>
+            </div>
+            <p class="info-bottom">How To Make Money in Crypto</p>
+          </div>
+        </a>
+
+        <a href="/coursepage.html" class="course all science">
+          <img src="{% static 'assets/banner.png'%}" alt="" />
+          <div class="info">
+            <div class="info-top">
+              <p>3Hrs 0Mins</p>
+              <p>7 Lessons</p>
+            </div>
+            <p class="info-bottom">Introduction To Science</p>
+          </div>
+        </a>
+
+        <a href="/coursepage.html" class="course all science">
+          <img src="{% static 'assets/banner.png'%}" alt="" />
+          <div class="info">
+            <div class="info-top">
+              <p>3Hrs 0Mins</p>
+              <p>7 Lessons</p>
+            </div>
+            <p class="info-bottom">Entomology for Beginners</p>
+          </div>
+        </a>
+
+        <a href="/coursepage.html" class="course all math history">
+          <img src="{% static 'assets/banner.png'%}" alt="" />
+          <div class="info">
+            <div class="info-top">
+              <p>3Hrs 0Mins</p>
+              <p>7 Lessons</p>
+            </div>
+            <p class="info-bottom">History of Calculus</p>
+          </div>
+        </a>
+
+        <a href="/coursepage.html" class="course all programming engineering">
+          <img src="{% static 'assets/banner.png'%}" alt="" />
+          <div class="info">
+            <div class="info-top">
+              <p>14Hrs 27Mins</p>
+              <p>16 Lessons</p>
+            </div>
+            <p class="info-bottom">How to Become a Software Engineer</p>
+          </div>
+        </a>
+
+        <a href="/coursepage.html" class="course all programming">
+          <img src="{% static 'assets/banner.png'%}" alt="" />
+          <div class="info">
+            <div class="info-top">
+              <p>14Hrs 27Mins</p>
+              <p>16 Lessons</p>
+            </div>
+            <p class="info-bottom">Secret Programming Techniques</p>
+          </div>
+        </a>
+
+        <a href="/coursepage.html" class="course all design engineering">
+          <img src="{% static 'assets/banner.png'%}" alt="" />
+          <div class="info">
+            <div class="info-top">
+              <p>14Hrs 27Mins</p>
+              <p>16 Lessons</p>
+            </div>
+            <p class="info-bottom">AutoCAD Design</p>
+          </div>
+        </a>
+      </div>
+    </section>
+
+
   
   {% endblock %}
 
@@ -109,9 +259,6 @@
   const tabContainer = document.querySelector('.field-content');
   const courses = tabContainer.getElementsByTagName('a');
 
-  console.log(tabContainer)
-  console.log(courses)
-
   const populateField = (e) => {
     // Remove 'active' class from all tabs
     tabs.forEach(tab => tab.classList.remove('active'));
@@ -151,6 +298,7 @@
     navLinks.style.right = "-200px";
   }
 </script>
+
 
 
   {% endblock %}

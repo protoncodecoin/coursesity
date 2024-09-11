@@ -1,0 +1,150 @@
+{% extends 'base2.html' %}
+{% block title %} My courses  {% endblock %}
+{% load static %}
+
+{% block content %}
+    <section class="my-courses discover">
+      <h1>Review your Courses</h1>
+
+      <div class="field-content">
+          {% for course in object_list %}
+            <a href="{% url 'student_course_detail' course.id %}" class="course all language">
+            <img src="{{ course.image.url }}" alt="{{ course.title }}" />
+            <div class="info">
+                <div class="info-top">
+                    <p>{{ course.owner.get_full_name}}</p>
+                    <p>{{course.modules.count}} Module{{course.modules.count| pluralize}}</p>
+                </div>
+                <p class="info-bottom">{{ course.title }}</p>
+            </div>
+            </a>
+            
+            {% empty %}
+            <p>You are not enrolled in any courses yet.
+                <a href="{% url 'course_list' %}">Browse courses</a> to enroll in a course
+            </p>
+
+        {% endfor %}
+      </div>
+    </section>
+
+    <section class="my-courses discover">
+      <h1>Wishlist Courses</h1>
+
+      <div class="field-content">
+        <a href="/coursepage.html" class="course all language">
+          <img src="{% static 'assets/banner.png' %}" alt="" />
+          <div class="info">
+            <div class="info-top">
+              <p>3Hrs 0Mins</p>
+              <p>7 Lessons</p>
+            </div>
+            <p class="info-bottom">Advanced Public Relations</p>
+          </div>
+        </a>
+
+        <a href="/coursepage.html" class="course all design">
+          <img src="{% static 'assets/banner.png' %}" alt="" />
+          <div class="info">
+            <div class="info-top">
+              <p>14Hrs 27Mins</p>
+              <p>16 Lessons</p>
+            </div>
+            <p class="info-bottom">Art & Design</p>
+          </div>
+        </a>
+
+        <a href="/coursepage.html" class="course all">
+          <img src="{% static 'assets/banner.png' %}" alt="" />
+          <div class="info">
+            <div class="info-top">
+              <p>3Hrs 0Mins</p>
+              <p>7 Lessons</p>
+            </div>
+            <p class="info-bottom">How To Make Money in Crypto</p>
+          </div>
+        </a>
+
+        <a href="/coursepage.html" class="course all science">
+          <img src="{% static 'assets/banner.png' %}" alt="" />
+          <div class="info">
+            <div class="info-top">
+              <p>3Hrs 0Mins</p>
+              <p>7 Lessons</p>
+            </div>
+            <p class="info-bottom">Introduction To Science</p>
+          </div>
+        </a>
+
+        <a href="/coursepage.html" class="course all science">
+          <img src="{% static 'assets/banner.png' %}" alt="" />
+          <div class="info">
+            <div class="info-top">
+              <p>3Hrs 0Mins</p>
+              <p>7 Lessons</p>
+            </div>
+            <p class="info-bottom">Entomology for Beginners</p>
+          </div>
+        </a>
+
+        <a href="/coursepage.html" class="course all math history">
+          <img src="{% static 'assets/banner.png' %}" alt="" />
+          <div class="info">
+            <div class="info-top">
+              <p>3Hrs 0Mins</p>
+              <p>7 Lessons</p>
+            </div>
+            <p class="info-bottom">History of Calculus</p>
+          </div>
+        </a>
+
+        <a href="/coursepage.html" class="course all programming engineering">
+          <img src="{% static 'assets/banner.png' %}" alt="" />
+          <div class="info">
+            <div class="info-top">
+              <p>14Hrs 27Mins</p>
+              <p>16 Lessons</p>
+            </div>
+            <p class="info-bottom">How to Become a Software Engineer</p>
+          </div>
+        </a>
+
+        <a href="/coursepage.html" class="course all programming">
+          <img src="{% static 'assets/banner.png' %}" alt="" />
+          <div class="info">
+            <div class="info-top">
+              <p>14Hrs 27Mins</p>
+              <p>16 Lessons</p>
+            </div>
+            <p class="info-bottom">Secret Programming Techniques</p>
+          </div>
+        </a>
+
+        <a href="/coursepage.html" class="course all design engineering">
+          <img src="{% static 'assets/banner.png' %}" alt="" />
+          <div class="info">
+            <div class="info-top">
+              <p>14Hrs 27Mins</p>
+              <p>16 Lessons</p>
+            </div>
+            <p class="info-bottom">AutoCAD Design</p>
+          </div>
+        </a>
+      </div>
+    </section>
+{% endblock %}
+
+{% block include_js %}
+    <!-- Toggle navbar js -->
+    <script>
+      let navLinks = document.getElementById("navLinks");
+
+      function showMenu() {
+        navLinks.style.right = "0";
+      }
+
+      function hideMenu() {
+        navLinks.style.right = "-200px";
+      }
+    </script>
+{% endblock %}

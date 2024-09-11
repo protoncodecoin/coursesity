@@ -1,7 +1,7 @@
 from django.contrib import admin
 
 # Register your models here.
-from .models import Subject, Course, Module
+from .models import Subject, Course, Module, Rating
 
 
 @admin.register(Subject)
@@ -22,3 +22,17 @@ class CourseAdmin(admin.ModelAdmin):
     search_fields = ["title", "overview"]
     prepopulated_fields = {"slug": ("title",)}
     inlines = [ModuleInline]
+
+
+@admin.register(Rating)
+class RatingAdmin(admin.ModelAdmin):
+    list_display = [
+        "course",
+        "user",
+        "rating",
+    ]
+
+    list_filter = [
+        "rating",
+        "user",
+    ]

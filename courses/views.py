@@ -1,3 +1,5 @@
+from datetime import timedelta
+from django.utils import timezone
 from django.shortcuts import get_object_or_404, redirect
 from django.views.generic.base import TemplateResponseMixin, View
 from django.views.generic.list import ListView
@@ -8,6 +10,7 @@ from django.contrib.auth.mixins import (
     LoginRequiredMixin,
     PermissionRequiredMixin,
 )
+from django.contrib import messages
 from django.apps import apps
 from django.forms.models import modelform_factory
 from django.db.models import Count
@@ -18,7 +21,7 @@ from courses.recommender import Recommender
 from students.forms import CourseEnrollForm
 
 
-from .models import Course, Module, Content, Subject
+from .models import Course, Module, Content, Rating, Subject
 from .forms import ModuleFormset
 
 
@@ -201,6 +204,30 @@ class CourseListView(TemplateResponseMixin, View):
 
         all_courses = Course.objects.annotate(total_modules=Count("modules"))
 
+        # get all popular courses
+        popular_courses = cache.get("popular_courses")
+        if not popular_courses:
+
+            MAX_SIZE = 9
+
+            popular_courses = (
+                all_courses.annotate(num_of_students=Count("students"))
+                .order_by("-num_of_students")
+                .filter(num_of_students__gte=1)[:MAX_SIZE]
+            )
+            cache.set("popular_courses", popular_courses)
+
+        # get recently added courses
+        recently_added = cache.get("recently_added")
+        if not recently_added:
+            MAX_SIZE = 9
+            QUERY_DATE = timezone.now() - timedelta(days=30)
+
+            recently_added = all_courses.filter(created__gte=QUERY_DATE).order_by(
+                "-created"
+            )[:MAX_SIZE]
+            cache.set("recently_added", recently_added)
+
         if subject:
             subject = get_object_or_404(Subject, slug=subject)
             key = f"subject_{subject.id}_courses"
@@ -219,6 +246,8 @@ class CourseListView(TemplateResponseMixin, View):
                 "subjects": subjects,
                 "subject": subject,
                 "courses": courses,
+                "popular_courses": popular_courses,
+                "recently_added": recently_added,
                 "active": "index",
             }
         )
@@ -242,11 +271,22 @@ class CourseDetailView(DetailView):
         return context
 
 
-class CourseDetailView2(TemplateResponseMixin, View):
-    model = Course
-    template_name = "courses/course/detail.html"
+class RatingView(TemplateResponseMixin, View):
+    template_name = "courses/course/ratings.html"
 
-    # def get_context_data(self, **kwargs):
-    #     context = super().get_context_data(**kwargs)
-    #     context["enroll_form"] = CourseEnrollForm(initial={"course": self.object})
-    #     return context
+    def dispatch(self, request, pk, *args, **kwargs):
+        self.course = get_object_or_404(Course, id=pk)
+        return super().dispatch(request, pk, *args, **kwargs)
+
+    def post(self, request, *rags, **kwargs):
+        rating_value = int(request.POST.get("rating"))
+        comment = request.POST.get("comment")
+
+        rating, created = Rating.objects.update_or_create(
+            course=self.course,
+            user=request.user,
+            defaults={"rating": rating_value, "comment": comment},
+        )
+        if created:
+            messages.success(request, "Thanks for your feedback")
+            return redirect("")

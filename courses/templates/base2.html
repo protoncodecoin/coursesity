@@ -9,8 +9,10 @@
   <title>Coursiy |{% block title %} {% endblock %}</title>
   {% if active == "index" %}
     <link rel="stylesheet" href="{% static 'css/list.css' %}">
-    {% elif active == "detail"%}
+  {% elif active == "detail"%}
      <link rel="stylesheet" href="{% static 'css/detail.css' %}">
+  {% elif style == "student_content"%}
+     <link rel="stylesheet" href="{% static 'css/learning.css' %}">
   {% endif %}
   <link rel="icon" type="image/x-icon" href="{% static 'icons/coursitylogo.png' %}" />
 </head>
@@ -44,20 +46,25 @@
     </div>
   </nav> -->
 
+  
   <nav>
-    <a href="{% url 'course_list' %}"><img src="{% static 'icons/coursitytextlogo2.png' %}" alt="Coursity" class="header-logo"></a>
+    <div class="main-nav">
+      <a href="{% url 'course_list' %}"><img src="{% static 'icons/coursitytextlogo2.png' %}" alt="Coursity" class="header-logo"></a>
 
-    <div class="searchbar">
-      <img src="{% static 'icons/searchico.svg' %}" alt="" class="search-icon">
-      <input type="search" placeholder="Search">
-    </div>
+      <div class="searchbar">
+        <img src="{% static 'icons/searchico.svg' %}" alt="" class="search-icon">
+        <input type="search" placeholder="Search">
+      </div>
 
-    <div class="nav-links" id="navLinks">
-      <span class="fa" onclick="hideMenu()">X</span>
-      <div class="cart-user">
-        <p>{{ request.user.get_full_name }}</p>
-        <img src="{% static 'icons/cartico.svg' %}" alt="Cart Icon" class="cart-icon">
-        <form method="post" action="{% url 'login' %}">
+      <div class="nav-links" id="navLinks">
+        <span class="fa" onclick="hideMenu()">X</span>
+        <div class="cart-user">
+
+          <a href="cart.html"><img src="{% static 'icons/cartico.svg' %}" alt="Cart Icon" class="cart-icon"></a>
+
+          <a href="#" class="username">{{ request.user.get_full_name }}</a>
+          
+          <form method="post" action="{% url 'login' %}">
           {% csrf_token %}
           {% if request.user.is_authenticated %}
             <button type="submit" class="user">Log Out</button>
@@ -66,33 +73,37 @@
             {% endif %}
           
         </form>
-           
+            
+        </div>
+        
+        <div class="more-drop">
+            
+            <div class="more-dropdown">
+              <a href="#">Categories</a>
+              <a href="learning.html">Learning</a>
+              <a href="cart.html">Cart</a>
+              <a href="#">Log In</a>
+            </div>
+        </div>
       </div>
-      
-      <div class="more-drop">
-          
-          <div class="more-dropdown">
-            <a href="#">Categories</a>
-            <a href="#">Learning</a>
-            <a href="#">Cart</a>
-            <a href="#">Log In</a>
-          </div>
-      </div>
+
+      <img src="/Icons/hamburger.svg" onclick="showMenu()" alt="menu icon" class="menu-icon fa">
     </div>
+  
 
-    <img src="{% static 'icons/hamburger.svg' %}" onclick="showMenu()" alt="menu icon" class="menu-icon fa">
-  </nav>
-
-  <div class="secondary-nav">
-    <ul>
-      <li><a href="#">Categories</a></li>
-      {% if request.user.is_instructor %}
+    <div class="secondary-nav">
+      <ul>
+        <li><a href="#">Categories</a></li>
+       {% if request.user.is_instructor %}
         <li><a href="{% url 'manage_course_list' %}">Courses Created</a></li>
       {% else %}
         <li><a href="{% url 'student_course_list' %}">Learining</a></li>
       {% endif %}
-    </ul>
-  </div>
+      </ul>
+    </div>
+
+  </nav>
+
 
   {% block content %}
 

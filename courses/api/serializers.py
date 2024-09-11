@@ -1,7 +1,8 @@
 from django.db.models import Count
 from rest_framework import serializers
 
-from courses.models import Subject, Course, Module, Content
+from courses.models import Rating, Subject, Course, Module, Content
+from students.models import WishList
 
 
 class SubjectSerializer(serializers.ModelSerializer):
@@ -84,4 +85,39 @@ class CourseWithContentsSerializer(serializers.ModelSerializer):
             "created",
             "owner",
             "modules",
+        ]
+
+
+class SimpleCourseSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Course
+        fields = [
+            "id",
+            "subject",
+            "title",
+            "slug",
+            "overview",
+            "created",
+            "owner",
+        ]
+
+
+class WishListSerializer(serializers.ModelSerializer):
+    course = SimpleCourseSerializer()
+
+    class Meta:
+        model = WishList
+        fields = [
+            "user",
+            "course",
+        ]
+
+
+class RatingSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Rating
+        fields = [
+            "user",
+            "course",
+            "rating",
         ]

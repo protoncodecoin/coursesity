@@ -38,17 +38,17 @@ from users.forms import CustomUserCreationForm
 #         if user and user.is_active:
 #             login(request, user)
 #             return redirect("student_course_list")
-        
+
 #         messages.error(request, "Invalid credentials provided")
 #         return redirect("student_registration")
-    
+
 
 # class StudentRegistrationView2(TemplateResponseMixin, View):
 #     template_name = "students/student/registration.html"
 
 #     def get(self, request, *args, **kwargs):
 #         return self.render_to_response({})
-    
+
 
 #     def post(self, request, *args, **kwargs):
 #         first_name = request.POST.get("firstName")
@@ -66,16 +66,14 @@ from users.forms import CustomUserCreationForm
 #         if password1 != password2:
 #             messages.error(request, "Passwords do not match!")
 #             return redirect("student_registration")
-        
+
 #         try:
 #             validate_password(password1)
 #         except ValidationError as e:
 #             messages.error(request, str(e))
 #             return redirect("student_registration")
-        
+
 #         return redirect("student_course_list")
-
-
 
 
 # class StudentRegistrationView(CreateView):
@@ -119,7 +117,12 @@ class StudentEnrollCourseView(LoginRequiredMixin, FormView):
 
 class StudentCourseListView(LoginRequiredMixin, ListView):
     model = Course
-    template_name = "students/course/list.html"
+    template_name = "students/course/list2.html"
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context["style"] = "student_content"
+        return context
 
     def get_queryset(self):
         qs = super().get_queryset()

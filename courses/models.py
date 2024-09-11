@@ -38,6 +38,7 @@ class Course(models.Model):
     )
     slug = models.SlugField(max_length=200, unique=True)
     overview = models.TextField()
+    course_description = models.TextField(blank=True)
     created = models.DateTimeField(auto_now_add=True)
     students = models.ManyToManyField(
         settings.AUTH_USER_MODEL, related_name="courses_joined", blank=True
@@ -62,6 +63,12 @@ class Course(models.Model):
 
     def courses_created_by_instructor(self):
         return self.owner.courses_created.count()
+
+    def average_rating(self):
+        ratings = self.ratings.all()
+        if ratings:
+            return round(sum(rating.rating for rating in ratings) / ratings.count(), 1)
+        return 0
 
 
 class Module(models.Model):
@@ -132,3 +139,27 @@ class Image(ItemBase):
 
 class Video(ItemBase):
     url = models.URLField()
+
+
+class Rating(models.Model):
+    RATING_CHOICED = [
+        (1, "1 - Poor"),
+        (2, "2 - Fair"),
+        (3, "3 - Good"),
+        (4, "4 - Very Good"),
+        (5, "5 - Excellent"),
+    ]
+
+    course = models.ForeignKey(Course, on_delete=models.CASCADE, related_name="ratings")
+
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+    rating = models.PositiveSmallIntegerField(choices=RATING_CHOICED)
+    comment = models.TextField(blank=True, null=True)
+
+    class Meta:
+        unique_together = ("course", "user")
+        verbose_name = "Ratitng"
+        verbose_name_plural = "Ratings"
+
+    def __str__(self):
+        return f"{self.course.title} - {self.rating}"

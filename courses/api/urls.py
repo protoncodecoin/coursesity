@@ -11,7 +11,6 @@ router.register("subject", views.SubjectViewSet)
 
 urlpatterns = [
     path("", include(router.urls)),
-    # path(
-    #     "courses/<pk>/enroll/", views.CourseEnrollView.as_view(), name="course_enroll"
-    # ),
+    path("rating/", views.RatingAPIView.as_view(), name="coures_rating"),
+    path("wishlist/", views.WishAPIView.as_view(), name="wish_list"),
 ]

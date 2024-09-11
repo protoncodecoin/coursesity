@@ -38,24 +38,17 @@
     </section>
 
     <!-- COURSE DESCRIPTIOM -->
-    {% comment %} <section class="course-description">
-      <h2>Course Descriptiom</h2>
+     {% if object.course_description %}
+      <section class="course-description">
+        <h2>Course Description</h2>
 
-      <p>
-        Lorem ipsum dolor sit amet consectetur adipisicing elit. Nihil deserunt
-        sapiente at beatae perspiciatis voluptate corrupti inventore. Totam iure
-        in incidunt fugit, impedit enim perspiciatis nostrum officia? Vero omnis
-        soluta vitae, repellat inventore quidem, tempora delectus neque enim
-        officia perspiciatis accusantium qui consequatur obcaecati laudantium
-        possimus in iure beatae? Minima. <br />
-        Lorem ipsum dolor sit, amet consectetur adipisicing elit. Laudantium
-        doloribus, cum incidunt nihil perferendis debitis, reiciendis rem saepe
-        recusandae odio obcaecati aperiam dignissimos ratione inventore
-        molestias, accusantium autem ex magni vero. Consequuntur distinctio quam
-        incidunt sequi nesciunt necessitatibus aliquid impedit! Provident
-        pariatur tenetur totam, culpa voluptatem qui itaque. Illum, blanditiis.
-      </p>
-    </section> {% endcomment %}
+        <p>
+          {{ object.course_description }}
+        </p>
+      </section>
+      {% else %}
+      <h2>No course description </h2>
+      {% endif %}
 
     <!-- What youll learn -->
     {% comment %} <section class="learn">
@@ -71,21 +64,29 @@
     </section> {% endcomment %}
 
     <!-- COURSE CONTENT -->
-    {% comment %} <section class="course-content">
+    <section class="course-content">
+      <h1>Contents of This Course</h1>
+      
+          <section class="course-content">
       <h1>Contents of This Course</h1>
 
-      <button class="accordion-btn">
-        <h3>Lesson 1: How to setup a trading account | 45mins</h3>
-        <!-- <span>&dArr;</span> -->
-        <span>🔽</span>
-      </button>
-      <div class="panel">
-        Lorem ipsum, dolor sit amet consectetur adipisicing elit. Assumenda
-        laboriosam at ipsa exercitationem ab vero officia ut laudantium eveniet
-        maiores.
-      </div>
+      {% with m=object.modules.all %}
 
-      <button class="accordion-btn">
+        {% for module in m %}
+
+          <button class="accordion-btn">
+            <h3>{{ module.title }}</h3>
+            <!-- <span>&dArr;</span> -->
+            <span>🔽</span>
+          </button>
+          <div class="panel">
+           {{ module.description }}
+          </div>
+
+        {% endfor %}
+      {% endwith %}
+
+      {% comment %} <button class="accordion-btn">
         <h3>Lesson 1: How to setup a trading account | 25mins</h3>
         <span>🔽</span>
       </button>
@@ -103,7 +104,7 @@
         Lorem ipsum, dolor sit amet consectetur adipisicing elit. Assumenda
         laboriosam at ipsa exercitationem ab vero officia ut laudantium eveniet
         maiores.
-      </div>
+      </div> {% endcomment %}
 
       <button class="accordion-btn">
         <h3>Lesson 1: How to setup a trading account | 1Hr 17mins</h3>
@@ -114,7 +115,9 @@
         laboriosam at ipsa exercitationem ab vero officia ut laudantium eveniet
         maiores.
       </div>
-    </section> {% endcomment %}
+    </section>
+
+    </section>
 
     <section class="instructor-profile">
       <div class="top">
@@ -136,70 +139,156 @@
       </p>
     </section>
 
-    <section class="similar-courses discover">
-      <h1>Recommended Courses</h1>
+    {% if recommended_courses %}
+      <section class="similar-courses discover">
+        <h1>Recommended Courses</h1>
 
-      
-      <div class="field-content">
-        {% if recommended_courses %}
-          {% for course in recommended_courses %}
-          <a href="{% url 'course_detail' course.slug %}" class="course">
-          <div class="course">
-            <img src="{{ course.image.url }}" alt="Image of {{ course.image.url }}" />
+        
+        <div class="field-content">
+          {% if recommended_courses %}
+            {% for course in recommended_courses %}
+            <a href="{% url 'course_detail' course.slug %}" class="course">
+            <div class="course">
+              <img src="{{ course.image.url }}" alt="Image of {{ course.image.url }}" />
+              <div class="info">
+                <div class="info-top">
+                  <p>{{ course.owner.get_full_name }}</p>
+                  <p>{{ course.modules.count }} Module{{ course.modules.count | pluralize }}</p>
+                </div>
+                <p class="info-bottom">{{ course.title }}</p>
+              </div>
+            </div>
+            </a>
+            {% endfor %}
+
+          {% endif %}
+
+          {% comment %} <div class="course">
+            <img src="/Assets/223023222_571328.jpg" alt="" />
             <div class="info">
               <div class="info-top">
-                <p>{{ course.owner.get_full_name }}</p>
-                <p>{{ course.modules.count }} Module{{ course.modules.count | pluralize }}</p>
+                <p>14Hrs 27Mins</p>
+                <p>16 Lessons</p>
               </div>
-              <p class="info-bottom">{{ course.title }}</p>
+              <p class="info-bottom">The Cause and Effect Theory</p>
             </div>
           </div>
-           </a>
-          {% endfor %}
 
-        {% endif %}
-
-        {% comment %} <div class="course">
-          <img src="/Assets/223023222_571328.jpg" alt="" />
-          <div class="info">
-            <div class="info-top">
-              <p>14Hrs 27Mins</p>
-              <p>16 Lessons</p>
+          <div class="course">
+            <img src="/Assets/223023222_571328.jpg" alt="" />
+            <div class="info">
+              <div class="info-top">
+                <p>3Hrs 0Mins</p>
+                <p>7 Lessons</p>
+              </div>
+              <p class="info-bottom">How To Make Money in Crypto</p>
             </div>
-            <p class="info-bottom">The Cause and Effect Theory</p>
           </div>
+
+          <div class="course">
+            <img src="/Assets/223023222_571328.jpg" alt="" />
+            <div class="info">
+              <div class="info-top">
+                <p>3Hrs 0Mins</p>
+                <p>7 Lessons</p>
+              </div>
+              <p class="info-bottom">How To Make Money in Crypto</p>
+            </div>
+          </div> {% endcomment %}
         </div>
+      </section>
 
-        <div class="course">
-          <img src="/Assets/223023222_571328.jpg" alt="" />
-          <div class="info">
-            <div class="info-top">
-              <p>3Hrs 0Mins</p>
-              <p>7 Lessons</p>
-            </div>
-            <p class="info-bottom">How To Make Money in Crypto</p>
-          </div>
-        </div>
+      <div class="cart-footer" id="cart-footer">
+        <h3 id="buy-text">Buy course now!</h3>
 
-        <div class="course">
-          <img src="/Assets/223023222_571328.jpg" alt="" />
-          <div class="info">
-            <div class="info-top">
-              <p>3Hrs 0Mins</p>
-              <p>7 Lessons</p>
-            </div>
-            <p class="info-bottom">How To Make Money in Crypto</p>
-          </div>
-        </div> {% endcomment %}
+        <button id="add-to-cart">Add to Cart</button>
       </div>
-    </section>
-
-    <div class="cart-footer" id="cart-footer">
-      <h3 id="buy-text">Buy course now!</h3>
-
-      <button id="add-to-cart">Add to Cart</button>
-    </div>
+      {% else %}
+      <p>There are no courses to recommend yet</p>
+    {% endif %}
 
 
 {% endblock %}
 
+{% block include_js %}
+  <!-- Accordion -->
+    <script>
+      let acc = document.getElementsByClassName("accordion-btn");
+      let i;
+
+      for (i = 0; i < acc.length; i++) {
+        acc[i].addEventListener("click", function () {
+          this.classList.toggle("active");
+
+          let panel = this.nextElementSibling;
+
+          if (this.classList.contains("active")) {
+            this.querySelector("span").textContent = "🔼";
+          } else {
+            this.querySelector("span").textContent = "🔽";
+          }
+
+          if (panel.style.maxHeight) {
+            panel.style.maxHeight = null;
+            panel.style.border = "none";
+          } else {
+            panel.style.maxHeight = panel.scrollHeight + "px";
+            panel.style.border = "2px solid black";
+            panel.style.borderTop = "none";
+          }
+        });
+      }
+    </script>
+
+    <!-- Toggle nav js -->
+    <script>
+      let navLinks = document.getElementById("navLinks");
+
+      function showMenu() {
+        navLinks.style.right = "0";
+      }
+
+      function hideMenu() {
+        navLinks.style.right = "-200px";
+      }
+    </script>
+
+    <!-- Show buy bar view -->
+    <script>
+      window.onscroll = function () {
+        // Get the bar element
+        const bar = document.getElementById("cart-footer");
+
+        // Show the bar when scrolling down 200 pixels
+        if (
+          document.body.scrollTop > 600 ||
+          document.documentElement.scrollTop > 600
+        ) {
+          bar.style.display = "flex";
+        } else {
+          bar.style.display = "none";
+        }
+
+        // bar.addEventListener("click", scrollToTop);
+      };
+    </script>
+
+    <!-- TOggle Buy button -->
+    <script>
+      const addToCart = document.getElementById("add-to-cart");
+      const buyText = document.getElementById("buy-text");
+
+      addToCart.addEventListener("click", function () {
+        if (
+          buyText.textContent === "Buy Course Now!" &&
+          addToCart.textContent === "Add to Cart"
+        ) {
+          buyText.textContent = "Added to Cart";
+          addToCart.textContent = "Remove from Cart";
+        } else {
+          buyText.textContent = "Buy Course Now!";
+          addToCart.textContent = "Add to Cart";
+        }
+      });
+    </script>
+{% endblock %}
