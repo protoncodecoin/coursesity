@@ -12,11 +12,12 @@
         <p>
           <a href="{% url "quiz_edit" quiz.id %}">Edit</a>
           <a href="{% url "quiz_delete" quiz.id %}">Delete</a>
-          {% comment %} <a href="{% url "course_module_update" course.id %}">Edit modules</a> {% endcomment %}
-          {% comment %} {% if course.modules.count > 0 %}
-            <a href="{% url "module_content_list" course.modules.first.id %}">
-            Manage contents</a>
-          {% endif %} {% endcomment %}
+          <a href="{% url "quiz_question_update" quiz.id %}">Edit questions</a>
+          <p>{{ quiz.questions.answers.count }} answers </p>
+          {% if quiz.questions.count > 0 %}
+            <a href="{% url "quiz_answer_list" quiz.id %}">
+            Manage answers</a>
+          {% endif %}
         </p>
       </div>
     {% empty %}

@@ -1,4 +1,5 @@
 {% extends 'base2.html' %}
+{% load course %}
 {% load static %}
 
 {% block title %} 
@@ -13,18 +14,42 @@
 
 {% block content %}
 
+ <section class="hero-section">
+      <div class="hero-container">
+        <button class="slide-btn slide-btn-1">&larr;</button>
 
-  <section class="hero-section">
-    <div class="banner">
-      <img src="{% static 'assets/banner.png' %}" alt="Class Learning" class="">
-      <h1>
-        Best Online Platform for Learning
-      </h1>
-    </div>
-    <h3>
-      Trusted By Millions of Learners
-    </h3>
-  </section>
+        <div class="banner-carousel">
+          <div class="banner">
+            <img src="{% static 'assets/banner.png' %}"  alt="Class Learning" class="" />
+            <h1>
+              Best Online Platform <br />
+              for Learning 1
+            </h1>
+          </div>
+
+          <div class="banner">
+            <img src="{% static 'assets/banner.png' %}" alt="Class Learning" class="" />
+            <h1>
+              Best Online Platform <br />
+              for Learning 2
+            </h1>
+          </div>
+
+          <div class="banner">
+            <img src="{% static 'assets/banner.png' %}" alt="Class Learning" class="" />
+            <h1>
+              Best Online Platform <br />
+              for Learning 3
+            </h1>
+          </div>
+        </div>
+
+        <button class="slide-btn slide-btn-2">&rarr;</button>
+      </div>
+
+      <h3>Trusted By Millions of Learners</h3>
+    </section>
+
 
   <section class="discover">
     <h1>Discover Amazing Courses</h1>
@@ -56,6 +81,13 @@
                         <p>{{ course.total_modules }} modules</p>
                         <p> Instructor: {{ course.owner.get_full_name }}</p>
                     </div>
+                    <div class="middle">
+                      {% comment %} {% with num_rating=course.average_rating %} {% endcomment %}
+                        {% comment %} {% for number in num_rating|range %} {% endcomment %}
+                          Ratings: {{course.average_rating }} <span class="fa fa-star checked"></span> 
+                        {% comment %} {% endfor %} {% endcomment %}
+                      {% comment %} {% endwith %} {% endcomment %}
+                    </div>
                     <p class="info-bottom">
                         {{ course.title }}
                     </p>
@@ -67,12 +99,12 @@
   </section>
 
   {% if recently_added %}
-      <section class="my-courses discover">
+      <section class="discover">
       <h1>Recently Added</h1>
-
+      
+      <div class="field-content">
       {% for r in recently_added %}
 
-      <div class="field-content">
         <a href="{% url 'course_detail' r.slug %}" class="course all language">
           <img src="{{ r.image.url }}" alt="{{ r.title }}" />
           <div class="info">
@@ -80,21 +112,23 @@
               <p>{{ r.owner.get_full_name }}</p>
               <p>{{ r.modules.count }}</p>
             </div>
+             <div class="middle"> Ratings: {{r.average_rating }} <span class="fa fa-star checked"></span> </div>
             <p class="info-bottom">{{ r.title }}</p>
           </div>
         </a>
 
+        {% endfor %}
       </div>
-      {% endfor %}
     </section>
     {% endif %}
 
     {% if popular_courses %}
-    <section class="my-courses discover">
+    <section class="discover">
         <h1>Popular Courses </h1>
-      {% for pop in popular_courses %}
 
         <div class="field-content">
+      {% for pop in popular_courses %}
+
           <a href="{% url 'course_detail' pop.slug %}" class="course all language">
             <img src="{{ pop.image.url }}" alt="Image of {{ pop.title }}" />
             <div class="info">
@@ -102,192 +136,131 @@
                 <p>{{ pop.owner.get_full_name }}</p>
                 <p>{{ pop.modules.count }}</p>
               </div>
+               <div class="middle"> Ratings: {{pop.average_rating }} <span class="fa fa-star checked"></span> </div>
               <p class="info-bottom">{{ pop.title }}</p>
             </div>
           </a>
+
+          {% endfor %}
         </div>
 
-        {% endfor %}
       </section>
     {% endif %}
 
 
-      <section class="my-courses discover">
+    <section class="discover">
       <h1>Highly Rated</h1>
 
       <div class="field-content">
-        <a href="/coursepage.html" class="course all language">
-          <img src="{% static 'assets/banner.png'%}" alt="" />
+      {% for rating in highly_rated %}
+        <a href="{% url 'course_detail' rating.slug %}" class="course all language">
+          <img src="{{ rating.image.url }}" alt="" />
           <div class="info">
             <div class="info-top">
-              <p>3Hrs 0Mins</p>
-              <p>7 Lessons</p>
+              <p>{{ rating.modules.count }}</p>
+              <p>{{ rating.owner.get_full_name }}</p>
             </div>
-            <p class="info-bottom">Advanced Public Relations</p>
+            <div class="middle">
+            Ratings: {{rating.average_rating }} <span class="fa fa-star checked"></span>
+            </div>
+            <p class="info-bottom">{{ rating.title }}</p>
           </div>
         </a>
 
-        <a href="/coursepage.html" class="course all design">
-          <img src="{% static 'assets/banner.png'%}" alt="" />
-          <div class="info">
-            <div class="info-top">
-              <p>14Hrs 27Mins</p>
-              <p>16 Lessons</p>
-            </div>
-            <p class="info-bottom">Art & Design</p>
-          </div>
-        </a>
+        {% endfor %}
 
-        <a href="/coursepage.html" class="course all">
-          <img src="{% static 'assets/banner.png'%}" alt="" />
-          <div class="info">
-            <div class="info-top">
-              <p>3Hrs 0Mins</p>
-              <p>7 Lessons</p>
-            </div>
-            <p class="info-bottom">How To Make Money in Crypto</p>
-          </div>
-        </a>
-
-        <a href="/coursepage.html" class="course all science">
-          <img src="{% static 'assets/banner.png'%}" alt="" />
-          <div class="info">
-            <div class="info-top">
-              <p>3Hrs 0Mins</p>
-              <p>7 Lessons</p>
-            </div>
-            <p class="info-bottom">Introduction To Science</p>
-          </div>
-        </a>
-
-        <a href="/coursepage.html" class="course all science">
-          <img src="{% static 'assets/banner.png'%}" alt="" />
-          <div class="info">
-            <div class="info-top">
-              <p>3Hrs 0Mins</p>
-              <p>7 Lessons</p>
-            </div>
-            <p class="info-bottom">Entomology for Beginners</p>
-          </div>
-        </a>
-
-        <a href="/coursepage.html" class="course all math history">
-          <img src="{% static 'assets/banner.png'%}" alt="" />
-          <div class="info">
-            <div class="info-top">
-              <p>3Hrs 0Mins</p>
-              <p>7 Lessons</p>
-            </div>
-            <p class="info-bottom">History of Calculus</p>
-          </div>
-        </a>
-
-        <a href="/coursepage.html" class="course all programming engineering">
-          <img src="{% static 'assets/banner.png'%}" alt="" />
-          <div class="info">
-            <div class="info-top">
-              <p>14Hrs 27Mins</p>
-              <p>16 Lessons</p>
-            </div>
-            <p class="info-bottom">How to Become a Software Engineer</p>
-          </div>
-        </a>
-
-        <a href="/coursepage.html" class="course all programming">
-          <img src="{% static 'assets/banner.png'%}" alt="" />
-          <div class="info">
-            <div class="info-top">
-              <p>14Hrs 27Mins</p>
-              <p>16 Lessons</p>
-            </div>
-            <p class="info-bottom">Secret Programming Techniques</p>
-          </div>
-        </a>
-
-        <a href="/coursepage.html" class="course all design engineering">
-          <img src="{% static 'assets/banner.png'%}" alt="" />
-          <div class="info">
-            <div class="info-top">
-              <p>14Hrs 27Mins</p>
-              <p>16 Lessons</p>
-            </div>
-            <p class="info-bottom">AutoCAD Design</p>
-          </div>
-        </a>
       </div>
     </section>
-
-
+  
   
   {% endblock %}
 
   {% block include_js %}
-    <!-- Tab component Show/HIde -->
-<!-- <script>
-  const tab = document.querySelectorAll('.field-item');
-  const tabContainer = document.querySelector(".field-content");
+  <!-- swap tabs -->
+    <script>
+      const tabs = document.querySelectorAll(".field-item");
+      const tabContainer = document.querySelector(".field-content");
+      const courses = tabContainer.getElementsByTagName("a");
 
-  const courses = tabContainer.getElementsByTagName('a')
+      const populateField = (e) => {
+        // Remove 'active' class from all tabs
+        tabs.forEach((tab) => tab.classList.remove("active"));
 
-  const populateField = (e) => {
-    
-        for (let i = 0; i < tab.length; i++) {
-           tab[i].classList.remove('active')
-        }
-        e.classList.add('active')
+        // Add 'active' class to the clicked tab
+        e.classList.add("active");
 
-        let tabName = e.textContent.toLowerCase()
+        // Get the tab name in lowercase
+        const tabName = e.textContent.toLowerCase();
 
-        for (let i = 0; i < courses.length; i++) {
-          if (courses[i].classList.contains(tabName)) {
-            continue
-          } else {courses[i].classList.add('hidden')}
-        }
+        // Show or hide the courses based on the tab name
+        Array.from(courses).forEach((course) => {
+          if (course.classList.contains(tabName)) {
+            course.classList.remove("hidden"); // Show the matching course
+          } else {
+            course.classList.add("hidden"); // Hide non-matching courses
+          }
+        });
+      };
 
-  }
+      tabs.forEach((tab) => {
+        tab.addEventListener("click", () => populateField(tab));
+      });
+    </script>
 
-  tab.forEach((e) => {
-    e.addEventListener('click', () => {
-      populateField(e)
-    })
-  })
+    <script>
+      const slideCarousel = (
+        prevButton,
+        nextButton,
+        carouselContent,
+        carouselItems
+      ) => {
+        document.addEventListener("DOMContentLoaded", function () {
+          let currentIndex = 0;
 
-</script> -->
+          function updateCarousel() {
+            const width = carouselItems[0].clientWidth;
+            const offset = -currentIndex * width;
 
-<script>
-  const tabs = document.querySelectorAll('.field-item');
-  const tabContainer = document.querySelector('.field-content');
-  const courses = tabContainer.getElementsByTagName('a');
+            for (let i = 0; i < carouselItems.length; i++) {
+              carouselItems[i].style.transform = "translateX(" + offset + "px)";
+            }
+          }
 
-  const populateField = (e) => {
-    // Remove 'active' class from all tabs
-    tabs.forEach(tab => tab.classList.remove('active'));
+          prevButton.addEventListener("click", function () {
+            if (currentIndex > 0) {
+              currentIndex--;
+            } else {
+              currentIndex = carouselItems.length - 1; // Go to the last item
+            }
+            updateCarousel();
+          });
 
-    // Add 'active' class to the clicked tab
-    e.classList.add('active');
+          nextButton.addEventListener("click", function () {
+            if (currentIndex < carouselItems.length - 1) {
+              currentIndex++;
+            } else {
+              currentIndex = 0; // Go back to the first item
+            }
+            updateCarousel();
+          });
+        });
+      };
 
-    // Get the tab name in lowercase
-    const tabName = e.textContent.toLowerCase();
-
-    // Show or hide the courses based on the tab name
-    Array.from(courses).forEach(course => {
-      if (course.classList.contains(tabName)) {
-        course.classList.remove('hidden'); // Show the matching course
-      } else {
-        course.classList.add('hidden'); // Hide non-matching courses
-      }
-    });
-  };
-
-  tabs.forEach(tab => {
-    tab.addEventListener('click', () => populateField(tab));
-  });
-</script>
-
+      // trends
+      slideCarousel(
+        document.querySelector(".slide-btn-1"),
+        document.querySelector(".slide-btn-2"),
+        document.querySelector(".banner-carousel"),
+        document.querySelectorAll(".banner")
+      );
+    </script>
 
 
-<!-- Toggle navbar js -->
-<script>
+
+    <script>
+
+      // Toggle navbar js 
+
   let navLinks = document.getElementById("navLinks");
 
   function showMenu() {
@@ -297,7 +270,32 @@
   function hideMenu() {
     navLinks.style.right = "-200px";
   }
-</script>
+
+
+
+  
+//  toggle search bar
+
+  const searchButton = document.getElementById('search-input');
+  const searchResults = document.querySelector('.search-results');
+
+  searchButton.onfocus = () => {
+    searchResults.classList.toggle("hidden")
+  }
+
+  searchButton.onblur = () => {
+    searchResults.classList.toggle("hidden")
+  }
+
+  // mobile version
+const mobileSearchButton = document.querySelector('.m-search-icon');
+const mobileSearchBar = document.querySelector('.m-searchbar');
+
+mobileSearchButton.addEventListener('click', () => {
+  mobileSearchBar.classList.toggle("hidden")
+})
+
+    </script>
 
 
 

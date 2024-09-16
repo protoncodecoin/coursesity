@@ -1,0 +1,72 @@
+{% extends "base2.html" %}
+{% load static %}
+
+{% block content %}
+    <section class="questions">
+      <h3>Course 1 - Quiz 1</h3>
+
+      <div class="question-numb">
+        <h2><span class=>1</span>/3</h2>
+      </div>
+
+      <p class="question">What is the main use of Grid in websites?</p>
+
+      <form class="answers-container">
+        
+        {% comment %} <div >
+          <input name="ans" type="radio" />
+          <label for="ans"
+            >To reduce the amouunt of power consumed by the website after it has
+            loaded</label
+          >
+        </div>
+
+        <div>
+          <input name="ans" type="radio" />
+          <label for="ans"
+            >To order the website elements according the designers
+            preference</label
+          >
+        </div>
+
+        <div>
+          <input name="ans" type="radio" />
+          <label for="ans"
+            >To save the elements in the website when it has been closed</label
+          >
+        </div>
+
+        <div>
+          <input name="ans" type="radio" />
+          <label for="ans">To remove crooked lines in the website.</label>
+        </div> {% endcomment %}
+
+        <!-- <div class="button">red</div> -->
+      </form>
+      <button type="submit" id="next" class="submit-ans-btn">Next</button>
+      
+    </section>
+{% endblock %}
+
+{% block include_js %}
+    <script>
+      const token = "{{ csrf_token }}";
+    </script>
+    <!-- Quiz Functionality js -->
+    <script src="{% static 'js/quiz.js' %}"></script>
+    
+    <!-- Toggle navbar js -->
+    <script>
+      let navLinks = document.getElementById("navLinks");
+
+      function showMenu() {
+        navLinks.style.right = "0";
+      }
+
+      function hideMenu() {
+        navLinks.style.right = "-200px";
+      }
+    </script>
+     
+{% endblock %}
+  

@@ -18,7 +18,8 @@
 
         <p>Created by: <a href="#">{{ object.owner.get_full_name }}</a></p>
 
-        <p>Last Updated: {{ object.updated }}, 💬 English, 📋 No Captions</p>
+        <p>Last Updated: {{ object.updated }}, 💬 English</p>
+        <p class="rating">Ratings: {{course.average_rating }} <span class="fa fa-star checked"></span> </p>
       </div>
 
       <div class="banner-right">
@@ -26,7 +27,12 @@
 
         <h2 class="price">GH:{{object.price}}</h2>
 
-        <button>Add To Cart</button>
+        <form action="{% url 'cart:cart_add' object.id %}" method="post">
+          {% csrf_token %}
+          <button type="submit">Add To Cart</button>
+
+        </form>
+
 
         <h4>Course Includes:</h4>
 
@@ -38,36 +44,34 @@
     </section>
 
     <!-- COURSE DESCRIPTIOM -->
-     {% if object.course_description %}
-      <section class="course-description">
+    <section class="course-description">
+        {% if object.course_description %}
         <h2>Course Description</h2>
 
-        <p>
-          {{ object.course_description }}
-        </p>
+          <p>
+            {{ object.course_description }}
+          </p>
+        {% else %}
+          <h2>No course description </h2>
+        {% endif %}
       </section>
-      {% else %}
-      <h2>No course description </h2>
-      {% endif %}
 
     <!-- What youll learn -->
-    {% comment %} <section class="learn">
-      <h1>What You'll Learn</h1>
-      <ul>
-        <li>How To setup a trading account on various trading sites</li>
-        <li>How To invest in trending markets</li>
-        <li>How to make profits with minimal capital</li>
-        <li>Trading strategies of top traders</li>
-        <li>How to setup trading bots</li>
-        <li>Ways to invest your crypto gains in more sustainable portfolios</li>
-      </ul>
-    </section> {% endcomment %}
+     {% if object.modules %}
+      <section class="learn">
+        <h1>What You'll Learn</h1>
+        <ul>
+          {% with m=object.modules.all %}
+            {% for module in m %}
+            <li>{{ module.title }}</li>
+            {% endfor %}
+          {% endwith %}
+        </ul>
+      </section>
+      {% endif %}
 
     <!-- COURSE CONTENT -->
     <section class="course-content">
-      <h1>Contents of This Course</h1>
-      
-          <section class="course-content">
       <h1>Contents of This Course</h1>
 
       {% with m=object.modules.all %}
@@ -76,53 +80,19 @@
 
           <button class="accordion-btn">
             <h3>{{ module.title }}</h3>
-            <!-- <span>&dArr;</span> -->
             <span>🔽</span>
           </button>
           <div class="panel">
            {{ module.description }}
           </div>
-
         {% endfor %}
       {% endwith %}
-
-      {% comment %} <button class="accordion-btn">
-        <h3>Lesson 1: How to setup a trading account | 25mins</h3>
-        <span>🔽</span>
-      </button>
-      <div class="panel">
-        Lorem ipsum, dolor sit amet consectetur adipisicing elit. Assumenda
-        laboriosam at ipsa exercitationem ab vero officia ut laudantium eveniet
-        maiores.
-      </div>
-
-      <button class="accordion-btn">
-        <h3>Lesson 1: How to setup a trading account | 1Hr 3mins</h3>
-        <span>🔽</span>
-      </button>
-      <div class="panel">
-        Lorem ipsum, dolor sit amet consectetur adipisicing elit. Assumenda
-        laboriosam at ipsa exercitationem ab vero officia ut laudantium eveniet
-        maiores.
-      </div> {% endcomment %}
-
-      <button class="accordion-btn">
-        <h3>Lesson 1: How to setup a trading account | 1Hr 17mins</h3>
-        <span>🔽</span>
-      </button>
-      <div class="panel">
-        Lorem ipsum, dolor sit amet consectetur adipisicing elit. Assumenda
-        laboriosam at ipsa exercitationem ab vero officia ut laudantium eveniet
-        maiores.
-      </div>
-    </section>
-
     </section>
 
     <section class="instructor-profile">
       <div class="top">
         <h2><a href="">{{ object.owner.get_full_name }}</a></h2>
-        <h4>Professor at <a href="">Academy of Cat Traders</a></h4>
+        <h4>Professor at <a href="#"> {{ object.owner.instructor_profile.institution }}</a></h4>
       </div>
 
       <div class="middle">
@@ -156,55 +126,25 @@
                   <p>{{ course.modules.count }} Module{{ course.modules.count | pluralize }}</p>
                 </div>
                 <p class="info-bottom">{{ course.title }}</p>
+                <div class="middle">Ratings: {{course.average_rating }} <span class="fa fa-star checked"></span> </div>
               </div>
             </div>
             </a>
             {% endfor %}
 
           {% endif %}
-
-          {% comment %} <div class="course">
-            <img src="/Assets/223023222_571328.jpg" alt="" />
-            <div class="info">
-              <div class="info-top">
-                <p>14Hrs 27Mins</p>
-                <p>16 Lessons</p>
-              </div>
-              <p class="info-bottom">The Cause and Effect Theory</p>
-            </div>
-          </div>
-
-          <div class="course">
-            <img src="/Assets/223023222_571328.jpg" alt="" />
-            <div class="info">
-              <div class="info-top">
-                <p>3Hrs 0Mins</p>
-                <p>7 Lessons</p>
-              </div>
-              <p class="info-bottom">How To Make Money in Crypto</p>
-            </div>
-          </div>
-
-          <div class="course">
-            <img src="/Assets/223023222_571328.jpg" alt="" />
-            <div class="info">
-              <div class="info-top">
-                <p>3Hrs 0Mins</p>
-                <p>7 Lessons</p>
-              </div>
-              <p class="info-bottom">How To Make Money in Crypto</p>
-            </div>
-          </div> {% endcomment %}
         </div>
       </section>
 
       <div class="cart-footer" id="cart-footer">
         <h3 id="buy-text">Buy course now!</h3>
-
-        <button id="add-to-cart">Add to Cart</button>
+        <form action="{% url 'cart:cart_add' object.id %}" method='post'>
+          {% csrf_token %}
+          <button id="add-to-cart" type="submit">Add to Cart</button>
+        </form>
       </div>
-      {% else %}
-      <p>There are no courses to recommend yet</p>
+      {% comment %} {% else %}
+      <p>There are no courses to recommend yet</p> {% endcomment %}
     {% endif %}
 
 

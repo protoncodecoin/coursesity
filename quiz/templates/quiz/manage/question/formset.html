@@ -1,0 +1,19 @@
+{% extends 'base.html' %}
+
+{% block title %}
+    Edit "{{ quiz.title }}"
+{% endblock %}
+
+{% block content %}
+    <h1>Edit "{{ quiz.title }}"</h1>
+    <div class="module">
+        <h2>Course Questions</h2>
+            <form method="post">
+            {{ formset }}
+            {{ formset.management_form }}
+            {% csrf_token %}
+            <input type="submit" value="Save Questions">
+            </form>
+  </div>
+{% endblock %}
+

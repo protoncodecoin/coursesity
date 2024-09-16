@@ -15,6 +15,7 @@
                     <p>{{ course.owner.get_full_name}}</p>
                     <p>{{course.modules.count}} Module{{course.modules.count| pluralize}}</p>
                 </div>
+                <div class="middle">Ratings: {{course.average_rating }} <span class="fa fa-star checked"></span> </div>
                 <p class="info-bottom">{{ course.title }}</p>
             </div>
             </a>
@@ -31,19 +32,27 @@
     <section class="my-courses discover">
       <h1>Wishlist Courses</h1>
 
-      <div class="field-content">
-        <a href="/coursepage.html" class="course all language">
-          <img src="{% static 'assets/banner.png' %}" alt="" />
-          <div class="info">
-            <div class="info-top">
-              <p>3Hrs 0Mins</p>
-              <p>7 Lessons</p>
-            </div>
-            <p class="info-bottom">Advanced Public Relations</p>
-          </div>
-        </a>
+      <div class="field-content" id="wishlist">
 
-        <a href="/coursepage.html" class="course all design">
+        {% with wishlist=request.user.wishlist.all %}
+          {% for w in wishlist %}
+            <a href="{% url 'course_detail' w.course.slug %}" class="course all language">
+              <img src="{{ w.course.image.url }}" alt="Image of {{ w.course.title }}" />
+              <div class="info">
+                <div class="info-top">
+                  <p>{{ w.course.modules.count }} Module{{w.course.modules.count|pluralize }}</p>
+                  <p>{{ w.course.owner.get_full_name }} </p>
+                </div>
+                <div class="middle">
+                  Ratings: {{pop.average_rating }} <span class="fa fa-star checked"></span>
+                </div>
+                <p class="info-bottom">{{ w.course.title }}</p>
+              </div>
+            </a>
+          {% endfor %}
+        {% endwith %}
+
+        {% comment %} <a href="/coursepage.html" class="course all design">
           <img src="{% static 'assets/banner.png' %}" alt="" />
           <div class="info">
             <div class="info-top">
@@ -129,7 +138,7 @@
             </div>
             <p class="info-bottom">AutoCAD Design</p>
           </div>
-        </a>
+        </a> {% endcomment %}
       </div>
     </section>
 {% endblock %}

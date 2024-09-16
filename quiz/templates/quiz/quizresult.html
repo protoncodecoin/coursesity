@@ -1,0 +1,97 @@
+{% extends 'base2.html' %}
+{% load static %}
+
+{% block title %} Results {% endblock %}
+
+{% block content %}
+
+    <section class="results">
+      <h3>Course 1 - Quiz 1</h3>
+
+      <div class="result-numb">
+        <p class="result">
+          Congratulations, you scored <span>3</span> out of 3 questions. You're
+          amazing
+        </p>
+      </div>
+
+      <div class="course-nav">
+        <a href="/">Home</a>
+        <a href="{% url 'student_course_list' %}">Continue</a>
+      </div>
+    </section>
+
+    <section class="more-info">
+      <h2>More information on your quiz...</h2>
+
+      <div class="answers">
+        <div class="q-a">
+          <p class="q">Whats my name?</p>
+          <p class="a">Ronald</p>
+        </div>
+        
+        <div class="q-a">
+          <p class="q">Lorem ipsum dolor sit amet consectetur adipisi?</p>
+          <p class="a">Lorem ipsum dolor sit amet consectetur adipisicing elit. At sequi expedita ullam voluptatibus voluptate ad voluptatem, est recusandae. Cum, distinctio.</p>
+        </div>
+        
+        <div class="q-a">
+          <p class="q">Whats my name?</p>
+          <p class="a">Ronald</p>
+        </div>
+        
+        <div class="q-a">
+          <p class="q">Lorem ipsum dolor sit amet consectetur adipisi?</p>
+          <p class="a">Lorem ipsum dolor sit amet consectetur adipisicing elit. At sequi expedita ullam voluptatibus voluptate ad voluptatem, est recusandae. Cum, distinctio.</p>
+        </div>
+
+        <div class="q-a">
+          <p class="q">Lorem ipsum dolor sit amet consectetur adipisi?</p>
+          <p class="a">Lorem ipsum dolor sit amet consectetur adipisicing elit. At sequi expedita ullam voluptatibus voluptate ad voluptatem, est recusandae. Cum, distinctio.</p>
+        </div>
+        
+        <div class="q-a">
+          <p class="q">Whats my name?</p>
+          <p class="a">Ronald</p>
+        </div>
+
+        <div class="q-a">
+          <p class="q">Lorem ipsum dolor sit amet consectetur adipisi?</p>
+          <p class="a">Lorem ipsum dolor sit amet consectetur adipisicing elit. At sequi expedita ullam voluptatibus voluptate ad voluptatem, est recusandae. Cum, distinctio.</p>
+        </div>
+
+        <div class="q-a">
+          <p class="q">Whats my name?</p>
+          <p class="a">Ronald</p>
+        </div>
+
+        <div class="q-a">
+          <p class="q">Lorem ipsum dolor sit amet consectetur adipisi?</p>
+          <p class="a">Lorem ipsum dolor sit amet consectetur adipisicing elit. At sequi expedita ullam voluptatibus voluptate ad voluptatem, est recusandae. Cum, distinctio.</p>
+        </div>
+        
+      </div>
+    </section>
+{% endblock %}
+
+{% block include_js %}
+
+
+        <!-- Toggle navbar js -->
+         <script src="{% static 'js/result.js' %}"></script>
+
+
+        <!-- Toggle navbar js -->
+    <script>
+      let navLinks = document.getElementById("navLinks");
+
+      function showMenu() {
+        navLinks.style.right = "0";
+      }
+
+      function hideMenu() {
+        navLinks.style.right = "-200px";
+      }
+    </script>
+{% endblock %}
+ 

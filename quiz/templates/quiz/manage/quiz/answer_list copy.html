@@ -1,0 +1,74 @@
+{% extends "base.html" %}
+{% block title %}
+{% comment %} Module {{ module.order|add:1 }}: {{ module.title }} {% endcomment %}
+{% endblock %}
+{% block content %}
+{% with quiz=question.quiz %}
+<h1>Course "{{ quiz.title }}"</h1>
+<div class="contents">
+<h3>Modules</h3>
+<ul id="modules">
+{% for m in question.answers.all %}
+<li data-id="{{ m.id }}" {% if m == question %}
+class="selected"{% endif %}>
+<a href="{% url "quiz_answer_list" m.id %}">
+<span>
+{% comment %} Module <span class="order">{{ m.order|add:1 }}</span> {% endcomment %}
+</span>
+<br>
+{{ m.title }}
+</a>
+</li>
+{% empty %}
+<li>No questions yet.</li>
+{% endfor %}
+</ul>
+{% comment %} <p><a href="{% url "course_module_update" course.id %}"> {% endcomment %}
+Edit answers</a></p>
+</div>
+<div class="module">
+{% comment %} <h2>Module {{ module.order|add:1 }}: {{ module.title }}</h2> {% endcomment %}
+<h3>Answer contents:</h3>
+{% comment %} <div id="module-contents">
+{% for content in module.contents.all %}
+<div data-id="{{ content.id }}">
+{% with item=content.item %}
+<p>{{ item }}</p>
+<a href="#">Edit</a>
+<form action="{% url "module_content_delete" content.id %}"
+method="post">
+<input type="submit" value="Delete">
+{% csrf_token %}
+</form>
+{% endwith %}
+</div>
+{% empty %}
+<p>This module has no contents yet.</p>
+{% endfor %}
+</div> {% endcomment %}
+<h3>Add new Answer``:</h3>
+<ul class="content-types">
+<li>
+{% comment %} <a href="{% url "module_content_create" module.id "text" %}">
+Text
+</a> {% endcomment %}
+</li>
+<li>
+{% comment %} <a href="{% url "module_content_create" module.id "image" %}">
+Image
+</a> {% endcomment %}
+</li>
+<li>
+{% comment %} <a href="{% url "module_content_create" module.id "video" %}">
+Video
+</a> {% endcomment %}
+</li>
+<li>
+{% comment %} <a href="{% url "module_content_create" module.id "file" %}">
+File
+</a> {% endcomment %}
+</li>
+</ul>
+</div>
+{% endwith %}
+{% endblock %}

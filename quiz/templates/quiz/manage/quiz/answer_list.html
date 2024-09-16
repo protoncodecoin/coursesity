@@ -1,0 +1,30 @@
+{% extends "base.html" %}
+{% block title %}
+    {{ quiz_obj.title }}
+{% endblock %}
+
+
+{% block content %}
+    
+    {% for q in questions %}
+    <div>
+        <div style="margin: 10px auto; padding: 10px 20px; border: 2px solid skyblue;">
+            <p>Questions: {{ q.question_text }}</p>
+
+            {% with ans=q.answers.all %}
+                {% for answer in ans %}
+                    <p>answers: {{answer}} </p>
+                {% empty %}
+                    <p>No ans </p>
+                {% endfor  %}
+            {% endwith %}
+            <p>Score: {{ q.score }}</p>
+            <div>
+                 <button style="background-color: blue; border:none; padding: 10px 15px; color: white;">Edit</button>
+                 <button  style="background-color: red; border:none; padding: 10px 15px; color: white;">Delete</button> 
+             </div>
+        </div>
+    </div>
+
+    {% endfor %}
+{% endblock %}

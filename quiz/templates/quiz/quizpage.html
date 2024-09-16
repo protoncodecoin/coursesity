@@ -1,0 +1,33 @@
+{% extends "base2.html" %}
+{% load static %}
+
+{% block content %}
+    {% comment %} <div class="crumbs">
+      <h3>
+        <a href="index.html">Home</a> > <a href="learning.html"> Learning</a> >
+        <a href="course.html"> Course 1</a> >
+        <a href="quizpage.html"> Quiz 1</a>
+      </h3>
+    </div> {% endcomment %}
+
+    <section class="header">
+      <img src="{% static 'assets/quizheaderimage.svg' %}" alt="" />
+      <h1>Course 1 - Quiz 1 <br> Ready to test your learning so far?</h1>
+
+      <button><a href="{% url 'render_quiz' quiz.course.id quiz.id quiz.slug %}">Yes, I am!</a></button>
+    </section>
+
+    <!-- Toggle navbar js -->
+    <script>
+      let navLinks = document.getElementById("navLinks");
+
+      function showMenu() {
+        navLinks.style.right = "0";
+      }
+
+      function hideMenu() {
+        navLinks.style.right = "-200px";
+      }
+    </script>
+
+{% endblock %}

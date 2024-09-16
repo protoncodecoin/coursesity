@@ -104,12 +104,14 @@ class SimpleCourseSerializer(serializers.ModelSerializer):
 
 class WishListSerializer(serializers.ModelSerializer):
     course = SimpleCourseSerializer()
+    rating = serializers.ReadOnlyField(source="course.average_rating")
 
     class Meta:
         model = WishList
         fields = [
             "user",
             "course",
+            "rating",
         ]
 
 

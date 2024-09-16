@@ -1,4 +1,5 @@
 from datetime import timedelta
+from django.http.response import HttpResponse as HttpResponse
 from django.utils import timezone
 from django.shortcuts import get_object_or_404, redirect
 from django.views.generic.base import TemplateResponseMixin, View
@@ -15,9 +16,11 @@ from django.apps import apps
 from django.forms.models import modelform_factory
 from django.db.models import Count
 from django.core.cache import cache
+from django.shortcuts import render
 
 from braces.views import CsrfExemptMixin, JsonRequestResponseMixin
 from courses.recommender import Recommender
+from quiz.models import Quiz
 from students.forms import CourseEnrollForm
 
 
@@ -195,6 +198,7 @@ class ContentOrderView(CsrfExemptMixin, JsonRequestResponseMixin, View):
 class CourseListView(TemplateResponseMixin, View):
     model = Course
     template_name = "courses/course/list2.html"
+    MAX_SIZE: int = 9
 
     def get(self, request, subject=None):
         subjects = cache.get("all_subjects")
@@ -208,25 +212,32 @@ class CourseListView(TemplateResponseMixin, View):
         popular_courses = cache.get("popular_courses")
         if not popular_courses:
 
-            MAX_SIZE = 9
-
             popular_courses = (
                 all_courses.annotate(num_of_students=Count("students"))
                 .order_by("-num_of_students")
-                .filter(num_of_students__gte=1)[:MAX_SIZE]
+                .filter(num_of_students__gte=1)[: self.MAX_SIZE]
             )
             cache.set("popular_courses", popular_courses)
 
         # get recently added courses
         recently_added = cache.get("recently_added")
         if not recently_added:
-            MAX_SIZE = 9
+            self.MAX_SIZE = 9
             QUERY_DATE = timezone.now() - timedelta(days=30)
 
             recently_added = all_courses.filter(created__gte=QUERY_DATE).order_by(
                 "-created"
-            )[:MAX_SIZE]
+            )[: self.MAX_SIZE]
             cache.set("recently_added", recently_added)
+
+        # get highly rated courses
+        highly_rated = cache.get("highly_rated")
+        if not highly_rated:
+            self.MAX_SIZE = 9
+            highly_rated = all_courses.annotate(num_ratings=Count("ratings")).order_by(
+                "-num_ratings"
+            )[: self.MAX_SIZE]
+            cache.set("highly_rated", highly_rated)
 
         if subject:
             subject = get_object_or_404(Subject, slug=subject)
@@ -248,7 +259,8 @@ class CourseListView(TemplateResponseMixin, View):
                 "courses": courses,
                 "popular_courses": popular_courses,
                 "recently_added": recently_added,
-                "active": "index",
+                "highly_rated": highly_rated,
+                "style": "index",
             }
         )
 
@@ -267,7 +279,7 @@ class CourseDetailView(DetailView):
         r = Recommender()
         recommended_courses = r.suggest_courses_for([course], 4)
         context["recommended_courses"] = recommended_courses
-        context["active"] = "detail"  # load specific css
+        context["style"] = "detail"  # load specific css
         return context
 
 
@@ -290,3 +302,85 @@ class RatingView(TemplateResponseMixin, View):
         if created:
             messages.success(request, "Thanks for your feedback")
             return redirect("")
+
+
+def quizpage(request, course_id):
+
+    course = Course.objects.filter(id=course_id).first()
+
+    quiz = Quiz.objects.filter(course=course).order_by("created_at")
+
+    return render(
+        request,
+        "quiz/list_quiz.html",
+        {
+            "quizzes": quiz,
+            "course": course,
+            "style": "quiz_list",
+        },
+    )
+
+
+class QuizPage(TemplateResponseMixin, View):
+    template_name = "quiz/list_quiz.html"
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context["style"] = "list_quizzes"
+        return context
+
+    def dispatch(self, request, course_id):
+        self.course = get_object_or_404(Course, id=course_id)
+        return super().dispatch(request, course_id)
+
+    def get(self, request, course_id):
+        quizzes = Quiz.objects.filter(course=self.course).order_by("created_at")
+
+        return self.render_to_response(
+            {
+                "quizzes": quizzes,
+                "course": self.course,
+            }
+        )
+
+
+class QuizPageDetail(TemplateResponseMixin, View):
+    template_name = "quiz/quizpage.html"
+
+    def get(self, request, course_id, quiz_id, quiz_slug):
+        course = Course.objects.filter(id=course_id).first()
+        quiz = Quiz.objects.filter(id=quiz_id, course=course).first()
+        return self.render_to_response(
+            {
+                "quiz": quiz,
+                "style": "quiz_questions",
+            }
+        )
+
+
+class QuizPageRender(TemplateResponseMixin, View):
+    template_name = "quiz/quiz.html"
+
+    def get(self, request, course_id, quiz_id, quiz_slug):
+        course = Course.objects.filter(id=course_id).first()
+        quiz = Quiz.objects.filter(id=quiz_id, course=course).first()
+        return self.render_to_response(
+            {
+                "quiz": quiz,
+                "style": "quiz_questions",
+            }
+        )
+
+
+class QuizResultPage(TemplateResponseMixin, View):
+    template_name = "quiz/quizresult.html"
+
+    def get(self, request, quiz_id, quiz_slug):
+        # course = Course.objects.filter(id=course_id).first()
+        quiz = Quiz.objects.filter(id=quiz_id).first()
+        return self.render_to_response(
+            {
+                "quiz": quiz,
+                "style": "quiz_questions",
+            }
+        )

@@ -1,5 +1,4 @@
 {% load static %}
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -7,87 +6,112 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Coursiy |{% block title %} {% endblock %}</title>
-  {% if active == "index" %}
-    <link rel="stylesheet" href="{% static 'css/list.css' %}">
-  {% elif active == "detail"%}
+  {% comment %} {% if style == "index" %}
+    <link rel="stylesheet" href="{% static 'css/list.css' %}"> {% endcomment %}
+  {% if style == "detail"%}
      <link rel="stylesheet" href="{% static 'css/detail.css' %}">
   {% elif style == "student_content"%}
      <link rel="stylesheet" href="{% static 'css/learning.css' %}">
+  {% elif style == "quiz_questions"%}
+     <link rel="stylesheet" href="{% static 'css/quiz.css' %}">
+  {% else %}
+    <link rel="stylesheet" href="{% static 'css/list.css' %}">
+
   {% endif %}
   <link rel="icon" type="image/x-icon" href="{% static 'icons/coursitylogo.png' %}" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 </head>
 <body>
-  
-  <!-- <nav>
-    <a href="index.html"><img src="/Icons/coursitytextlogo2.png" alt="Coursity" class="header-logo"></a>
-
-    <div class="searchbar">
-      <img src="/Icons/searchico.svg" alt="" class="search-icon">
-      <input type="search" placeholder="Search">
-    </div>
-
-    <div>
-      <div class="cart-user">
-        <img src="/Icons/cartico.svg" alt="Cart Icon" class="cart-icon">
-        
-        <button type="button" class="user">Log In</button>
-           
-      </div>
-      
-      <div class="more-drop">
-          <img src="/Icons/hamburger.svg" alt="menu icon" class="menu-icon">
-          <div class="more-dropdown">
-            <a href="#">Categories</a>
-            <a href="#">Learining</a>
-            <a href="#">Cart</a>
-            <a href="#">Log In</a>
-          </div>
-      </div>
-    </div>
-  </nav> -->
-
-  
   <nav>
     <div class="main-nav">
       <a href="{% url 'course_list' %}"><img src="{% static 'icons/coursitytextlogo2.png' %}" alt="Coursity" class="header-logo"></a>
 
       <div class="searchbar">
         <img src="{% static 'icons/searchico.svg' %}" alt="" class="search-icon">
-        <input type="search" placeholder="Search">
+        <input type="search" placeholder="Search" id='search-input'>
+
+         <ul class="search-results hidden">
+            <li>How to make a bomb</li>
+            <li>How to become rich</li>
+            <li>How to learn C++ and Assembly in 2 weeks</li>
+          </ul>
       </div>
 
-      <div class="nav-links" id="navLinks">
-        <span class="fa" onclick="hideMenu()">X</span>
-        <div class="cart-user">
+        <div class="nav-links" id="navLinks">
+          <span class="fa" onclick="hideMenu()">X</span>
+          <div class="cart-user">
+            <div class="user-dp">
+              <img src=" {% if request.user.profile.photo %} {{ request.user.profile.photo.url }} {% else %} {% static 'img/no_image.png' %} {% endif %}" alt="" />
+              <a href="#" class="username">{{ request.user.get_full_name }}</a>
+            </div>
 
-          <a href="cart.html"><img src="{% static 'icons/cartico.svg' %}" alt="Cart Icon" class="cart-icon"></a>
+              
+              {% if request.user.is_authenticated %}
+              <form method='post' action="{% url 'logout' %}">
+                 {% csrf_token %}
+                  <button type="submit" class="user">Log out</button>
+                </form>
+              {% else %}
+                <form method='post' action="{% url 'login' %}">
+                  {% csrf_token %}
+                  <button type="submit" class="user">Log in</button>
+                </form>
+              {% endif %}
 
-          <a href="#" class="username">{{ request.user.get_full_name }}</a>
-          
-          <form method="post" action="{% url 'login' %}">
-          {% csrf_token %}
-          {% if request.user.is_authenticated %}
-            <button type="submit" class="user">Log Out</button>
-          {% else %}
-            <button type="submit" class="user">Log In</button>
-            {% endif %}
-          
-        </form>
-            
-        </div>
-        
-        <div class="more-drop">
-            
+
+            <a href="{% url 'cart:cart_detail' %}" class="cart-container">
+              {% with total_items=cart|length %}
+                <img src="{% static 'icons/cartico.svg' %}" alt="Cart Icon" class="cart-icon" />
+                <div class="cart-badge">{{ total_items }}</div>
+              {% endwith %}
+            </a>
+          </div>
+
+          <div class="more-drop">
             <div class="more-dropdown">
+              <a href="index.html">Home</a>
               <a href="#">Categories</a>
               <a href="learning.html">Learning</a>
-              <a href="cart.html">Cart</a>
-              <a href="#">Log In</a>
+              <a href="cart.html" class="m-cart-container">
+                Cart
+                <div class="m-cart-badge">3</div>
+              </a>
+              <form method="post" action="{% url 'login' %}">
+                {% csrf_token %}
+                {% if request.user.is_authenticated %}
+                  <button type="submit" class="user">Log Out</button>
+                {% else %}
+                  <button type="submit" class="user">Log In</button>
+                  {% endif %}
+              </form>
+              <!-- <a href="#" class="user-dp m-user-btn">
+                <img src="/Assets/sad cat.jpg" alt="Sir meowlingtom">
+                Sir Meowlington
+              </a> -->
             </div>
+          </div>
         </div>
-      </div>
 
-      <img src="/Icons/hamburger.svg" onclick="showMenu()" alt="menu icon" class="menu-icon fa">
+          <div class="m-search-hamburger">
+          <img src="{% static 'icons/searchico.svg' %}" alt="" class="m-search-icon" />
+
+          <div class="m-searchbar hidden">
+            <input type="search" placeholder="Search" />
+
+            <ul class="search-results">
+              <li>How to make a bomb</li>
+              <li>How to become rich</li>
+              <li>How to learn C++ and Assembly in 2 weeks</li>
+            </ul>
+          </div>
+
+          <img
+            src="{% static 'icons/hamburger.svg' %}"
+            onclick="showMenu()"
+            alt="menu icon"
+            class="menu-icon fa"
+          />
+        </div>
     </div>
   
 

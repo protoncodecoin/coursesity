@@ -80,5 +80,6 @@ class InstructorProfileAdmin(admin.ModelAdmin):
     list_display = [
         "user",
         "years_of_experience",
+        "institution",
         "biography",
     ]

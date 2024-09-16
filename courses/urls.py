@@ -39,4 +39,21 @@ urlpatterns = [
         name="course_list_subject",
     ),
     path("<slug:slug>/", views.CourseDetailView.as_view(), name="course_detail"),
+    # quiz
+    path("<int:course_id>/quizzes/", views.QuizPage.as_view(), name="course_quizzes"),
+    path(
+        "<int:course_id>/quizzes/<int:quiz_id>/<slug:quiz_slug>/",
+        views.QuizPageDetail.as_view(),
+        name="course_quiz",
+    ),
+    path(
+        "<int:course_id>/quizzes/<int:quiz_id>/<slug:quiz_slug>/render/",
+        views.QuizPageRender.as_view(),
+        name="render_quiz",
+    ),
+    path(
+        "quizzes/<int:quiz_id>/<slug:quiz_slug>/result/",
+        views.QuizResultPage.as_view(),
+        name="quiz_result",
+    ),
 ]

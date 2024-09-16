@@ -8,6 +8,7 @@ from .models import Question, Answer, Quiz, Score
 class QuizAdmin(admin.ModelAdmin):
     list_display = ["course", "title", "description", "created_at"]
     list_filter = ["created_at"]
+    prepopulated_fields = {"slug": ("title",)}
 
 
 # @admin.register(Answer)

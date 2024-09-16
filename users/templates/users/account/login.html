@@ -1,47 +1,37 @@
-{% extends 'base.html' %}
-
-{% block title %}
-    Login
-{% endblock %}
-
+{% extends "base2.html" %}
+{% block title %} Login {% endblock %}
 {% block content %}
-       <p>{% for message in messages %}
-            <div class="alert {{ message.tags }}">
-            <span class="closebtn" onclick="this.parentElement.style.display='none';"
-                >&times;</span
-            >
-            {{ message }}
-            </div>
-        {% endfor %}</p>
+    <form method="post" class="login-form">
+      {% csrf_token %}
+      <div class="input-field">
+        <label for="email">Email</label>
+        <input
+          type="email"
+          name="email"
+          id="email"
+          placeholder="email"
+          required
+        />
+      </div>
 
+      <div class="input-field">
+        <label for="password">Password</label>
+        <input
+          type="password"
+          name="password"
+          id="password"
+          placeholder="password"
+          required
+        />
+      </div>
 
-        <form method="post">
-            <label for="email">Email</label>
-        <br>
-        <input type="email" name="email" id="email" required>
-        
-        <br>
-        <br>
-        
-        <label for="password">Passoword</label>
-        <br>
-        <input type="password" name="password" id="password" required>
-        
-        
-        <br>
-        <br>
-        <input type="submit" value="Login">
-        {% csrf_token %}
+      <input type="submit" value="login" class="submit" />
     </form>
-    <br>
-    <br>
-    <br>
-    <br>
-    <p>Don't have an account<a href="{% url 'user_registration' %}"> Sign up?</a></p>
-
-    <br>
-    <br>
-    <br>
-    <p>sign up with google </p>
-    <a href={% url 'social:begin' 'google-oauth2' %}>Sign with Google</a>
-{% endblock %}
+    <div class="sign-up-container">
+      <p>Don't have an account?? <a href="{% url 'user_registration' %}">signup</a></p>
+    </div>
+    
+    <div class="google-auth">
+      <a href="{% url 'social:begin' 'google-oauth2' %}">Google</a>
+    </div>
+    {% endblock %}

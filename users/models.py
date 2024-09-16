@@ -58,6 +58,7 @@ class InstructorProfile(models.Model):
     years_of_experience = models.IntegerField(
         validators=[MinValueValidator(1)], default=1
     )
+    institution = models.CharField(max_length=500, blank=True)
 
     def __str__(self):
         return f"{self.user.get_full_name}"

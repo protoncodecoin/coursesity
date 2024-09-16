@@ -209,6 +209,96 @@ nav .fa {
   display: none;
 }
 
+/* login form */
+.login-form {
+  max-width: 90%;
+  padding: 20px 10px;
+  margin: 80px auto;
+  font-size: 20px;
+  margin-bottom: 8px;
+}
+
+label {
+  color: #5962d4;
+  display: block;
+  padding-top: 15px;
+  font-weight: bolder;
+}
+
+input[type="password"],
+input[type="email"] {
+  outline: none;
+  width: 90%;
+  height: 40px;
+  font-size: 22px;
+  transition: all 0.5s;
+}
+
+input[type="password"]:focus,
+input[type="email"]:focus {
+  outline: #5962d4;
+  border: 2.5px solid #5962d4;
+  width: 100%;
+  padding-left: 2px;
+}
+
+input::placeholder {
+  text-transform: capitalize;
+  padding-left: 5px;
+  color: #4f5163;
+  margin: 10px;
+  font-size: 15px;
+}
+
+.submit {
+  display: block;
+  border: none;
+  padding: 10px 20px;
+  margin: 20px auto;
+  font-weight: bolder;
+  color: #5962d4;
+  font-size: 20px;
+  text-transform: uppercase;
+  transition: all 0.5s;
+  border-radius: 2px;
+}
+
+.submit:hover {
+  background-color: #5962d4;
+  color: #fff;
+}
+
+.sign-up-container {
+  text-align: center;
+  font-weight: 500;
+}
+
+.sign-up-container a:link,
+.sign-up-container a:hover {
+  color: #5962d4;
+  text-decoration: underline;
+}
+
+.sign-up-container a:visited,
+.sign-up-container a:visited {
+  color: #0c1481;
+}
+
+.google-auth {
+  display: block;
+  margin-top: 30px;
+  text-align: center;
+}
+
+.google-auth a {
+  display: inline-block;
+  background-color: white;
+  border: 2px solid #ad0a0a;
+  padding: 15px 30px;
+  border-radius: 10px;
+  text-align: center;
+}
+
 /* NAV MEDIA */
 @media (max-width: 700px) {
   body::before {
@@ -387,172 +477,4 @@ nav .fa {
   .more-drop a {
     padding: 8px 12px;
   }
-}
-
-/* HERO SECTION */
-/* HERO SECTION */
-/* HERO SECTION */
-
-.hero-section {
-  position: relative;
-  width: 100%;
-  margin-bottom: 30px;
-}
-
-.overlay {
-  position: absolute;
-  width: 100%;
-  height: 100%;
-  backdrop-filter: blur(2px);
-}
-
-.banner {
-  display: grid;
-  height: 70vh;
-  place-items: center;
-  overflow: hidden;
-}
-
-.banner img {
-  position: absolute;
-  object-fit: cover;
-  width: 100%;
-  height: 70vh;
-  top: 0;
-  left: 0;
-  z-index: -1;
-}
-
-.banner h1 {
-  font-size: 3rem;
-  color: rgb(255, 255, 255);
-  width: 40%;
-  text-align: center;
-}
-
-.hero-section h3 {
-  font-size: 2rem;
-  text-align: center;
-  color: #5962d4;
-  margin: 0 auto;
-}
-
-/* HERO MEDIA */
-@media (max-width: 700px) {
-  .banner {
-    height: 50vh;
-  }
-
-  .banner img {
-    height: 50vh;
-  }
-
-  .banner h1 {
-    font-size: 2.5rem;
-    width: 70%;
-  }
-
-  .hero-section h3 {
-    font-size: 1.2rem;
-  }
-}
-
-/* My Courses SECTION */
-
-.my-courses {
-  position: relative;
-  width: 90%;
-  margin: 10vh auto;
-  padding: 10px;
-}
-
-.my-courses h1 {
-  font-size: 2.3rem;
-  text-align: center;
-}
-
-.field-content {
-  display: grid;
-  grid-template-columns: auto auto auto;
-  gap: 25px;
-  margin: 20px 0;
-  align-items: center;
-}
-
-.course {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  transition: 0.3s;
-}
-
-.course:hover {
-  transform: scale(1.02);
-}
-
-.course img {
-  width: 160px;
-  border-radius: 10px;
-}
-
-.info {
-  display: flex;
-  flex-direction: column;
-  justify-content: start;
-  font-size: 0.8rem;
-}
-
-.info-top {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-}
-
-.info-top p {
-  font-weight: 600;
-  color: rgb(126, 126, 126);
-}
-
-.middle {
-  color: #5962d4;
-  font-size: 20px;
-}
-
-.info-bottom {
-  font-weight: 700;
-  font-size: 1.1rem;
-  width: 185px;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  text-wrap: nowrap;
-}
-
-/* my-courses MEDIA QUERIES */
-
-@media (max-width: 700px) {
-  .my-courses {
-    width: 95%;
-    margin: 3vh auto;
-  }
-
-  .my-courses h1 {
-    font-size: 1.6rem;
-  }
-
-  .field-content {
-    grid-template-columns: auto;
-    gap: 25px;
-  }
-
-  .course img {
-    width: 130px;
-  }
-
-  .info-bottom {
-    /* width: 100%; */
-  }
-}
-
-.hidden {
-  display: none;
 }

@@ -9,3 +9,8 @@ def model_name(obj):
         return obj._meta.model_name
     except AttributeError:
         return None
+
+
+@register.filter(name="range")
+def get_range(value):
+    return range(value)
