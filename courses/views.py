@@ -363,7 +363,9 @@ class QuizPageRender(TemplateResponseMixin, View):
 
     def get(self, request, course_id, quiz_id, quiz_slug):
         course = Course.objects.filter(id=course_id).first()
+
         quiz = Quiz.objects.filter(id=quiz_id, course=course).first()
+
         return self.render_to_response(
             {
                 "quiz": quiz,

@@ -2,6 +2,11 @@ const msgEl = document.querySelector(".result");
 const resultComparisonEl  = document.querySelector(".answers");
 
 
+/**
+ * 
+ * @param {Object} data serializied data to post to the api endpoint
+ * @returns {Object} data containing 'ok' or 'error' depending on the status of the request 
+ */
 const postStudentScore = async (data) => {
     // post score the api
     const saveScoreURL = '/quiz/api/save-score/'

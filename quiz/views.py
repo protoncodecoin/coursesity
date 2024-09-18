@@ -8,6 +8,7 @@ from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMix
 from django.views.generic.base import TemplateResponseMixin, View
 from django.shortcuts import get_object_or_404, redirect
 from django.forms.models import modelform_factory
+from django_filters.rest_framework import DjangoFilterBackend
 
 from rest_framework import status
 from rest_framework.response import Response
@@ -42,14 +43,20 @@ class QuestionViewSet(viewsets.ModelViewSet):
     View to list all questions related to quiz
     """
 
+    permission_classes = [permissions.IsAuthenticated]
+
     queryset = Question.objects.all()
     serializer_class = QuestionSerializer
+    filter_backends = [DjangoFilterBackend]
+    filterset_fields = ["quiz"]
 
 
 class AnswerViewSet(viewsets.ModelViewSet):
     """
     View to list all anwers related to question
     """
+
+    permission_classes = [permissions.IsAuthenticated]
 
     queryset = Answer.objects.all()
     serializer_class = AnswerSerializer

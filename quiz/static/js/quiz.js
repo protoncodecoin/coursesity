@@ -1,7 +1,14 @@
 "use strict"
 
 // const URL = "/quiz/api/quizzes/1/";
-const URL = "/quiz/api/questions/";
+
+let currenhrefParams = window.location.href;
+currenhrefParams = currenhrefParams.split("/")
+
+const quiz_slug = currenhrefParams[7];
+const quiz_id = currenhrefParams[6];
+
+const URL = `/quiz/api/questions?quiz=${quiz_id}`;
 const questionEl = document.querySelector(".question");
 const answersContainer = document.querySelector(".answers-container");
 const questionNumTrackEl = document.querySelector(".question-numb");
@@ -136,12 +143,6 @@ document.querySelector("#next").addEventListener("click", function(e){
 
                     // quiz data
                     localStorage.setItem("quiz-questions", JSON.stringify(QUESTIONS))
-
-                    let currenhrefParams = window.location.href;
-                    currenhrefParams = currenhrefParams.split("/")
-
-                    const quiz_slug = currenhrefParams[7];
-                    const quiz_id = currenhrefParams[6];
 
                     // if true
                     // display result page
