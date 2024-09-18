@@ -61,7 +61,7 @@ class QuestionSerializer(serializers.HyperlinkedModelSerializer):
         ]
 
 
-class SaveScoreSerializer(serializers.HyperlinkedModelSerializer):
+class SaveScoreSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Score

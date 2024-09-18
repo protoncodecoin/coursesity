@@ -29,7 +29,11 @@
 
         <form action="{% url 'cart:cart_add' object.id %}" method="post">
           {% csrf_token %}
-          <button type="submit">Add To Cart</button>
+
+        <button type="submit">Add To Cart</button>          
+        {% comment %} <button class="wishlist-btn">Add to Wishlist</button> {% endcomment %}
+        <a href="#" class="add-to-wishlist">Add to Wishlist</a>
+
 
         </form>
 

@@ -3,10 +3,18 @@
 
 {% block title %} Results {% endblock %}
 
-{% block content %}
+{% block content %} 
+    {% comment %} <div class="crumbs">
+      <h3>
+        <a href="index.html">Home</a> > <a href="learning.html"> Learning</a> >
+        <a href="course.html"> Course 1</a> > <a href="quiz.html">Quiz 1</a> >
+        <a href="quizresultspage.html">Results</a>
+      </h3>
+    </div> {% endcomment %}
 
     <section class="results">
-      <h3>Course 1 - Quiz 1</h3>
+      <h3>Course: {{ quiz.course.title }} - Quiz: {{ quiz.title }}</h3>
+      <p class="total-questions">Total Questions: {{quiz.questions.count}}</p>
 
       <div class="result-numb">
         <p class="result">
@@ -25,57 +33,67 @@
       <h2>More information on your quiz...</h2>
 
       <div class="answers">
-        <div class="q-a">
-          <p class="q">Whats my name?</p>
-          <p class="a">Ronald</p>
-        </div>
-        
-        <div class="q-a">
-          <p class="q">Lorem ipsum dolor sit amet consectetur adipisi?</p>
-          <p class="a">Lorem ipsum dolor sit amet consectetur adipisicing elit. At sequi expedita ullam voluptatibus voluptate ad voluptatem, est recusandae. Cum, distinctio.</p>
-        </div>
-        
-        <div class="q-a">
-          <p class="q">Whats my name?</p>
-          <p class="a">Ronald</p>
-        </div>
-        
-        <div class="q-a">
-          <p class="q">Lorem ipsum dolor sit amet consectetur adipisi?</p>
-          <p class="a">Lorem ipsum dolor sit amet consectetur adipisicing elit. At sequi expedita ullam voluptatibus voluptate ad voluptatem, est recusandae. Cum, distinctio.</p>
-        </div>
-
-        <div class="q-a">
-          <p class="q">Lorem ipsum dolor sit amet consectetur adipisi?</p>
-          <p class="a">Lorem ipsum dolor sit amet consectetur adipisicing elit. At sequi expedita ullam voluptatibus voluptate ad voluptatem, est recusandae. Cum, distinctio.</p>
-        </div>
-        
-        <div class="q-a">
+        <div class="q-a correct">
           <p class="q">Whats my name?</p>
           <p class="a">Ronald</p>
         </div>
 
-        <div class="q-a">
+        <div class="q-a correct">
           <p class="q">Lorem ipsum dolor sit amet consectetur adipisi?</p>
-          <p class="a">Lorem ipsum dolor sit amet consectetur adipisicing elit. At sequi expedita ullam voluptatibus voluptate ad voluptatem, est recusandae. Cum, distinctio.</p>
+          <p class="a">
+            Lorem ipsum dolor sit amet consectetur adipisicing elit. At sequi
+            expedita ullam voluptatibus voluptate ad voluptatem, est recusandae.
+            Cum, distinctio.
+          </p>
         </div>
 
-        <div class="q-a">
+        <div class="q-a correct">
           <p class="q">Whats my name?</p>
           <p class="a">Ronald</p>
         </div>
 
-        <div class="q-a">
+        <div class="q-a correct">
           <p class="q">Lorem ipsum dolor sit amet consectetur adipisi?</p>
-          <p class="a">Lorem ipsum dolor sit amet consectetur adipisicing elit. At sequi expedita ullam voluptatibus voluptate ad voluptatem, est recusandae. Cum, distinctio.</p>
+          <p class="a">
+            Lorem ipsum dolor sit amet consectetur adipisicing elit. At sequi
+            expedita ullam voluptatibus voluptate ad voluptatem, est recusandae.
+            Cum, distinctio.
+          </p>
         </div>
-        
+
+        <div class="q-a correct">
+          <p class="q">Lorem ipsum dolor sit amet consectetur adipisi?</p>
+          <p class="a">
+            Lorem ipsum dolor sit amet consectetur adipisicing elit. At sequi
+            expedita ullam voluptatibus voluptate ad voluptatem, est recusandae.
+            Cum, distinctio.
+          </p>
+        </div>
+
+
+        <div class="q-a wrong">
+          <p class="q">Whats my name?</p>
+          <p class="a">Ronald</p>
+        </div>
+
+        <div class="q-a correct">
+          <p class="q">Lorem ipsum dolor sit amet consectetur adipisi?</p>
+          <p class="a">
+            Lorem ipsum dolor sit amet consectetur adipisicing elit. At sequi
+            expedita ullam voluptatibus voluptate ad voluptatem, est recusandae.
+            Cum, distinctio.
+          </p>
+        </div>
       </div>
     </section>
 {% endblock %}
 
 {% block include_js %}
 
+    
+      <script>
+          const token = "{{ csrf_token }}";
+    </script>
 
         <!-- Toggle navbar js -->
          <script src="{% static 'js/result.js' %}"></script>

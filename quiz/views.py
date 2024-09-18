@@ -1,6 +1,5 @@
 from typing import Any
 from django.db.models.query import QuerySet
-from django.http import HttpRequest
 from django.http.response import HttpResponse as HttpResponse
 from django.views.generic.list import ListView
 from django.views.generic.edit import CreateView, DeleteView, UpdateView
@@ -9,12 +8,12 @@ from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMix
 from django.views.generic.base import TemplateResponseMixin, View
 from django.shortcuts import get_object_or_404, redirect
 from django.forms.models import modelform_factory
-from django.shortcuts import render
 
 from rest_framework import status
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework import viewsets
+from rest_framework import permissions
 
 from courses.models import Course
 from .models import Quiz, Question, Answer, Score
@@ -58,6 +57,8 @@ class AnswerViewSet(viewsets.ModelViewSet):
 
 class SaveScoreView(APIView):
 
+    permission_classes = [permissions.IsAuthenticated]
+
     def get(self, request, format=None):
         scores = Score.objects.filter(user=request.user)
         serializer = SaveScoreSerializer(scores, many=True)
@@ -66,9 +67,20 @@ class SaveScoreView(APIView):
     def post(self, request):
 
         score = request.data.get("score", 0)
+        quiz_id = request.data.get("quiz")
+        user = request.user
         # save the score in a database model
-        # to be implemented later
-        return Response({"score": score}, status=status.HTTP_200_OK)
+
+        quiz_obj = Quiz.objects.get(id=quiz_id)
+
+        saved_score_obj, created = Score.objects.update_or_create(
+            user=user,
+            quiz=quiz_obj,
+            defaults={"score": score, "user": user, "quiz": quiz_obj},
+        )
+
+        # score = Score.objects.create(user=user, quiz=quiz_obj, score=score)
+        return Response({"message": "ok"}, status=status.HTTP_200_OK)
 
 
 class OwnerMixin:

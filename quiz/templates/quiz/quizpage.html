@@ -12,12 +12,16 @@
 
     <section class="header">
       <img src="{% static 'assets/quizheaderimage.svg' %}" alt="" />
-      <h1>Course 1 - Quiz 1 <br> Ready to test your learning so far?</h1>
+      <h1>Course: {{ quiz.course.title }} - Quiz: {{quiz.title }} <br> Ready to test your learning so far?</h1>
+
+        <p class="total-questions">Total Questions: {{quiz.questions.count}}</p>
 
       <button><a href="{% url 'render_quiz' quiz.course.id quiz.id quiz.slug %}">Yes, I am!</a></button>
     </section>
 
     <!-- Toggle navbar js -->
+    <script src="{% static 'js/result.js' %}"></script>
+
     <script>
       let navLinks = document.getElementById("navLinks");
 

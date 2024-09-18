@@ -1,37 +1,165 @@
-{% extends "base2.html" %}
-{% block title %} Login {% endblock %}
-{% block content %}
-    <form method="post" class="login-form">
-      {% csrf_token %}
-      <div class="input-field">
-        <label for="email">Email</label>
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Coursiy - Log In</title>
+    <link rel="stylesheet" href="{% static 'css/login.css' %}" />
+    <link rel="icon" type="image/x-icon" href="{% static 'icons/coursitylogo.png' %}" />
+  </head>
+  <body>
+
+    <nav>
+      <div class="main-nav">
+        <a href="/"
+          ><img
+            src="{% static 'icons/coursitytextlogo2.png' %}"
+            alt="Coursity"
+            class="header-logo"
+        /></a>
+
+        <!-- <div class="searchbar">
+          <img src="/Icons/searchico.svg" alt="" class="search-icon" />
+          <input type="search" placeholder="Search" id="search-input" />
+
+          <ul class="search-results hidden">
+            <li>How to make a bomb</li>
+            <li>How to become rich</li>
+            <li>How to learn C++ and Assembly in 2 weeks</li>
+          </ul>
+        </div> -->
+
+        <div class="nav-links" id="navLinks">
+          <span class="fa" onclick="hideMenu()">X</span>
+          <div class="cart-user">
+            <!-- <div class="user-dp">
+              <img src="/Assets/sad cat.jpg" alt="Sir meowlingtom" />
+              <a href="userprofilepage.html" class="username"
+                >Sir Meowlington</a
+              >
+            </div> -->
+
+            <a href="{% url 'user_registration' %}">
+            <button type="button" class="user">Sign Up</button>
+            </a>
+
+            <!-- <a href="cart.html" class="cart-container">
+              <img src="/Icons/cartico.svg" alt="Cart Icon" class="cart-icon" />
+              <div class="cart-badge">3</div>
+            </a> -->
+          </div>
+
+          <div class="more-drop">
+            <div class="more-dropdown">
+              <a href="/">Home</a><a href="#">Categories</a>
+              <a href="learning.html">Learning</a>
+
+
+              <!-- <a href="cart.html" class="m-cart-container">
+                Cart
+                <div class="m-cart-badge">3</div>
+              </a> -->
+
+              <!-- <a href="#" class="m-login-btn"> Log In </a> -->
+
+
+              <!-- <a href="#" class="user-dp m-user-btn">
+                <img src="/Assets/sad cat.jpg" alt="Sir meowlingtom">
+                Sir Meowlington
+              </a> -->
+            </div>
+          </div>
+        </div>
+
+        <div class="m-search-hamburger">
+
+          <!-- <img src="/Icons/searchico.svg" alt="" class="m-search-icon" /> 
+
+          <div class="m-searchbar hidden">
+            <input type="search" placeholder="Search" />
+
+            <ul class="search-results">
+              <li>How to make a bomb</li>
+              <li>How to become rich</li>
+              <li>How to learn C++ and Assembly in 2 weeks</li>
+            </ul>
+          </div>
+          -->
+
+          <img
+            src="{% static 'icons/hamburger.svg' %}"
+            onclick="showMenu()"
+            alt="menu icon"
+            class="menu-icon fa"
+          />
+        </div>
+      </div>
+
+    </nav>
+
+      <div >
+        <img class="banner"  src="{% static 'assets/banner.png' %}"  alt="Class Learning" class="" />
+      </div>
+
+
+      <div >
+        <img class="banner" src="{% static 'assets/banner.png' %}" alt="Class Learning" class="" />
+      </div>
+
+        <!-- lOGIN -->
+    <section class="log-in">
+      <img class="app-logo" src="{% static 'icons/coursitylogo.png' %}" alt="">
+
+      <h1>Welcome To Coursity</h1>
+
+      <p>Enter your Email and password to Log In</p>
+
+      <form method="post">
+         {% for message in messages %}
+          <div class="alert {{ message.tags }}">
+              <span class="closebtn" onclick="this.parentElement.style.display='none';">&times;</span>
+            {{ message }}
+           </div>
+        {% endfor %}
+
+        {% csrf_token %}
         <input
+          class="info"
           type="email"
-          name="email"
-          id="email"
-          placeholder="email"
+          placeholder="Email"
           required
+          name='email'
         />
-      </div>
+        <input class="info" type="password" required placeholder="Password" name="password"/>
+        
+        <div class="check-forgot-password">
+          <div class="left">
+            <input class="checkbox" type="checkbox" />
+            Keep me logged in
+          </div>
+          <div class="right">
+            <a href="#">Forgot passsword</a>
+          </div>
+        </div>
+        
+        <div class="button-container">
+          <button class="btn submit">Log in</button>
+        </div>
+      </form>
 
-      <div class="input-field">
-        <label for="password">Password</label>
-        <input
-          type="password"
-          name="password"
-          id="password"
-          placeholder="password"
-          required
-        />
-      </div>
-
-      <input type="submit" value="login" class="submit" />
-    </form>
-    <div class="sign-up-container">
-      <p>Don't have an account?? <a href="{% url 'user_registration' %}">signup</a></p>
-    </div>
-    
-    <div class="google-auth">
+      {% comment %} <div class="google-auth">
       <a href="{% url 'social:begin' 'google-oauth2' %}">Google</a>
-    </div>
-    {% endblock %}
+    </div> {% endcomment %}
+
+
+      <p>Don't have an account? <a href="{% url 'user_registration' %}">Sign Up</a></p>
+    </section>
+
+        <!-- SCRIPTS -->
+    <script src="{% static 'js/main.js' %}"></script>
+
+    <!--  -->
+  </body>
+</html>

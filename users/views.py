@@ -27,8 +27,13 @@ logger = logging.getLogger(__name__)
 class UserLoginView(TemplateResponseMixin, View):
     template_name = "users/account/login.html"
 
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context["style"] = "login"
+        return context
+
     def get(self, request, *args, **kwargs):
-        return self.render_to_response({})
+        return self.render_to_response({"style": "login"})
 
     def post(self, request, *args, **kwargs):
         email = request.POST.get("email")
@@ -51,8 +56,13 @@ class UserLoginView(TemplateResponseMixin, View):
 class UserRegisterView(TemplateResponseMixin, View):
     template_name = "users/account/registration.html"
 
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context["style"] = "signup"
+        return context
+
     def get(self, request, *args, **kwargs):
-        return self.render_to_response({})
+        return self.render_to_response({"style": "signup"})
 
     def post(self, request, *args, **kwargs):
         first_name = request.POST.get("firstName")

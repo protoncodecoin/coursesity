@@ -6,14 +6,16 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Coursiy |{% block title %} {% endblock %}</title>
-  {% comment %} {% if style == "index" %}
-    <link rel="stylesheet" href="{% static 'css/list.css' %}"> {% endcomment %}
   {% if style == "detail"%}
      <link rel="stylesheet" href="{% static 'css/detail.css' %}">
   {% elif style == "student_content"%}
      <link rel="stylesheet" href="{% static 'css/learning.css' %}">
   {% elif style == "quiz_questions"%}
      <link rel="stylesheet" href="{% static 'css/quiz.css' %}">
+  {% elif style == "signup"%}
+     <link rel="stylesheet" href="{% static 'css/signup.css' %}">
+  {% elif style == "login"%}
+     <link rel="stylesheet" href="{% static 'css/login.css' %}">
   {% else %}
     <link rel="stylesheet" href="{% static 'css/list.css' %}">
 

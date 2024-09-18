@@ -1,74 +1,115 @@
-{% extends "base.html" %}
-{% block title %}
-    Sign up
-{% endblock %}
-{% block content %}
-    <h1>
-        Sign Up
-    </h1>
-    <div class="module">
-        <p>Enter your details to create an account:</p>
 
-           {% for message in messages %}
-                <div class="alert {{ message.tags }}">
-                <span class="closebtn" onclick="this.parentElement.style.display='none';"
-                    >&times;</span
-                >
-                {{ message }}
-                </div>
-            {% endfor %}
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Coursiy - Sign Up</title>
+    <link rel="stylesheet" href="{% static 'css/signup.css' %}" />
+    <link rel="icon" type="image/x-icon" href="{% static 'icons/coursitylogo.png' %}" />
+  </head>
+  <body>
+    <!-- Sign UP -->
 
-        {% comment %} <form method="post">
-            {{ form.as_p }}
-            {% csrf_token %}
-            <p><input type="submit" value="Create my account"></p>
-        </form> {% endcomment %}
+     <section class="sign-up">
+      <div class="main">
+        <div class="bg">
+          <video
+            autoplay
+            loop
+            muted
+            src="{% static 'assets/one.mp4' %}"
+            class="video-bg"
+            poster="/Motion graphics/two-frame.png"
+          ></video>
 
-        <form method="post">
-            <label for="first-name">First Name</label>
-            <br>
-            <input type="text" name="firstName" id="first-name">
-            <br>
-            <br>
+          <div class="overlay hidden"></div>
+          <div class="sign-up-modal">
+            <img src="{% static 'icons/coursitylogo.png' %}" class="app-logo" alt="" />
 
-            <label for="last-name">Last Name</label>
-            <br>
-            <input type="text" name="lastName" id="last-name">
-            <br>
-            <br>
+            <h1>Create a Coursity account</h1>
 
-            <label for="email">Email</label>
-            <br>
-            <input type="email" name="email" id="email">
+            <p class="or">Sign Up with your Email Address</p>
 
-            <br>
-            <br>
-            <label for="instructor">Become an instructor</label>
-            <br>
-            <input type="checkbox" name="is_instructor" id="instructor">
+            <form method="post">
+                {% for message in messages %}
+                    <div class="alert {{ message.tags }}">
+                        <span class="closebtn" onclick="this.parentElement.style.display='none';"
+                            >&times;</span
+                        >
+                        {{ message }}
+                    </div>
+                    {% endfor %}
 
-            <br>
-            <br>
+                {% csrf_token %}
+              <div class="names">
+                <input
+                  class="info"
+                  type="text"
+                  name="firstName"
+                  placeholder="First name"
+                  required
+                />
+
+                <input
+                  class="info"
+                  type="text"
+                  name="lastName"
+                  placeholder="Last name"
+                  required
+                />
+              </div>
+
+              <input
+                class="info"
+                type="email"
+                placeholder="Email (example@gmail.com)"
+                required
+                name="email"
+              />
+              <input
+                class="info"
+                type="password"
+                placeholder="Password"
+                required
+                name="password1"
+              />
+              <input
+                class="info"
+                type="password"
+                placeholder="Confirm Password"
+                required
+                name="password2"
+              />
+              <div class="button-center">
+                <button type="submit" class="btn show-modal submit">
+                  Create Account
+                </button>
+              </div>
+            </form>
+
+            <p>Have an account? Log in <a href="{% url 'login' %}">here</a></p>
+          </div>
+
+          <!-- MODAL -->
+          <div class="pop-modal modal hidden">
+            <button class="close-modal">x</button>
+            <img src="/Images/mail.svg" alt="" />
+            <h2>
+              A verification link was sent to your email account! Please click
+              it to finish creating your account
+            </h2>
+          </div>
+        </div>
+      </div>
+    </section>
 
 
-            <label for="password">Passoword</label>
-            <br>
-            <input type="password" name="password1" id="password">
+        <!-- SCRIPTS -->
+    <script src="{% static 'js/main.js' %}"></script>
 
-            <br>
-            <br>
-
-            <label for="confirm-password">Confirm Passoword</label>
-            <br>
-            <input type="password" name="password2" id="confirm-password">
-
-
-            <br>
-            <br>
-            <input type="submit" value="Login">
-
-            {% csrf_token %}
-        </form>
-    </div>
-    <p>No Account? <a href="{% url 'login' %}"> Login!</a></p>
-{% endblock %}
+    <!--  -->
+  </body>
+</html>

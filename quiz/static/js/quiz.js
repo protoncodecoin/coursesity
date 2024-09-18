@@ -83,8 +83,7 @@ const displayQuestion = () => {
         
         <div >
           <input name="ans" type="radio" />
-          <label for="ans"
-            > ${ans.text}</label
+          <label for="ans">${ans.text}</label
           >
         </div>
         
@@ -111,6 +110,9 @@ document.querySelector("#next").addEventListener("click", function(e){
 
     if (hasUserSelectedAns){
 
+        // remove alert message if it's in the dom
+        document.querySelector(".alert").style.display="none";
+
         for (let ans of optionsEl) {
             if (ans.checked){
                 let userChoice = ans.parentElement.querySelector("label").textContent;
@@ -126,32 +128,36 @@ document.querySelector("#next").addEventListener("click", function(e){
                 // move to the next question if not
                 if (currentQuestionNum + 1 === TOTALNUMQUESTIONS){
                     // save user answers to the localstorage
+                    const result = JSON.stringify(tempStorage)
+                    
+                    // user results
+                    localStorage.removeItem("result")
+                    localStorage.setItem("result", result)
+
+                    // quiz data
+                    localStorage.setItem("quiz-questions", JSON.stringify(QUESTIONS))
 
                     let currenhrefParams = window.location.href;
                     currenhrefParams = currenhrefParams.split("/")
-
-                    'http://localhost:8000/course/6/quizzes/1/python-programming/render/'
 
                     const quiz_slug = currenhrefParams[7];
                     const quiz_id = currenhrefParams[6];
 
                     // if true
                     // display result page
-                    window.location.href = `/course/quizzes/${quiz_id}/${quiz_slug}/result/`
+                    return window.location.href = `/course/quizzes/${quiz_id}/${quiz_slug}/result/`;
                 }
 
                 currentQuestionNum += 1;
 
                 // call display question
                 displayQuestion()
-
-                
                 
             }
         }
     } else {
         // ask user to select answer
-        console.log("user has not selected answer")
+      document.querySelector(".alert").style.display="block";
     }
         
 })
