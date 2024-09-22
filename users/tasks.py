@@ -8,14 +8,14 @@ from django.utils.encoding import force_bytes
 from celery import shared_task
 from .tokens import generate_token
 
-logger = logging.getLogger(__name__)
+# logger = logging.getLogger(__name__)
 
 
 @shared_task
 def send_welcome_email(user_id):
     try:
         unverified_user = get_user_model().objects.get(id=user_id)
-        logger.info(f"Unverified user is {unverified_user}")
+        # logger.info(f"Unverified user is {unverified_user}")
 
         subject = "Welcome to Coursesity"
         message = f"Hello {unverified_user.first_name}!\n\nThank you for choosing Coursesity. There are exciting opportunities awaiting you!"
@@ -25,17 +25,18 @@ def send_welcome_email(user_id):
         sent_email = send_mail(
             subject, message, from_email, to_list, fail_silently=False
         )
-        logger.info(f"Welcome email sent: {sent_email}")
+        # logger.info(f"Welcome email sent: {sent_email}")
         return sent_email
     except Exception as e:
-        logger.error(f"Email couldn't be sent: {e}")
+        # logger.error(f"Email couldn't be sent: {e}")
+        print(str(e))
 
 
 @shared_task
 def send_activation_email(user_id):
     try:
         unverified_user = get_user_model().objects.get(id=user_id)
-        logger.info(f"Unverified user is {unverified_user}")
+        # logger.info(f"Unverified user is {unverified_user}")
 
         from_email = settings.EMAIL_HOST_USER
         to_list = [unverified_user.email, "princeaffumasante@gmail.com"]
@@ -53,7 +54,8 @@ def send_activation_email(user_id):
         mail_sent = send_mail(
             email_subject, messages2, from_email, to_list, fail_silently=False
         )
-        logger.info(f"Activation email sent: {mail_sent}")
+        # logger.info(f"Activation email sent: {mail_sent}")
         return mail_sent
     except Exception as e:
-        logger.error(f"Couldn't send the mail: {e}")
+        # logger.error(f"Couldn't send the mail: {e}")
+        print(str(e))

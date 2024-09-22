@@ -231,6 +231,7 @@ nav .fa {
 
 .added {
   background-color: rgb(0, 99, 0);
+  color: #fff;
 }
 
 .added:hover {
@@ -939,11 +940,6 @@ nav .fa {
     /* width: 50px; */
     width: 50%;
   }}
-
-
-
-
-
 
 
 

@@ -1,0 +1,85 @@
+{% extends 'base2.html' %}
+{% block title %} Result for {{ query }}{% endblock %}
+
+{% block content %}
+
+    <section class="query">
+      {% with results.count as total_results %}
+      <h1>Found ({{total_results}}) result{{ total_results|pluralize}} for {{query}}</h1>
+      {% endwith %}
+
+      <div class="field-content">
+        {% for result in results %}
+          <a href="{% url 'course_detail' result.slug %}" class="course all language">
+            <img src="{{ result.image.url }}" alt="{{ result.title }}" />
+            <div class="info">
+              <div class="info-top">
+                <p>Module{{result.modules|pluralize}}: {{result.modules.count }}</p>
+                <p>Instructor: {{result.owner.get_full_name }}</p>
+              </div>
+              <div class="middle">
+               Ratings: {{result.average_rating }} <span class="fa fa-star checked"></span> 
+              </div>
+              <p class="info-bottom">{{ result.title }}</p>
+
+              <p class="info-bottom" style="color: #5962d4">GHS {{result.price }}</p>
+            </div>
+          </a>
+          {% endfor %}
+      </div>
+
+      <!-- nocontent HTML -->
+      <!-- nocontent HTML -->
+      <!-- nocontent HTML -->
+      <!-- <div class="empty">
+        <img src="/Assets/floating.svg" alt="" />
+        <h4>Nothing to see..👀</h4>
+      </div> -->
+    </section>
+
+    <section class="query">
+      <h1>similar Courses</h1>
+
+     <div class="field-content">
+      {% for sim in similar %}
+        <a href="{% url 'course_detail' sim.slug %}" class="course all language">
+            <img src="{{ sim.image.url }}" alt="{{ sim.title }}" />
+            <div class="info">
+              <div class="info-top">
+                <p>Module{{sim.modules|pluralize}}: {{sim.modules.count }}</p>
+                <p>Instructor: {{sim.owner.get_full_name }}</p>
+              </div>
+              <div class="middle">
+               Ratings: {{sim.average_rating }} <span class="fa fa-star checked"></span> 
+              </div>
+              <p class="info-bottom">{{ sim.title }}</p>
+
+              <p class="info-bottom" style="color: #5962d4">GHS {{sim.price }}</p>
+            </div>
+          </a>
+        {% endfor %}
+
+        {% comment %} <a href="/instuctorprofilepage.html" class="course">
+          <div class="instructor-content">
+            <img src="/Assets/sad cat.jpg" alt="instructor-image" />
+            <div class="stats">
+              <p><span>👨‍🏫</span> Sir Meowlington</p>
+              <p><span>📚</span> 13 courses</p>
+              <p><span>🎓</span> 7000+ Enrollments</p>
+            </div>
+          </div>
+        </a> {% endcomment %}
+        
+      </div>
+
+      <!-- nocontent HTML -->
+      <!-- nocontent HTML -->
+      <!-- nocontent HTML -->
+      <div class="empty">
+        <img src="/Assets/floating.svg" alt="" />
+        {% comment %} <h4>Nothing to see..👀</h4> {% endcomment %}
+      </div>
+    </section>
+
+
+{% endblock %}

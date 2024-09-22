@@ -49,6 +49,6 @@ def stripe_webhook(request):
             r.courses_bought(courses)
 
             # launch asynchronous task
-            # payment_complete.delay(order.id)
+            payment_complete.delay(order.id)
 
     return HttpResponse(status=200)

@@ -1,5 +1,6 @@
 import logging
 
+from django.shortcuts import get_object_or_404
 from django.contrib.auth import authenticate, login
 from django.contrib.sites.shortcuts import get_current_site
 from django.template.loader import render_to_string
@@ -14,8 +15,13 @@ from django.contrib.auth.password_validation import validate_password
 from django.conf import settings
 from django.core.mail import send_mail
 from django.contrib.auth.models import Group
+from django.views.generic.detail import DetailView
+from django.views.generic.edit import UpdateView
 
-from .models import Profile
+from courses.models import Course
+
+
+from .models import InstructorProfile, Profile
 from .tokens import generate_token
 from . import tasks
 
@@ -128,58 +134,58 @@ class UserRegisterView(TemplateResponseMixin, View):
 
         # launch asynchronous task
         # current_site = get_current_site(request)
-        logger.info(f"The new user is: {myuser.id}")
+        # logger.info(f"The new user is: {myuser.id}")
 
-        # tasks.send_welcome_email.delay(myuser.id)
-        # tasks.send_activatation_email.delay(myuser.id)
+        tasks.send_welcome_email.delay(myuser.id)
+        tasks.send_activation_email.delay(myuser.id)
 
-        # messages.success(
-        #     request,
-        #     "Your account has been created successfully!\nPlease check your email to confirm your email address and activate your account.",
-        # )
-        # return redirect("login")
+        messages.success(
+            request,
+            "Your account has been created successfully!\nPlease check your email to confirm your email address and activate your account.",
+        )
+        return redirect("login")
 
-        try:
-            # Send a welcome email
-            subject = "Welcome to Coursesity"
-            message = f"Hello {myuser.first_name}!\n\nThank you for choosing Coursesity. There are exciting opportunities awaiting you!"
-            from_email = settings.EMAIL_HOST_USER
-            to_list = ["sistercharmings@gmail.com"]
-            send_mail(
-                subject,
-                message,
-                "princeaffumasante@gmail.com",
-                to_list,
-                fail_silently=False,
-            )
+        # try:
+        #     # Send a welcome email
+        #     subject = "Welcome to Coursesity"
+        #     message = f"Hello {myuser.first_name}!\n\nThank you for choosing Coursesity. There are exciting opportunities awaiting you!"
+        #     from_email = settings.EMAIL_HOST_USER
+        #     to_list = ["sistercharmings@gmail.com"]
+        #     send_mail(
+        #         subject,
+        #         message,
+        #         "princeaffumasante@gmail.com",
+        #         to_list,
+        #         fail_silently=False,
+        #     )
 
-            # send email confirmation link
-            current_site = get_current_site(request)
-            email_subject = "Confirm Your Email Address"
-            messages2 = render_to_string(
-                "registration/confirmation.html",
-                {
-                    "name": myuser.first_name,
-                    "domain": current_site.domain,
-                    "uid": urlsafe_base64_encode(force_bytes(myuser.pk)),
-                    "token": generate_token.make_token(myuser),
-                },
-            )
-            send_mail(email_subject, messages2, from_email, to_list, fail_silently=True)
-            # tasks.send_welcome_email(myuser.id)
-            # tasks.send_activatation_email(myuser.id)
+        #     # send email confirmation link
+        #     current_site = get_current_site(request)
+        #     email_subject = "Confirm Your Email Address"
+        #     messages2 = render_to_string(
+        #         "registration/confirmation.html",
+        #         {
+        #             "name": myuser.first_name,
+        #             "domain": current_site.domain,
+        #             "uid": urlsafe_base64_encode(force_bytes(myuser.pk)),
+        #             "token": generate_token.make_token(myuser),
+        #         },
+        #     )
+        #     send_mail(email_subject, messages2, from_email, to_list, fail_silently=True)
+        #     # tasks.send_welcome_email(myuser.id)
+        #     # tasks.send_activatation_email(myuser.id)
 
-            messages.success(
-                request,
-                "Your account has been created successfully!\nPlease check your email to confirm your email address and activate your account.",
-            )
+        #     messages.success(
+        #         request,
+        #         "Your account has been created successfully!\nPlease check your email to confirm your email address and activate your account.",
+        #     )
 
-            return redirect("login")
+        #     return redirect("login")
 
-        except Exception as e:
-            print("exception is: ", str(e))
-            messages.error(request, "Error sending email", str(e))
-            return redirect("user_registration")
+        # except Exception as e:
+        #     print("exception is: ", str(e))
+        #     messages.error(request, "Error sending email", str(e))
+        #     return redirect("user_registration")
 
 
 def activate_account(request, uidb64, token):
@@ -198,10 +204,53 @@ def activate_account(request, uidb64, token):
         myuser.save()
 
         # create user profile
-        Profile.objects.create(user=myuser)
+        if myuser.is_instructor:
+            InstructorProfile.objects.create(user=myuser)
+        else:
+            Profile.objects.create(user=myuser)
 
         # login(request, myuser)
         messages.success(request, "Your account has been activated!")
         return redirect("login")
     else:
         return render(request, "registration/activation_failed.html")
+
+
+class OwnerMixin:
+    def get_queryset(self):
+        qs = super().get_queryset()
+        return qs.filter()
+
+
+def showProfile(request, user_id, user_slug):
+    User = get_user_model()
+    user_obj = get_object_or_404(User, id=user_id)
+    # MAX_SIZE: int = 6
+
+    if request.method == "POST":
+        pass
+    if user_obj.is_instructor:
+        profile = InstructorProfile.objects.filter(user=user_obj).first()
+        courses_created = Course.objects.filter(owner=user_obj)
+        return render(
+            request,
+            "profile/instructor.html",
+            {
+                "style": "instructor",
+                "profile": profile,
+                "instructor": user_obj,
+                "courses": courses_created,
+            },
+        )
+    profile = Profile.objects.filter(user=user_obj).first()
+    courses_completed = user_obj.courses_joined.filter(has_completed=True)
+    return render(
+        request,
+        "profile/student.html",
+        {
+            "style": "student",
+            "student": user_obj,
+            "profile": profile,
+            "courses_completed": courses_completed,
+        },
+    )

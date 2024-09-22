@@ -1,0 +1,107 @@
+{% extends "base2.html" %}
+{% load static %}
+{% block title %} Profile of {{request.user.get_full_name }} {% endblock %}
+
+{% block content %}
+    <!-- profile section -->
+    <section class="instructor-profile">
+      <div class="top">
+        <h2>{{ instructor.get_full_name }}</h2>
+        <h4>Professor at <a href="{{ instructor.website }}">{{ profile.institution }}</a></h4>
+      </div>
+
+      <div class="middle">
+        <img src="{{ instructor.photo.url }}" alt="instructor-image" />
+        <div class="stats">
+          <p><span>📚</span> {{instructor.num_of_courses}} course{{ iinstructor|pluralize}}s</p>
+          <p><span>🎓</span> {{instructor.get_total_number_of_enrolled_student }} Enrollment{{ instructor.get_total_number_of_enrolled_student|pluralize}}</p>
+          <p><span>🕔</span> Instructor for {{profile.years_of_experience }}+ months</p>
+        </div>
+      </div>
+
+      <p class="about">
+        <h3>About Me</h3>
+        {{ profile.biography }}
+      </p>
+
+      <div class="links">
+        <a href="{{ instructor.website }}">Website &rarr;</a>
+        
+        <a href="{{ instructor.x }}">(X) Twitter &rarr;</a>
+        
+        <a href="{{ instructor.linkedIn }}">LinkedIn &rarr;</a>
+      </div>
+    </section>
+
+    <hr>
+
+  <!-- courses  -->
+  <section class="courses-completed">
+    <h2>Courses Created ({{courses.count}})</h2>
+
+    <div class="field-content">
+          {% for course in courses %}
+            <a href="{% url 'course_detail' course.slug %}" class="course all language">
+            <img src="{{ course.image.url }}" alt="{{ course.title }}" />
+            <div class="info">
+                <div class="info-top">
+                <p>Module {{course.modules.count|pluralize}}s: {{ course.modules.count }}</p>
+                <p>Instructor: {{ course.owner.get_full_name }}</p>
+                </div>
+                <div class="middle">
+                Rating: {{ course.average_rating }} <span class="fa fa-star checked"></span> 
+                </div>
+                <p class="info-bottom">{{ course.title }}</p>
+            </div>
+            </a>
+        {% endfor %}
+      </div>
+
+      <!-- nocontent HTML -->
+      <!-- nocontent HTML -->
+      <!-- nocontent HTML -->
+
+      <!-- <div class="empty">
+      <img src="/Assets/floating.svg" alt="">
+      <h4>Nothing to see..👀</h4>
+    </div> -->
+  </section>
+
+
+{% endblock %}
+
+{% block include_js %}
+    <!-- SCRIPTS -->
+
+    <script src="main.js"></script>
+
+    <!-- Accordion -->
+    <script>
+
+      let acc = document.getElementsByClassName("accordion-btn");
+      let i;
+
+      for (i = 0; i < acc.length; i++) {
+        acc[i].addEventListener("click", function () {
+          this.classList.toggle("active");
+
+          let panel = this.nextElementSibling;
+
+          if (this.classList.contains("active")) {
+            this.querySelector("span").textContent = "🔼";
+          } else {
+            this.querySelector("span").textContent = "🔽";
+          }
+
+          if (panel.style.maxHeight) {
+            panel.style.maxHeight = null;
+            panel.style.border = "none";
+          } else {
+            panel.style.maxHeight = panel.scrollHeight + "px";
+            panel.style.border = "2px solid black";
+            panel.style.borderTop = "none";
+          }
+        });
+      }
+    </script>
+{% endblock %}

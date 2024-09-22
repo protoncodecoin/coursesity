@@ -37,9 +37,10 @@ def cart_detail(request):
 
     return render(
         request,
-        "cart/detail.html",
+        "cart/detail2.html",
         {
             "cart": cart,
             "recommended_courses": recommended_courses,
+            "style": "cart",
         },
     )

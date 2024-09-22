@@ -14,15 +14,19 @@
             {% with ans=q.answers.all %}
                 {% for answer in ans %}
                     <p>answers: {{answer}} </p>
+               
+            <div>
+                <a href="{% url 'answer_content_create' q.quiz.id q.id %}" style="background-color: green; border:none; padding: 10px 15px; color: white;">Add</a>
+                 <a href="{% url 'answer_content_update' q.quiz.id answer.id q.id %}" style="background-color: blue; border:none; padding: 10px 15px; color: white;">Edit</a>
+                 <a  style="background-color: red; border:none; padding: 10px 15px; color: white;">Delete</a> 
+             </div>
                 {% empty %}
-                    <p>No ans </p>
+                    <a href="{% url 'answer_content_create' q.quiz.id q.id %}" style="background-color: green; border:none; padding: 10px 15px; color: white;">Add</a>
+                
                 {% endfor  %}
             {% endwith %}
             <p>Score: {{ q.score }}</p>
-            <div>
-                 <button style="background-color: blue; border:none; padding: 10px 15px; color: white;">Edit</button>
-                 <button  style="background-color: red; border:none; padding: 10px 15px; color: white;">Delete</button> 
-             </div>
+           
         </div>
     </div>
 

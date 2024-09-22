@@ -25,9 +25,7 @@ const postStudentScore = async (data) => {
         throw new Error(response)
     }
 
-    const responseData = await response.json();
-
-    console.log(responseData);
+    await response.json();
 
     } catch (error) {
         console.log(error)
@@ -132,7 +130,7 @@ const compareAnswers = (quiz, userChoice) => {
         "quiz": +quiz_id,
     }
 
-    //
+    // send data to the api
     postStudentScore(JSON.stringify(scoreData))
 }
 

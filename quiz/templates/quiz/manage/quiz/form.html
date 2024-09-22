@@ -2,18 +2,18 @@
 
 {% block title %}
   {% if object %}
-    Edit "{{object.course.title }}'s" Quiz "{{ object.title }}"
+    Edit "{{object.question.quiz.title }}"
   {% else %}
-    Create a new Quiz
+    Create a new Quiz Answer
   {% endif %}
 {% endblock %}
 
 {% block content %}
   <h1>
     {% if object %}
-      Edit quiz "{{ object.title }}"
+      Edit answer for "{{ object.question.question_text }}"
     {% else %}
-      Create a new Quiz
+      Add new Quiz Answer
     {% endif %}
   </h1>
   <div class="module">

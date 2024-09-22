@@ -1,0 +1,199 @@
+{% extends 'base2.html' %}
+{% load static %}
+
+{% block title %} Profile of {{request.user.get_full_name }} {% endblock %}
+
+{% block content %}
+    <!-- profile section -->
+    <section class="profile">
+
+      <div class="img-button">
+        <img src="{{ student.photo.url }}" alt="">
+
+        <button class="edit-btn">
+          Edit profile
+        </button>
+
+        <button class="log-out">
+          Log Out
+        </button>
+      </div>
+
+      <div class="profile-content wide">
+        <h2 class="name">MY PROFILE</h2>
+        <div class="content">
+          <div class="left">
+            {% comment %} <span>Phone:</span>
+            <p>0123456789</p> {% endcomment %}
+
+            {% comment %} <span>City</span>
+            <p>Abidjan</p> {% endcomment %}
+
+            <span>Interest</span>
+            <p>{{profile.field_of_study}}</p>
+          </div>
+          <div class="right">
+            {% comment %} <span>Email:</span>
+            <p><a href="mailto:kofibauherg@yahoo.com">kofibauher@yahoo.com</a></p> {% endcomment %}
+            
+            <span>LinkedIn</span>
+            <p><a href="{{student.linkedIn}}">{{ student.get_full_name }}</a></p>
+            
+            <span>X(Twitter):</span>
+            <p><a href="{{ student.x }}">{{ student.get_full_name }}</a></p>
+          </div>
+
+
+        </div>
+      </div>
+
+      <div class="accordion">
+        <button class="accordion-btn">
+          <h4 class="name">MY PROFILE</h4>
+          <span>🔽</span>
+        </button>
+
+        <div class="panel">
+          <div class="profile-content">
+            <div class="content">
+              <div class="left">
+                <span>Phone:</span>
+                <p>0123456789</p>
+    
+                <span>City</span>
+                <p>Abidjan</p>
+    
+                <span>Interest</span>
+                <p>Science</p>
+              </div>
+              <div class="right">
+                <span>Email:</span>
+                <p><a href="mailto:kofibauherg@yahoo.com">kofibauher@yahoo.com</a></p>
+                
+                <span>LinkedIn</span>
+                <p><a href="www.linkedin.com/user10010">Kofi Bauher</a></p>
+                
+                <span>X(Twitter):</span>
+                <p><a href="">@kofi_b3</a></p>
+              </div>
+    
+    
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <hr>
+
+  <!-- courses completed -->
+  <section class="courses-completed">
+    <h2>Courses You Have Completed</h2>
+
+    {% if courses_completed %}
+      <div class="field-content">
+        {% for course in courses_completed %}
+            <a href="{% url 'course_detail' course.slug %}" class="course all language">
+            <img src="{{ course.image.url }}" alt="{{ course.title }}" />
+            <div class="info">
+                <div class="info-top">
+                <p>Module{{course.modules.count|pluralize}}s: {{ course.modules.count }}</p>
+                <p>Instructor: {{ course.owner.get_full_name }}</p>
+                </div>
+                <div class="middle">
+                Rating: {{ course.average_rating }} <span class="fa fa-star checked"></span> 
+                </div>
+                <p class="info-bottom">{{ course.title }}</p>
+            </div>
+            </a>
+            {% endfor %}
+
+        {% comment %} <a href="/coursepage.html" class="course all design">
+          <img src="/Assets/223023222_571328.jpg" alt="" />
+          <div class="info">
+            <div class="info-top">
+              <p>14Hrs 27Mins</p>
+              <p>16 Lessons</p>
+            </div>
+            <div class="middle">&#9733; &#9733; &#9733; &#9733; &#9733;</div>
+            <p class="info-bottom">Art & Design</p>
+          </div>
+        </a>
+
+        <a href="/coursepage.html" class="course all">
+          <img src="/Assets/223023222_571328.jpg" alt="" />
+          <div class="info">
+            <div class="info-top">
+              <p>3Hrs 0Mins</p>
+              <p>7 Lessons</p>
+            </div>
+            <div class="middle">
+              &#9733; &#9733; &#9733; &#9733; &#9733; &#9733;
+            </div>
+            <p class="info-bottom">How To Make Money in Crypto</p>
+          </div>
+        </a> {% endcomment %}
+      </div>
+    {% else %}
+
+
+      <!-- nocontent HTML -->
+      <!-- nocontent HTML -->
+      <!-- nocontent HTML -->
+
+      <div class="empty">
+      <img src="{% static 'assets/floating.svg' %}" alt="">
+      <h4>Nothing to see..👀</h4>
+    </div>
+    {% endif %}
+    </section>
+
+
+  </section>
+
+    <hr>
+
+    <!-- achievements -->
+    <section class="learning">
+      <h2>Courses You're Learning</h2>
+     <a href="{% url 'student_course_list' %}"><button>Go to Learning &rarr;</button></a>
+    </section>
+
+   
+{% endblock %}
+
+{% block include_js %}
+     <!-- SCRIPTS -->
+
+    <script src="{% static 'js/main.js' %}"></script>
+
+    <!-- Accordion -->
+    <script>
+
+      let acc = document.getElementsByClassName("accordion-btn");
+      let i;
+
+      for (i = 0; i < acc.length; i++) {
+        acc[i].addEventListener("click", function () {
+          this.classList.toggle("active");
+
+          let panel = this.nextElementSibling;
+
+          if (this.classList.contains("active")) {
+            this.querySelector("span").textContent = "🔼";
+          } else {
+            this.querySelector("span").textContent = "🔽";
+          }
+
+          if (panel.style.maxHeight) {
+            panel.style.maxHeight = null;
+            panel.style.border = "none";
+          } else {
+            panel.style.maxHeight = panel.scrollHeight + "px";
+            panel.style.border = "2px solid black";
+            panel.style.borderTop = "none";
+          }
+        });
+      }
+    </script>
+{% endblock %}

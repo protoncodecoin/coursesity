@@ -17,11 +17,19 @@ from django.forms.models import modelform_factory
 from django.db.models import Count
 from django.core.cache import cache
 from django.shortcuts import render
+from django.contrib.postgres.search import (
+    SearchVector,
+    SearchQuery,
+    SearchRank,
+    TrigramSimilarity,
+)
+
 
 from braces.views import CsrfExemptMixin, JsonRequestResponseMixin
 from courses.recommender import Recommender
 from quiz.models import Quiz
 from students.forms import CourseEnrollForm
+from students.models import WishList
 
 
 from .models import Course, Module, Content, Rating, Subject
@@ -273,13 +281,20 @@ class CourseDetailView(DetailView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
+        if self.request.user:
+            pass
         # context["enroll_form"] = CourseEnrollForm(initial={"course": self.object})
         course_obj = self.object.id
         course = Course.objects.get(id=course_obj)
+        has_added_to_wishlist = WishList.objects.filter(
+            user=self.request.user, course=course
+        ).exists()
+
         r = Recommender()
         recommended_courses = r.suggest_courses_for([course], 4)
         context["recommended_courses"] = recommended_courses
         context["style"] = "detail"  # load specific css
+        context["has_added_to_wishlist"] = has_added_to_wishlist
         return context
 
 
@@ -386,3 +401,46 @@ class QuizResultPage(TemplateResponseMixin, View):
                 "style": "quiz_questions",
             }
         )
+
+
+def course_search(request):
+    query = None
+    results = []
+    similarity = []
+
+    if "query" in request.GET:
+        query = request.GET.get("query")
+
+        # similarity search
+        similarity = (
+            Course.objects.annotate(
+                similarity=TrigramSimilarity("title", query),
+            )
+            .filter(similarity__gte=0.1)
+            .order_by("-similarity")
+        )
+
+        search_vector = (
+            SearchVector("title", weight="A")
+            + SearchVector("overview", weight="B")
+            + SearchVector("course_description", weight="C")
+        )
+        search_query = SearchQuery(query)
+
+        results = Course.objects.annotate(
+            search=search_query, rank=SearchRank(search_vector, search_query)
+        ).filter(rank__gte=0.3)
+
+        # remove courses from similarity that appear in results
+        filtered_similarity = similarity.exclude(title__in=[r.title for r in results])
+
+    return render(
+        request,
+        "courses/search.html",
+        {
+            "query": query,
+            "results": results,
+            "similar": filtered_similarity,
+            "style": "search",
+        },
+    )

@@ -1,0 +1,228 @@
+{% extends 'base2.html' %}
+{% load static %}
+{% block title %} Cart {% endblock %}
+
+{% block content %}
+
+<!-- CArT -->
+    <section class="cart">
+      <div class="course-view">
+        <div class="top">
+          <h2 class="top-firstchild">Course</h2>
+          <h2>Price</h2>
+          <div class="last">Remove</div>
+        </div>
+
+        <div class="course-rows">
+            {% for item in cart%}
+                {% with course=item.course %}
+                <div class="course-row">
+                    <div class="main">
+                        <a href="{{ course.get_absolute_url }}" class="course all language">
+                            <img src="{{ course.image.url }}" alt="" />
+                            <div class="info">
+                            <div class="info-top">
+                                <p>Modules: {{ course.modules.count }}</p>
+                                <p>Instructor: {{ course.owner.get_full_name }}</p>
+                            </div>
+                            <p class="info-bottom">{{ course.title }}</p>
+                            </div>
+                        </a>
+                    </div>
+
+                    <div class="price-del">
+                    <div class="price">
+                        <h3>GHC {{ course.price }}</h3>
+                    </div>
+
+                <form action="{% url 'cart:cart_remove' course.id %}" method="post">
+                        {% csrf_token %}
+                            <button class="delete-button" type="submit">Remove</button>
+                    </form>
+
+                    </div>
+                </div>
+                {% endwith %}
+            {% endfor %}
+
+          {% comment %} <div class="course-row">
+            <div class="main">
+              <a href="/coursepage.html" class="course all language">
+                <img src="/Assets/223023222_571328.jpg" alt="" />
+                <div class="info">
+                  <div class="info-top">
+                    <p>3Hrs 0Mins</p>
+                    <p>7 Lessons</p>
+                  </div>
+                  <p class="info-bottom">Advanced Public Relations2</p>
+                </div>
+              </a>
+            </div>
+
+            <div class="price-del">
+              <div class="price">
+                <h3>GHC 99.99</h3>
+              </div>
+
+              <div class="delete-button">Remove</div>
+            </div>
+          </div>
+
+          <div class="course-row">
+            <div class="main">
+              <a href="/coursepage.html" class="course all language">
+                <img src="/Assets/223023222_571328.jpg" alt="" />
+                <div class="info">
+                  <div class="info-top">
+                    <p>3Hrs 0Mins</p>
+                    <p>7 Lessons</p>
+                  </div>
+                  <p class="info-bottom">Advanced Public Relations3</p>
+                </div>
+              </a>
+            </div>
+
+            <div class="price-del">
+              <div class="price">
+                <h3>GHC 99.99</h3>
+              </div>
+
+              <div class="delete-button">Remove</div>
+            </div>
+          </div> {% endcomment %}
+        </div>
+        <a href="/" class="browse">Browse Courses</a>
+      </div>
+
+      <div class="payment-view">
+        <div class="top">
+          <h2>Order Summary</h2>
+        </div>
+
+        <div class="order-details">
+          <div class="order-rows">
+            <div class="order-row">
+              <div class="order-left">Course(s)</div>
+              <div class="order-right">
+                {% with total_items=cart|length %}
+                    {% if total_items > 0  %}
+                        {{  total_items }}
+                    {% else %}
+                     0
+                    {% endif %}
+                {% endwith %}
+                </div>
+            </div>
+
+            {% comment %} <div class="order-row">
+              <div class="order-left">Discount (GHC)</div>
+              <div class="order-right">30.00</div>
+            </div> {% endcomment %}
+            <hr />
+            <div class="order-row total">
+              <div class="order-left">Total (GHC)</div>
+              <div class="order-right">{{cart.get_total_price}}</div>
+            </div>
+          </div>
+
+          {% with total_items=cart|length %}
+                    {% if total_items > 0  %}
+                    <a href="{% url 'orders:order_create' %}" class="checkout-btn">CHECKOUT</a>
+                        
+                    {% else %}
+                       <a href="{% url 'orders:order_create' %}" style="pointer-events: none" class="checkout-btn">NO ITEMS ADDED</a>
+                    {% endif %}
+                {% endwith %}
+
+        </div>
+      </div>
+    </section>
+
+    <section class="recommended-courses discover">
+      {% if recommended_courses %}
+      <h2>Other students also bought...</h2>
+
+      <div class="field-content">
+
+        {% for course in recommended_courses %}
+        
+            <a href="{{ course.get_absolute_url }}" class="r-course all design">
+            <img src="{{ course.image.url }}" alt="{{course.title}}" />
+            <div class="info">
+                <div class="info-top">
+                <p>Modules: {{ course.modules.count }}</p>
+                <p>Instructor: {{ course.owner.get_full_name}}</p>
+                </div>
+                Ratings: {{course.average_rating }} <span class="fa fa-star checked"></span> 
+                <p class="info-bottom">{{ course.title }}</p>
+            </div>
+            </a>
+        
+            {% endfor %}
+
+        {% comment %} <a href="/coursepage.html" class="r-course all">
+          <img src="/Assets/223023222_571328.jpg" alt="" />
+          <div class="info">
+            <div class="info-top">
+              <p>3Hrs 0Mins</p>
+              <p>7 Lessons</p>
+            </div>
+            <div class="middle">&#9733; &#9733; &#9733;</div>
+            <p class="info-bottom">How To Make Money in Crypto</p>
+          </div>
+        </a>
+
+        <a href="/coursepage.html" class="r-course all">
+          <img src="/Assets/223023222_571328.jpg" alt="" />
+          <div class="info">
+            <div class="info-top">
+              <p>3Hrs 0Mins</p>
+              <p>7 Lessons</p>
+            </div>
+            <div class="middle">&#9733; &#9733; &#9733;</div>
+            <p class="info-bottom">How To Make Money in Crypto</p>
+          </div>
+        </a>
+
+        <a href="/coursepage.html" class="r-course all">
+          <img src="/Assets/223023222_571328.jpg" alt="" />
+          <div class="info">
+            <div class="info-top">
+              <p>3Hrs 0Mins</p>
+              <p>7 Lessons</p>
+            </div>
+            <div class="middle">&#9733; &#9733; &#9733;</div>
+            <p class="info-bottom">How To Make Money in Crypto</p>
+          </div>
+        </a>
+
+        <a href="/coursepage.html" class="r-course all">
+          <img src="/Assets/223023222_571328.jpg" alt="" />
+          <div class="info">
+            <div class="info-top">
+              <p>3Hrs 0Mins</p>
+              <p>7 Lessons</p>
+            </div>
+            <div class="middle">&#9733; &#9733; &#9733;</div>
+            <p class="info-bottom">How To Make Money in Crypto</p>
+          </div>
+        </a> {% endcomment %}
+      </div>
+      {% else %}
+
+      <!-- nocontent HTML -->
+      <!-- nocontent HTML -->
+      <!-- nocontent HTML -->
+
+       <div class="empty">
+      <img src="{% static 'assets/floating.svg' %}" alt="">
+      <h4>Nothing to see..👀</h4>
+    </div>
+    {% endif %}
+    </section>
+
+{% endblock %}
+
+{% block include_js %}
+    <script src="{% static 'js/main.js' %}"></script>
+{% endblock %}

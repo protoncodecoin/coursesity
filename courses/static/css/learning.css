@@ -8,7 +8,7 @@
 
 body {
   position: relative;
-  padding-bottom: 35px;
+  /* padding-bottom: 35px; */
 }
 
 a {
@@ -555,4 +555,136 @@ nav .fa {
 
 .hidden {
   display: none;
+}
+
+
+
+
+
+
+
+
+
+/* empty */
+.empty {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+  margin: 50px 0;
+}
+
+.empty img {
+  width: 20%;
+  margin-bottom: 20px;
+}
+
+.empty h4 {
+  text-align: center;
+  color: gray;
+  font-size: 1.3rem;
+}
+
+/* empty MEDIA QUERIES */
+
+@media (max-width: 700px) {
+  .recommended-courses {
+    width: 95%;
+    margin: 3vh auto;
+  }
+
+  .recommended-courses h2 {
+    font-size: 1.5rem;
+    text-align: start ;
+  }
+  
+  .empty {
+    margin: 20px 0;
+  }
+
+  .empty img{
+    /* width: 50px; */
+    width: 50%;
+  }}
+
+
+
+
+/* Foooter */
+
+.footer {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  background-color: #2c2c2c;
+  color: white;
+  box-shadow: 5px 5px 40px 0px rgba(0, 0, 0, 0.2);
+}
+
+.footer-top {
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+  padding: 20px 10px  10px;
+  width:60%;
+  margin: 0 auto;
+  gap: 10px;
+}
+
+.footer-top img {
+  width: 100px;
+}
+
+.footer-title {
+  font-size: 1.3rem;
+}
+
+.address-contact-mail {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+}
+
+.address-contact-mail span {
+  font-size: 1.5rem;
+}
+
+.footer-bottom {
+  padding: 5px;
+  color: #fff;
+  background-color: #5057bb;
+  text-align: center;
+  font-size: 1rem;
+}
+
+/* FOOTER MEDIA */
+@media (max-width: 700px) {
+
+  .footer-top {
+    justify-content: start;
+    align-items: start;
+    /* width:100%; */
+    margin: 0 10px;
+  }
+
+  .footer-top img {
+    width: 20%;
+  }
+
+  .footer-title {
+    font-size: 1.2rem;
+  }
+
+  .address-contact-mail {
+    flex-direction: column;
+    align-items: start;
+  }
+  
+  .footer-bottom {
+    padding-left: 20px;
+    text-align: start;
+  }
+
+
 }

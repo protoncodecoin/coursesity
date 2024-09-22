@@ -1,3 +1,4 @@
+from django.utils.text import slugify
 from django.db import models
 from django.contrib.auth.models import AbstractUser
 from django.utils.translation import gettext_lazy as _
@@ -19,8 +20,12 @@ class CustomUser(AbstractUser):
         default=False, help_text="Checked creates an instructor account"
     )
     photo = models.ImageField(
-        upload_to="users/%Y/%m/%d", blank=True, default="users/default.jpg"
+        upload_to="users/%Y/%m/%d", blank=True, default="users/default.jpeg"
     )
+    slug = models.SlugField(blank=True, null=True)
+    linkedIn = models.URLField(blank=True, null=True)
+    x = models.URLField(blank=True, null=True)
+    website = models.URLField(blank=True, null=True)
 
     USERNAME_FIELD = "email"
     REQUIRED_FIELDS = []
@@ -37,12 +42,30 @@ class CustomUser(AbstractUser):
         else:
             return None
 
+    def num_of_courses(self):
+        return self.courses_created.count()
+
+    def save(self, *args, **kwargs):
+        if self.slug is None or self.slug == "":
+            self.slug = slugify(self.get_full_name())
+        super(CustomUser, self).save(args, kwargs)
+
 
 class Profile(models.Model):
+
+    class Interest(models.TextChoices):
+        ANY = "any", "Any"
+        SCIENCE = "science", "science"
+        MATH = "mathematics", "Mathematics"
+        CYBERSECURITY = "cybersecurity", "Cybersecurity"
+        PROGRAMMING = "programming", "Programming"
+
     user = models.OneToOneField(
         settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name="profile"
     )
-    photo = models.ImageField(upload_to="users/%Y/%m/%d", blank=True)
+    field_of_study = models.CharField(
+        max_length=100, choices=Interest, default=Interest.ANY
+    )
 
     def __str__(self):
         return f"Profile of {self.user.email}"

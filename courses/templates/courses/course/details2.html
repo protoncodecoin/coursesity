@@ -1,5 +1,6 @@
 {% extends 'base2.html' %}
 {% load static %}
+{% load wishlist_tags %}
 
 {% block title %} {{ object.title }} {% endblock %}
 
@@ -16,7 +17,7 @@
           {{ object.overview }}
         </p>
 
-        <p>Created by: <a href="#">{{ object.owner.get_full_name }}</a></p>
+        <p>Created by: <a href="{% url 'show_profile' 1 "prince" %}">{{ object.owner.get_full_name }}</a></p>
 
         <p>Last Updated: {{ object.updated }}, 💬 English</p>
         <p class="rating">Ratings: {{course.average_rating }} <span class="fa fa-star checked"></span> </p>
@@ -30,9 +31,9 @@
         <form action="{% url 'cart:cart_add' object.id %}" method="post">
           {% csrf_token %}
 
-        <button type="submit">Add To Cart</button>          
+        <button type="submit"> Add To Cart</button>          
         {% comment %} <button class="wishlist-btn">Add to Wishlist</button> {% endcomment %}
-        <a href="#" class="add-to-wishlist">Add to Wishlist</a>
+        <a href="#" class="add-to-wishlist {% if has_added_to_wishlist  %} added {% else %} "" {% endif %}" data-id="{{ object.id }}"> {% if has_added_to_wishlist %} Remove from Wishlist {% else %}Add to Wishlist {% endif %}</a>
 
 
         </form>
@@ -139,6 +140,7 @@
           {% endif %}
         </div>
       </section>
+      {% endif %}
 
       <div class="cart-footer" id="cart-footer">
         <h3 id="buy-text">Buy course now!</h3>
@@ -149,12 +151,15 @@
       </div>
       {% comment %} {% else %}
       <p>There are no courses to recommend yet</p> {% endcomment %}
-    {% endif %}
 
 
 {% endblock %}
 
 {% block include_js %}
+<script>
+  const token = "{{ csrf_token }}";
+</script>
+  <script src="{% static 'js/add-to-cart.js' %}"></script>
   <!-- Accordion -->
     <script>
       let acc = document.getElementsByClassName("accordion-btn");
@@ -202,7 +207,7 @@
       window.onscroll = function () {
         // Get the bar element
         const bar = document.getElementById("cart-footer");
-
+    
         // Show the bar when scrolling down 200 pixels
         if (
           document.body.scrollTop > 600 ||

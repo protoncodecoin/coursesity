@@ -84,7 +84,7 @@
                     <div class="middle">
                       {% comment %} {% with num_rating=course.average_rating %} {% endcomment %}
                         {% comment %} {% for number in num_rating|range %} {% endcomment %}
-                          Ratings: {{course.average_rating }} <span class="fa fa-star checked"></span> 
+                          Ratings: {{ course.average_rating }} <span class="fa fa-star checked"></span> 
                         {% comment %} {% endfor %} {% endcomment %}
                       {% comment %} {% endwith %} {% endcomment %}
                     </div>
@@ -176,7 +176,9 @@
   {% endblock %}
 
   {% block include_js %}
-  <!-- swap tabs -->
+   <script src="{% static 'js/main.js' %}"></script>
+
+   <!-- swap tabs -->
     <script>
       const tabs = document.querySelectorAll(".field-item");
       const tabContainer = document.querySelector(".field-content");
@@ -207,6 +209,8 @@
       });
     </script>
 
+    <!-- carousel -->
+
     <script>
       const slideCarousel = (
         prevButton,
@@ -216,6 +220,7 @@
       ) => {
         document.addEventListener("DOMContentLoaded", function () {
           let currentIndex = 0;
+          let autoScrollInterval;
 
           function updateCarousel() {
             const width = carouselItems[0].clientWidth;
@@ -226,7 +231,25 @@
             }
           }
 
+          function autoScroll() {
+            autoScrollInterval = setInterval(() => {
+              if (currentIndex < carouselItems.length - 1) {
+                currentIndex++;
+              } else {
+                currentIndex = 0; // Go back to the first item
+              }
+              updateCarousel();
+            }, 3000); // Change the interval (in milliseconds) as needed
+          }
+
+          function stopAutoScroll() {
+            if (autoScrollInterval) {
+              clearInterval(autoScrollInterval);
+            }
+          }
+
           prevButton.addEventListener("click", function () {
+            stopAutoScroll(); // Stop auto-scroll when manually interacting
             if (currentIndex > 0) {
               currentIndex--;
             } else {
@@ -236,6 +259,7 @@
           });
 
           nextButton.addEventListener("click", function () {
+            stopAutoScroll(); // Stop auto-scroll when manually interacting
             if (currentIndex < carouselItems.length - 1) {
               currentIndex++;
             } else {
@@ -243,10 +267,16 @@
             }
             updateCarousel();
           });
+
+          carouselContent.addEventListener("mouseenter", stopAutoScroll); // Stop auto-scroll on hover
+          carouselContent.addEventListener("mouseleave", autoScroll); // Resume auto-scroll when hover ends
+
+          updateCarousel(); // Initial update to set the correct position
+          autoScroll(); // Start auto-scrolling
         });
       };
 
-      // trends
+      // Initialize the carousel
       slideCarousel(
         document.querySelector(".slide-btn-1"),
         document.querySelector(".slide-btn-2"),
@@ -254,49 +284,5 @@
         document.querySelectorAll(".banner")
       );
     </script>
-
-
-
-    <script>
-
-      // Toggle navbar js 
-
-  let navLinks = document.getElementById("navLinks");
-
-  function showMenu() {
-    navLinks.style.right = "0";
-  }
-
-  function hideMenu() {
-    navLinks.style.right = "-200px";
-  }
-
-
-
-  
-//  toggle search bar
-
-  const searchButton = document.getElementById('search-input');
-  const searchResults = document.querySelector('.search-results');
-
-  searchButton.onfocus = () => {
-    searchResults.classList.toggle("hidden")
-  }
-
-  searchButton.onblur = () => {
-    searchResults.classList.toggle("hidden")
-  }
-
-  // mobile version
-const mobileSearchButton = document.querySelector('.m-search-icon');
-const mobileSearchBar = document.querySelector('.m-searchbar');
-
-mobileSearchButton.addEventListener('click', () => {
-  mobileSearchBar.classList.toggle("hidden")
-})
-
-    </script>
-
-
 
   {% endblock %}

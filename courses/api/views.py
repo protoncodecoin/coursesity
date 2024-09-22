@@ -102,7 +102,8 @@ class WishAPIView(views.APIView):
         wish_item = WishList.objects.filter(course=course_obj, user=user).exists()
         if wish_item:
             # remove course from wishlist
-            WishList.objects.delete(course=course_obj, user=user)
+            wishlist_obj = WishList.objects.get(course=course_obj, user=user)
+            wishlist_obj.delete()
             return Response({"action": "deleted"}, status=status.HTTP_200_OK)
 
         # add to wishlist

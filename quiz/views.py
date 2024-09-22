@@ -179,20 +179,23 @@ class QuizQuestionUpdateView(TemplateResponseMixin, View):
 class AnswerCreateUpdateView(TemplateResponseMixin, View):
     quiz = None
     answer = None
+    question = None
     template_name = "quiz/manage/quiz/form.html"
 
     def get_form(self, *args, **kwargs):
-        Form = modelform_factory(Answer, exclude=[])
+        Form = modelform_factory(Answer, exclude=["question"])
         return Form(*args, **kwargs)
 
-    def dispatch(self, request, quiz_id, id=None, *args, **kwargs):
+    def dispatch(self, request, quiz_id, question_id, id=None, *args, **kwargs):
         self.quiz = get_object_or_404(Quiz, id=quiz_id)
-        if id:
-            self.answer = get_object_or_404(Answer, quiz_id, id=id)
+        self.question = get_object_or_404(Question, id=question_id)
+        if id:  # id of the answer if it's none then we are creating a new answer
+            self.answer = get_object_or_404(Answer, pk=id)
+            print(self.answer, id, "i came here")
 
-        return super().dispatch(request, quiz_id, id)
+        return super().dispatch(request, quiz_id, question_id, id)
 
-    def get(self, request, quiz_id, id=None):
+    def get(self, request, quiz_id, question_id, id=None):
         form = self.get_form(instance=self.answer)
         return self.render_to_response(
             {
@@ -201,12 +204,14 @@ class AnswerCreateUpdateView(TemplateResponseMixin, View):
             }
         )
 
-    def post(self, request, quiz_id, id=None):
+    def post(self, request, quiz_id, question_id, id=None):
         form = self.get_form(instance=self.answer, data=request.POST)
         if form.is_valid():
-            form.save()
+            obj = form.save(commit=False)
+            obj.question = self.question
+            obj.save()
 
-            return redirect("quiz_answer_list")
+            return redirect("quiz_answer_list", quiz_id)
         return self.render_to_response(
             {
                 "form": form,

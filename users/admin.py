@@ -20,6 +20,10 @@ class CustomUserAdmin(UserAdmin):
         "is_instructor",
         "is_disabled",
         "photo",
+        "linkedIn",
+        "x",
+        "website",
+        "slug",
     )
     list_filter = ("email", "is_staff", "is_active", "is_instructor", "is_disabled")
     fieldsets = (
@@ -33,8 +37,12 @@ class CustomUserAdmin(UserAdmin):
                     "is_instructor",
                     "is_disabled",
                     "photo",
-                    # "first_name",
-                    # "last_name",
+                    "first_name",
+                    "last_name",
+                    "slug",
+                    "linkedIn",
+                    "x",
+                    "website",
                     "groups",
                     "user_permissions",
                 )
@@ -72,6 +80,7 @@ class ProfileAdmin(admin.ModelAdmin):
     list_display = [
         "id",
         "user",
+        "field_of_study",
     ]
 
 

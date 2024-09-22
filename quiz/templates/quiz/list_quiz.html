@@ -2,12 +2,17 @@
 <h3>Course: {{ course.title }}</h3>
 
 {% for quiz in quizzes %}
-<div style="border: 2px solid black; padding: 4px; margin: 20px; border-radius: 2px;">
-    <p>Title: {{quiz.title }}</p>
-    <p>Number of Questions: {{quiz.questions.count}}</p>
-    <p>Description: {{quiz.description}}</p>
-    <p>Pass Score: {{quiz.pass_score}}</p>
-    <p>Instructor: {{ quiz.owner.get_full_name }}</p>
-    <a href="{% url 'course_quiz' course.id quiz.id quiz.slug %}" style="text-decoration:none; background-color: skyblue; display: inline-block; padding: 4px 8px; margin-top: 3px;">Start</a>
-</div>
+    {% if quiz.questions.count > 0 %}
+        <div style="border: 2px solid black; padding: 4px; margin: 20px; border-radius: 2px;">
+            <p>Title: {{quiz.title }}</p>
+            <p>Number of Questions: {{quiz.questions.count}}</p>
+            <p>Description: {{quiz.description}}</p>
+            <p>Pass Score: {{quiz.pass_score}}</p>
+            <p>Instructor: {{ quiz.owner.get_full_name }}</p>
+            <a href="{% url 'course_quiz' course.id quiz.id quiz.slug %}" style="text-decoration:none; background-color: skyblue; display: inline-block; padding: 4px 8px; margin-top: 3px;">Start</a>
+        </div>
+    {% endif %}
+
+    {% empty %}
+    <p>No quiz has been added for this course</p>
 {% endfor %}

@@ -16,6 +16,14 @@
      <link rel="stylesheet" href="{% static 'css/signup.css' %}">
   {% elif style == "login"%}
      <link rel="stylesheet" href="{% static 'css/login.css' %}">
+  {% elif style == "cart"%}
+     <link rel="stylesheet" href="{% static 'css/cart.css' %}">
+  {% elif style == "instructor"%}
+     <link rel="stylesheet" href="{% static 'css/instructor.css' %}">
+  {% elif style == "student"%}
+     <link rel="stylesheet" href="{% static 'css/student.css' %}">
+  {% elif style == "search"%}
+     <link rel="stylesheet" href="{% static 'css/search.css' %}">
   {% else %}
     <link rel="stylesheet" href="{% static 'css/list.css' %}">
 
@@ -30,7 +38,9 @@
 
       <div class="searchbar">
         <img src="{% static 'icons/searchico.svg' %}" alt="" class="search-icon">
-        <input type="search" placeholder="Search" id='search-input'>
+        <form method="get" class="q-search">
+            <input type="search" placeholder="Search" id='search-input' name='query'>
+        <form>
 
          <ul class="search-results hidden">
             <li>How to make a bomb</li>
@@ -42,10 +52,12 @@
         <div class="nav-links" id="navLinks">
           <span class="fa" onclick="hideMenu()">X</span>
           <div class="cart-user">
+            {% if request.user.is_authenticated %}
             <div class="user-dp">
-              <img src=" {% if request.user.profile.photo %} {{ request.user.profile.photo.url }} {% else %} {% static 'img/no_image.png' %} {% endif %}" alt="" />
-              <a href="#" class="username">{{ request.user.get_full_name }}</a>
+                  <img src=" {% if request.user.photo.url %} {{ request.user.photo.url }} {% else %} {% static '/users/default.jpeg' %} {% endif %}" alt="" />
+                  <a href="{% url 'show_profile' request.user.id request.user.slug  %}" class="username">{{ request.user.get_full_name }}</a>
             </div>
+            {% endif %}
 
               
               {% if request.user.is_authenticated %}
@@ -71,7 +83,7 @@
 
           <div class="more-drop">
             <div class="more-dropdown">
-              <a href="index.html">Home</a>
+              <a href="/">Home</a>
               <a href="#">Categories</a>
               <a href="learning.html">Learning</a>
               <a href="cart.html" class="m-cart-container">
@@ -135,8 +147,25 @@
 
   {% endblock %}
 
+  <!-- footer -->
+    <section class="footer">
+      <div class="footer-top">
+        <img src="{% static 'icons/coursitylogo.png' %}" alt="" class="footer-logo" />
+
+        <div class="footer-title">Coursity © 2024</div>
+
+        <div class="address-contact-mail">
+          <div class="address"><span>🏨</span> Accra, Ghana.</div>
+          <div class="contact"><span>📞</span> 01 2345 6789</div>
+          <div class="mail"><span>📧</span> info@coursity.org</div>
+        </div>
+      </div>
+
+      <div class="footer-bottom">All Rights Reserved®</div>
+
   {% block include_js %}
 
   {% endblock %}
+  <script src="{% static 'js/search.js' %}"></script>
   </body>
 </html>

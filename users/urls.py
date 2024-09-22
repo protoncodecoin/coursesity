@@ -37,6 +37,11 @@ urlpatterns = [
         auth_views.PasswordChangeDoneView.as_view(),
         name="password_change_done",
     ),
+    path(
+        "profile/<int:user_id>/<slug:user_slug>/",
+        views.showProfile,
+        name="show_profile",
+    ),
     # activate account
     path("activate/<uidb64>/<token>/", views.activate_account, name="activate"),
 ]

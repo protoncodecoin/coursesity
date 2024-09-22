@@ -13,12 +13,12 @@ urlpatterns = [
         name="quiz_question_update",
     ),
     path(
-        "answer/<int:quiz_id>/create/",
+        "answer/<int:quiz_id>/<int:question_id>/create/",
         views.AnswerCreateUpdateView.as_view(),
         name="answer_content_create",
     ),
     path(
-        "answer/<int:quiz_id>/update/<int:id>/",
+        "answer/<int:quiz_id>/update/<int:id>/<int:question_id>/",
         views.AnswerCreateUpdateView.as_view(),
         name="answer_content_update",
     ),
