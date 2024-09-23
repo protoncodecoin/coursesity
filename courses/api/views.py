@@ -70,18 +70,53 @@ class RatingAPIView(views.APIView):
         rating_value: int = request.data.get("rating")
         comment: str = request.data.get("comment")
 
+        print(user, course_id, comment)
+
+        # Validate rating_value
+        if rating_value is None or rating_value not in [1, 2, 3, 4, 5]:
+            return Response(
+                {"error": "Invalid rating value"}, status=status.HTTP_400_BAD_REQUEST
+            )
+
         # get course from database
         course_obj = Course.objects.filter(id=course_id).first()
+        if not course_obj:
+            return Response(
+                {"error": "Course not found"}, status=status.HTTP_404_NOT_FOUND
+            )
 
         rating, created = Rating.objects.update_or_create(
             course=course_obj,
             user=user,
-            defaults={"rating": rating_value, "comment": comment},
+            defaults={"rating": rating_value, "comment": comment, "user": user},
         )
         if created:
-            return Response({"created": True}, status=status.HTTP_201_CREATED)
+            return Response(
+                {"created": True, "updated": False}, status=status.HTTP_201_CREATED
+            )
         else:
-            return Response({"created": False}, status=status.HTTP_200_OK)
+            return Response(
+                {"created": False, "updated": True}, status=status.HTTP_200_OK
+            )
+
+
+class CheckRatingStatus(views.APIView):
+    """
+    Check feature a student as rated a course or not.
+    """
+
+    permission_classes = [IsAuthenticated]
+
+    def get(self, request):
+        user = request.user
+        course_id = request.GET.get("course_id")
+        course_obj = Course.objects.filter(id=course_id).first()
+        # check if user has rated the course
+        is_rated = Rating.objects.filter(course=course_id, user=user).exists()
+
+        if is_rated:
+            return Response({"rating_status": True, "course_id": course_id})
+        return Response({"rating_status": False, "course_id": course_id})
 
 
 class WishAPIView(views.APIView):

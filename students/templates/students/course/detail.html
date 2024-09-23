@@ -1,4 +1,5 @@
 {% extends "base.html" %}
+{% load static %}
 {% load cache %}
 
 {% block title %}
@@ -44,4 +45,55 @@
         {% endcache %}
     </div>
 
+    {% comment %} Toast Notification {% endcomment %}
+     <div class="toastBox">
+     </div>
+
+    {% comment %} Modal for Rating {% endcomment %}
+     <!-- Trigger/Open The Modal -->
+<button id="myBtn">Open Modal</button>
+
+     <div id="myModal", class="modal">
+
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            
+
+        <div class="feedback-form">
+          <h2>Rate the course</h2>
+            <form id="feedbackForm">
+                <div class="rating">
+                    <!-- Notice that the stars are in reverse order -->
+
+                    <input type="radio" id="star5" name="rating" value="5">
+                    <label for="star5">&#9733;</label>
+                    <input type="radio" id="star4" name="rating" value="4">
+                    <label for="star4">&#9733;</label>
+                    <input type="radio" id="star3" name="rating" value="3">
+                    <label for="star3">&#9733;</label>
+                    <input type="radio" id="star2" name="rating" value="2">
+                    <label for="star2">&#9733;</label>
+                    <input type="radio" id="star1" name="rating" value="1">
+                    <label for="star1">&#9733;</label>
+                </div>
+                <div class="comment">
+                    <label for="comment">Tell us more:</label><br>
+                    <textarea id="comment" name="comment"></textarea>
+                </div>
+                <button type="submit" class="submit-btn">Submit</button>
+            </form>
+        </div>
+
+        </div>
+
+     </div>
+
+{% endblock %}
+{% block include_js %}
+    <script>
+        const token = "{{csrf_token}}";
+        const course_id = "{{object.id}}";
+    </script>
+     <script src="{% static 'js/ratings.js' %}"></script>
+     
 {% endblock %}

@@ -242,9 +242,11 @@ class CourseListView(TemplateResponseMixin, View):
         highly_rated = cache.get("highly_rated")
         if not highly_rated:
             self.MAX_SIZE = 9
-            highly_rated = all_courses.annotate(num_ratings=Count("ratings")).order_by(
-                "-num_ratings"
-            )[: self.MAX_SIZE]
+            highly_rated = (
+                all_courses.annotate(num_ratings=Count("ratings"))
+                .exclude(num_ratings__lt=1)
+                .order_by("-num_ratings")[: self.MAX_SIZE]
+            )
             cache.set("highly_rated", highly_rated)
 
         if subject:

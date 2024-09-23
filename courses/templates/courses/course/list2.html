@@ -28,7 +28,7 @@
           </div>
 
           <div class="banner">
-            <img src="{% static 'assets/banner.png' %}" alt="Class Learning" class="" />
+            <img src="{% static 'assets/banner4.jpg' %}" alt="Class Learning" class="" />
             <h1>
               Best Online Platform <br />
               for Learning 2
@@ -36,7 +36,7 @@
           </div>
 
           <div class="banner">
-            <img src="{% static 'assets/banner.png' %}" alt="Class Learning" class="" />
+            <img src="{% static 'assets/banner3.jpg' %}" alt="Class Learning" class="" />
             <h1>
               Best Online Platform <br />
               for Learning 3
@@ -109,8 +109,8 @@
           <img src="{{ r.image.url }}" alt="{{ r.title }}" />
           <div class="info">
             <div class="info-top">
-              <p>{{ r.owner.get_full_name }}</p>
-              <p>{{ r.modules.count }}</p>
+              <p>Module{{r.modules.count|pluralize}}: {{ r.modules.count }}</p>
+              <p>Instructor: {{ r.owner.get_full_name }}</p>
             </div>
              <div class="middle"> Ratings: {{r.average_rating }} <span class="fa fa-star checked"></span> </div>
             <p class="info-bottom">{{ r.title }}</p>
@@ -133,8 +133,8 @@
             <img src="{{ pop.image.url }}" alt="Image of {{ pop.title }}" />
             <div class="info">
               <div class="info-top">
-                <p>{{ pop.owner.get_full_name }}</p>
-                <p>{{ pop.modules.count }}</p>
+                <p>Module{{pop.modules.count|pluralize}}: {{ pop.modules.count }}</p>
+                <p>Instructor: {{ pop.owner.get_full_name }}</p>
               </div>
                <div class="middle"> Ratings: {{pop.average_rating }} <span class="fa fa-star checked"></span> </div>
               <p class="info-bottom">{{ pop.title }}</p>
@@ -157,8 +157,8 @@
           <img src="{{ rating.image.url }}" alt="" />
           <div class="info">
             <div class="info-top">
-              <p>{{ rating.modules.count }}</p>
-              <p>{{ rating.owner.get_full_name }}</p>
+              <p>Module{{rating.modules.count|pluralize}}: {{ rating.modules.count }}</p>
+               <p>Instructor: {{ rating.owner.get_full_name }}</p>
             </div>
             <div class="middle">
             Ratings: {{rating.average_rating }} <span class="fa fa-star checked"></span>

@@ -133,59 +133,18 @@ class UserRegisterView(TemplateResponseMixin, View):
             return redirect("user_registration")
 
         # launch asynchronous task
-        # current_site = get_current_site(request)
+        current_site = get_current_site(request)
+
         # logger.info(f"The new user is: {myuser.id}")
 
         tasks.send_welcome_email.delay(myuser.id)
-        tasks.send_activation_email.delay(myuser.id)
+        tasks.send_activation_email.delay(myuser.id, current_site.domain)
 
         messages.success(
             request,
             "Your account has been created successfully!\nPlease check your email to confirm your email address and activate your account.",
         )
         return redirect("login")
-
-        # try:
-        #     # Send a welcome email
-        #     subject = "Welcome to Coursesity"
-        #     message = f"Hello {myuser.first_name}!\n\nThank you for choosing Coursesity. There are exciting opportunities awaiting you!"
-        #     from_email = settings.EMAIL_HOST_USER
-        #     to_list = ["sistercharmings@gmail.com"]
-        #     send_mail(
-        #         subject,
-        #         message,
-        #         "princeaffumasante@gmail.com",
-        #         to_list,
-        #         fail_silently=False,
-        #     )
-
-        #     # send email confirmation link
-        #     current_site = get_current_site(request)
-        #     email_subject = "Confirm Your Email Address"
-        #     messages2 = render_to_string(
-        #         "registration/confirmation.html",
-        #         {
-        #             "name": myuser.first_name,
-        #             "domain": current_site.domain,
-        #             "uid": urlsafe_base64_encode(force_bytes(myuser.pk)),
-        #             "token": generate_token.make_token(myuser),
-        #         },
-        #     )
-        #     send_mail(email_subject, messages2, from_email, to_list, fail_silently=True)
-        #     # tasks.send_welcome_email(myuser.id)
-        #     # tasks.send_activatation_email(myuser.id)
-
-        #     messages.success(
-        #         request,
-        #         "Your account has been created successfully!\nPlease check your email to confirm your email address and activate your account.",
-        #     )
-
-        #     return redirect("login")
-
-        # except Exception as e:
-        #     print("exception is: ", str(e))
-        #     messages.error(request, "Error sending email", str(e))
-        #     return redirect("user_registration")
 
 
 def activate_account(request, uidb64, token):

@@ -20,23 +20,23 @@ def send_welcome_email(user_id):
         subject = "Welcome to Coursesity"
         message = f"Hello {unverified_user.first_name}!\n\nThank you for choosing Coursesity. There are exciting opportunities awaiting you!"
         from_email = settings.EMAIL_HOST_USER
-        to_list = [unverified_user.email, "princeaffumasante@gmail.com"]
 
         sent_email = send_mail(
-            subject, message, from_email, to_list, fail_silently=False
+            subject,
+            message,
+            from_email,
+            [unverified_user.email],
+            fail_silently=False,
         )
-        # logger.info(f"Welcome email sent: {sent_email}")
         return sent_email
     except Exception as e:
-        # logger.error(f"Email couldn't be sent: {e}")
-        print(str(e))
+        print(str(e))  # should be logged not printed
 
 
 @shared_task
-def send_activation_email(user_id):
+def send_activation_email(user_id, domain):
     try:
         unverified_user = get_user_model().objects.get(id=user_id)
-        # logger.info(f"Unverified user is {unverified_user}")
 
         from_email = settings.EMAIL_HOST_USER
         to_list = [unverified_user.email, "princeaffumasante@gmail.com"]
@@ -46,6 +46,7 @@ def send_activation_email(user_id):
             "registration/confirmation.html",
             {
                 "name": unverified_user.first_name,
+                "domain": domain,
                 "uid": urlsafe_base64_encode(force_bytes(unverified_user.pk)),
                 "token": generate_token.make_token(unverified_user),
             },

@@ -3,6 +3,7 @@ import stripe
 from django.conf import settings
 from django.shortcuts import get_object_or_404, redirect, render
 from django.urls import reverse
+from courses.models import Course
 from orders.models import Order
 
 
@@ -57,8 +58,21 @@ stripe.api_version = settings.STRIPE_API_VERSION
 
 
 def payment_completed(request):
+    courses = request.session.get("added_courses")
+    # get the id of the courses and and the current user
+    # add current user to courses they paid for
+    curr_user = request.user
+    for i in courses:
+        course_obj = Course.objects.filter(id=i).first()
+        course_obj.students.add(curr_user)
+        course_obj.save()
+
+    # clear courses from session
+    del request.session["added_courses"]
     return render(request, "payment/completed.html")
 
 
 def payment_canceled(request):
+    # clear courses from session
+    del request.session["added_courses"]
     return render(request, "payment/canceled.html")

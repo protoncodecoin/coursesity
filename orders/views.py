@@ -57,10 +57,13 @@ def order_create(request):
             new_order_item = Order.objects.create(
                 first_name=user.first_name, last_name=user.last_name, email=user.email
             )
+            course_ids = list()
             for item in cart:
                 OrderItem.objects.create(
                     order=new_order_item, course=item["course"], price=item["price"]
                 )
+                course_ids.append(item["course"].id)
+            request.session["added_courses"] = course_ids
             # clear the cart
             cart.clear()
 
