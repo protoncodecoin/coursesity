@@ -1,5 +1,4 @@
 
-
 let uid = sessionStorage.getItem("uid");
 
 if (!uid) {
@@ -38,16 +37,35 @@ let joinRoomInit = async () => {
  * Gets user video and microphone streams and it to the dom
  */
 let joinStream = async () => {
-  localTracks = await AgoraRTC.createMicrophoneAndCameraTracks();
+  localTracks = await AgoraRTC.createMicrophoneAndCameraTracks(
+    {},
+    {
+      encoderConfig: {
+        width: {
+          min: 640,
+          ideal: 1920,
+          max: 1920,
+        },
+        height: {
+          min: 480,
+          ideal: 1080,
+          max: 1080,
+        },
+      },
+    }
+  );
 
   let player = `<div  class="video__container" id="user-container-${uid}">
                     <div class="video-player" id="user-${uid}"></div>
                 </div>
 `;
-
   document
     .getElementById("streams__container")
     .insertAdjacentHTML("beforeend", player);
+
+  document
+    .getElementById(`user-container-${uid}`)
+    .addEventListener("click", expandVideoFrame);
 
   localTracks[1].play(`user-${uid}`);
   await client.publish([localTracks[0], localTracks[1]]);
@@ -72,6 +90,14 @@ let handleUserPublished = async (user, mediaType) => {
     document
       .getElementById("streams__container")
       .insertAdjacentHTML("beforeend", player);
+    document
+      .getElementById(`user-container-${user.uid}`)
+      .addEventListener("click", expandVideoFrame);
+  }
+
+  if (displayFrame.style.display) {
+    player.style.height = "100px";
+    player.style.width = "100px";
   }
 
   if (mediaType === "video") {
@@ -90,6 +116,19 @@ let handleUserPublished = async (user, mediaType) => {
 let handleUserLeft = async (user) => {
   delete remoteUsers[user.uid];
   document.getElementById(`user-container-${user.uid}`).remove();
+
+  // check to see if the user who left is the user in the displayFrame
+  if (userIdInDisplayFrame === `user-container-${user.uid}`) {
+    displayFrame.style.display = null;
+
+    // change videoFrames display style to default
+    let videoFrames = document.getElementsByClassName("video__container");
+
+    for (let i = 0; videoFrames.length > i; i++) {
+      videoFrames[i].style.height = "300px";
+      videoFrames[i].style.width = "300px";
+    }
+  }
 };
 
 joinRoomInit();
