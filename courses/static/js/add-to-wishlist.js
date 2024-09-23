@@ -1,6 +1,41 @@
+const toastBox = document.querySelector('.toastBox');
+const AddedMsg = 
+    '<i class="fas fa-check-circle"></i>Added to Wishlist!';
+const RemoveMsg = 
+    '<i class="fas fa-check-circle"></i>Removed from Wishlist!';
+const updatedMsg = 
+    '<i class="fas fa-check-circle"></i> Review was updated!!';
+const errorMsg = 
+    '<i class="fas fa-times-circle"></i> Error sending data. Try again ';
 const addWishListBtn = document.querySelector(".add-to-wishlist");
-
 const wishListURL = '/api/wishlist/'
+
+
+/**
+ * 
+ * @param {HTMLElement} message 
+ * @param {String} type messag type
+ */
+function showToast(message, type) {
+    const toast = document.createElement('div');
+    toast.classList.add('toast', type);
+    toast.innerHTML = 
+        '<button class="close-btn">X</button>' 
+                                    + message;
+    toastBox.appendChild(toast);
+
+    const closeButton = 
+            toast.querySelector('.close-btn');
+    closeButton.addEventListener('click', () => {
+        toast.remove();
+    });
+
+    setTimeout(() => {
+        toast.remove();
+    }, 3000);
+}
+
+
 
 addWishListBtn.addEventListener("click", async function(e){
     e.preventDefault();
@@ -35,17 +70,18 @@ addWishListBtn.addEventListener("click", async function(e){
         switch (action) {
             case "created":
                 // show modal or toast notification
+                showToast(AddedMsg, "success")
                 addWishListBtn.textContent = "Remove from Wishlist";
                 addWishListBtn.classList.add("added");
                 break;
             case "deleted":
                 // show modal or toast notification
+                showToast(RemoveMsg, "success")
                 addWishListBtn.textContent = "Add to WishList";
                 addWishListBtn.classList.remove("added");
                 break;
             default:
-                // an error occurred 
-                console.log("An error occurred. Couldn't add to wishlist")
+                showToast(errorMsg, "error")
        
         }
 

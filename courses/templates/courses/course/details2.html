@@ -114,6 +114,11 @@
       </p>
     </section>
 
+        {% comment %} Toast Notification {% endcomment %}
+     <div class="toastBox">
+     </div>
+
+
     {% if recommended_courses %}
       <section class="similar-courses discover">
         <h1>Recommended Courses</h1>
@@ -159,7 +164,7 @@
 <script>
   const token = "{{ csrf_token }}";
 </script>
-  <script src="{% static 'js/add-to-cart.js' %}"></script>
+  <script src="{% static 'js/add-to-wishlist.js' %}"></script>
   <!-- Accordion -->
     <script>
       let acc = document.getElementsByClassName("accordion-btn");
