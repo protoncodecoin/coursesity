@@ -1,0 +1,129 @@
+{% extends "base2.html" %}
+{% load static %}
+{% load cache %}
+
+{% block title %}
+    {{ object.title }}
+{% endblock %}
+
+{% block content %}
+
+    <div id="content" class="content">
+      <div class="top">
+        <h1>{{ module.title }}</h1>
+
+        {% comment %} <a href="#" class="big-btn">{{ random.button }}</a> {% endcomment %}
+      </div>
+      <div class="contents">
+        <h3>Modules</h3>
+        <ul id="modules">
+          {% for m in object.modules.all %}
+          <li data-id="{{ m.id }}" {% if m == module %} class="selected"{% endif %}>
+            <a href="{% url 'student_course_detail_module' object.id m.id %}">
+                        <span>
+                            Module <span class="order">{{ m.order|add:1 }}</span>
+                        </span>
+                        <br>
+                        {{ m.title }}
+                    </a>
+          </li>
+          {% empty %}
+          <li>No modules yet.</li>
+          {% endfor %}
+        </ul>
+        <h3>
+           <a href="{% url 'chat:course_chat_room' object.id %}">Course chat room</a>
+             <a href="{% url 'course_quizzes' object.id %}">Course Quizzes</a>
+        </h3>
+      </div>
+      <div class="module">
+         {% cache 600 module_contents module %}
+        {% for content in module.contents.all %}
+            {% with item=content.item %}
+                <h2>{{ item.title }}</h2>
+                {{ item.render }}
+            {% endwith %}
+        {% endfor %}
+        {% endcache %}
+      </div>
+
+      {% comment %} Toast Notification {% endcomment %}
+     <div class="toastBox">
+     </div>
+
+      <!-- feedback modal -->
+
+      <!-- Trigger/Open The Modal -->
+      <button id="myBtn">Open Modal</button>
+      <div id="myModal" class="feedback-modal">
+        <div class="modal-content hidden">
+          <span class="close">&times;</span>
+
+          <div class="feedback-form">
+            <h2>Rate the course</h2>
+            <form id="feedbackForm">
+              <div class="rating">
+                <!-- Notice that the stars are in reverse order -->
+
+                <input type="radio" id="star5" name="rating" value="5" />
+                <label for="star5">&#9733;</label>
+                <input type="radio" id="star4" name="rating" value="4" />
+                <label for="star4">&#9733;</label>
+                <input type="radio" id="star3" name="rating" value="3" />
+                <label for="star3">&#9733;</label>
+                <input type="radio" id="star2" name="rating" value="2" />
+                <label for="star2">&#9733;</label>
+                <input type="radio" id="star1" name="rating" value="1" />
+                <label for="star1">&#9733;</label>
+              </div>
+              <div class="comment">
+                <label for="comment">Tell us more:</label><br />
+                <textarea id="comment" name="comment"></textarea>
+              </div>
+              <div class="btn">
+                <button type="submit" class="submit-btn">Submit</button>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+
+      {% comment %} <!-- MODAL -->
+      <!-- add a 'hidden' class to hide the modal -->
+      <div class="pop-modal modal hid..">
+        <button class="close-modal">x</button>
+        <!-- <img src="/Assets/floating.svg" alt="" /> -->
+        <!-- <h2>
+          A verification link was sent to your email account! Please click it
+          to finish creating your account
+        </h2> -->
+
+        <input type="text" placeholder="Meeting name" />
+
+        <div class="enrolled">
+          <input name="enroll" type="checkbox" />
+          <label for="enroll">Only enrolled students</label>
+        </div>
+
+        <textarea
+          name="about"
+          id=""
+          cols="30"
+          rows="10"
+          placeholder="About meeting.."
+        ></textarea>
+
+        <button class="big-btn">Submit</button>
+      </div> {% endcomment %}
+    </div>
+
+{% endblock %}
+
+{% block include_js %}
+    <script>
+        const token = "{{csrf_token}}";
+        const course_id = "{{object.id}}";
+    </script>
+     <script src="{% static 'js/ratings.js' %}"></script>
+     
+{% endblock %}

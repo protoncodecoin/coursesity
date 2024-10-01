@@ -1,5 +1,7 @@
 from django.shortcuts import render, get_object_or_404, redirect
 from django.views.decorators.http import require_POST
+from django.contrib.auth.decorators import login_required
+
 from courses.models import Course
 from courses.recommender import Recommender
 from .cart import Cart
@@ -25,6 +27,7 @@ def cart_remove(request, course_id):
     return redirect("cart:cart_detail")
 
 
+@login_required
 def cart_detail(request):
     cart = Cart(request)
 

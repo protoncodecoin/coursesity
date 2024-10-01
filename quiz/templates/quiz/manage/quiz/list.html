@@ -1,30 +1,54 @@
-{% extends "base.html" %}
+{% extends "base2.html" %}
+{% load static %}
+{% block title %} Manage Quizzes {% endblock %}
 
-{% block title %}My Quizzes{% endblock %}
 
 {% block content %}
-  <h1>My Quizzes</h1>
-  <div class="module">
-    {% for quiz in object_list %}
-      <div class="course-info">
-        <h3>Course: {{ quiz.course.title }}</h3>
-        <h3>{{ quiz.title }}</h3>
-        <p>
-          <a href="{% url "quiz_edit" quiz.id %}">Edit</a>
-          <a href="{% url "quiz_delete" quiz.id %}">Delete</a>
-          <a href="{% url "quiz_question_update" quiz.id %}">Edit questions</a>
-          <p>{{ quiz.questions.answers.count }} answers </p>
-          {% if quiz.questions.count > 0 %}
-            <a href="{% url "quiz_answer_list" quiz.id %}">
-            Manage answers</a>
-          {% endif %}
-        </p>
+
+    <div id="content" class="content">
+      <div class="top">
+        <h1>My Quizzes</h1>
+
+        <a href="{% url "course_create" %}" class="big-btn">Create new Quiz</a>
       </div>
-    {% empty %}
-      <p>You haven't created any courses yet.</p>
-    {% endfor %}
-    <p>
-      <a href="{% url "quiz_create" %}" class="button">Create new Quiz for a Course</a>
-    </p>
-  </div>
+      <div class="module">
+        {% if object_list %}
+          <div class="modules">
+            {% for quiz in object_list %}
+            <div class="course-info">
+                {% comment %} <img src="{{ quiz.image.url }}" alt="" /> {% endcomment %}
+                <div class="details">
+                <h3>{{ quiz.title }}</h3>
+                <p>
+                    <a href="{% url "quiz_edit" quiz.id %}">Edit</a>
+                    <a href="{% url "quiz_delete" quiz.id %}">Delete</a>
+                    <a href="{% url "quiz_question_update" quiz.id %}">Edit answers</a>
+                        {% if quiz.modules.count > 0 %}
+                            <a href="{% url "quiz_answer_list" quiz.id %}"> Manage answers</a>
+                        {% endif %}
+                </p>
+                </div>
+            </div>
+            {% endfor %}
+
+        </div>
+
+        {% else %}
+        <!-- nocontent HTML -->
+        <!-- nocontent HTML -->
+        <!-- nocontent HTML -->
+
+        <div class="empty">
+          <img src="{% static 'assets/floating.svg' %}" alt="" />
+          <h4>You haven't created any quiz yet.</h4>
+        </div>
+    {% endif %}
+      </div>
+
+    </div>
+
+{% endblock %}
+
+{% block include_js %}
+    <script src="{% static 'js/main.js' %}"></script>
 {% endblock %}

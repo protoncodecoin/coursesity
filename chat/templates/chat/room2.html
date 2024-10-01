@@ -1,0 +1,162 @@
+{% extends "base2.html" %}
+{% load static %}
+{% block   title %}Chat room for "{{ course.title }}"{% endblock %}
+
+{% block content %}
+    <div id="content" class="content">
+      <div id="chat" class="chat">
+        {% for message in latest_messages %}
+        {% if message.user == request.user %}
+
+
+        <div class="m-right">
+          <div class="message">
+            <div class="date-name">
+              <h3>
+               {{ message.user.first_name }} {{ message.user.last_name }}
+              </h3>
+              <span class="date">
+               {{ message.sent_on|date:"Y.m.d H:i A" }}
+              </span>
+            </div>
+           <p class="m-text">{{ message.content }}</p>
+          </div>
+        </div>
+        {% else %}
+
+
+
+        <div class="m-left">
+          <div class="message">
+            <div class="date-name">
+              <h3>
+               {{ message.user.first_name }} {{ message.user.last_name }}
+              </h3>
+
+              <span class="date">
+                {{ message.sent_on|date:"Y.m.d H:i A" }}
+              </span>
+            </div>
+
+             <p class="m-text">{{ message.content }}</p>
+          </div>
+        </div>
+        {% endif %}
+        {% empty %}
+                
+        <!-- nocontent HTML -->
+        <!-- nocontent HTML -->
+        <!-- nocontent HTML -->
+        
+        <div class="empty">
+            <img src="{% static 'assets/floating.svg' %}" alt="" />
+            <h4>Start a convo...</h4>
+        </div>
+        {% endfor %}
+        </div>
+            
+
+      <div id="chat-input" class="chat-input">
+        <input class="text-input" id="chat-message-input" type="text" />
+        <input
+          class="send-btn"
+          id="chat-message-submit"
+          type="submit"
+          value="Send"
+        />
+      </div>
+    </div>
+{% endblock %}
+
+{% block include_js %}
+
+    {{ course.id|json_script:"course-id"}}
+    {{ request.user.id|json_script:"request-user"}}
+
+    <script src="{% static 'js/main.js' %}"></script>
+{% endblock %}
+
+{% block domready %}
+
+    const courseId = JSON.parse(document.getElementById('course-id').textContent);
+    const requestUser = JSON.parse(document.getElementById("request-user").textContent);
+
+   
+    const url = 'ws://' + window.location.host + '/ws/chat/room/' + courseId + "/";
+    const chatSocket = new WebSocket(url);
+
+    chatSocket.onmessage = function(event){
+        const data = JSON.parse(event.data);
+        const chat = document.getElementById("chat")
+
+        const dateOptions = {hour: 'numeric', minute: 'numeric', hour12: true};
+        const datetime = new Date(data.datetime).toLocaleString('en', dateOptions);
+
+        const isMe = data.user_id === requestUser;
+        const source = isMe ? 'm-right' : 'm-left';
+        const name =  isMe ? 'Me' : data.user;
+
+        {% comment %} chat.innerHTML += '<div class="message ' + source + '">' + '<strong>' + name + '</strong>' + '<span class="date">' + datetime + '</span><br>' + data.message + '</div>'; {% endcomment %}
+
+
+        chat.innerHTML += `<div class="${source}">
+                <div
+                    class="message"
+                >
+                    <div class="date-name">
+                    <h3>
+                        ${data.user}
+                    </h3>
+
+                    <span class="date">
+                        ${data.datetime}
+                        {% comment %} 27/04/01 {% endcomment %}
+                    </span>
+                    </div>
+
+                    <p class="m-text">${data.message}</p>
+                </div>
+            </div>
+`
+
+        chat.scrollTop = chat.scrollHeight;
+    }
+
+    chatSocket.onclose = function(event){
+        console.error("Chat socket closed unexpectedly");
+    }
+
+
+    const input = document.getElementById("chat-message-input");
+    const submitButtom = document.getElementById("chat-message-submit");
+
+    submitButtom.addEventListener("click", function(event){
+        const message = input.value;
+
+        console.log("I was clicked")
+
+        if (message){
+
+            // send message in JSON format
+            chatSocket.send(JSON.stringify({"message": message}))
+    
+            // clear input
+            input.value = "";
+            input.focus();
+        }
+
+    })
+
+    input.addEventListener("keypress", function(event){
+        if (event.key === "Enter"){
+            console.log("enter was pressed")
+            // cancel the default action, if needed
+            event.preventDefault();
+            // trigger click event on button
+            submitButtom.click();
+        }
+    })
+
+    input.focus();
+
+{% endblock %}

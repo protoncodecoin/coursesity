@@ -7,6 +7,11 @@ const updatedMsg =
     '<i class="fas fa-check-circle"></i> Review was updated!!';
 const errorMsg = 
     '<i class="fas fa-times-circle"></i> Error sending data. Try again ';
+const wishListError = 
+    '<i class="fas fa-times-circle"></i>Login to add to wishlist';
+
+
+
 const addWishListBtn = document.querySelector(".add-to-wishlist");
 const wishListURL = '/api/wishlist/'
 
@@ -42,6 +47,8 @@ addWishListBtn.addEventListener("click", async function(e){
 
     // get the id of the course
     const courseId = e.target.dataset.id;
+
+    if (user === "None") return showToast(wishListError, "error")
 
     const postData = {
         "course": courseId

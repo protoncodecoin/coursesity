@@ -171,7 +171,39 @@
 
       </div>
     </section>
-  
+
+        <!-- Instructors -->
+    <section class="query">
+      <h1>Top Instructors</h1>
+
+      <div class="field-content">
+
+        {% for top in top_instructors %}
+
+        <a href="{% url 'show_profile' top.id top.slug %}" class="course">
+          <div class="instructor-content">
+            <img src="{{ top.photo.url }}" alt="instructor-image" />
+            <div class="stats">
+              <p><span>👨‍🏫</span>{{ top.get_full_name }}</p>
+              <p><span>📚</span>Courses: {{ top.num_of_courses }}</p>
+              <p><span>🎓</span> {{ top.get_total_number_of_enrolled_student }} Enrollment{{top.get_total_number_of_enrolled_student|pluralize}}</p>
+            </div>
+          </div>
+        </a>
+
+        {% endfor %}      
+      </div>
+
+      <!-- nocontent HTML -->
+      <!-- nocontent HTML -->
+      <!-- nocontent HTML -->
+      <!-- <div class="empty">
+        <img src="/Assets/floating.svg" alt="" />
+        <h4>Nothing to see..👀</h4>
+      </div> -->
+    </section>
+
+
   
   {% endblock %}
 

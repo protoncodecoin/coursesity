@@ -3,6 +3,7 @@ from rest_framework import serializers
 
 from courses.models import Rating, Subject, Course, Module, Content
 from students.models import WishList
+from users.models import Meeting
 
 
 class SubjectSerializer(serializers.ModelSerializer):
@@ -122,4 +123,23 @@ class RatingSerializer(serializers.ModelSerializer):
             "user",
             "course",
             "rating",
+        ]
+
+
+class MeetingSerializer(serializers.ModelSerializer):
+    host = serializers.ReadOnlyField(source="host.get_full_name")
+    course = serializers.ReadOnlyField(source="course.title")
+
+    class Meta:
+        model = Meeting
+        fields = [
+            "host",
+            "course",
+            "meeting_token",
+            "date_created",
+            "only_enrolled_students",
+            "updated",
+            "expires",
+            "about_message",
+            "meeting_name",
         ]

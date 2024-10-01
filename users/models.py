@@ -1,3 +1,4 @@
+from datetime import timedelta
 from django.utils.text import slugify
 from django.db import models
 from django.contrib.auth.models import AbstractUser
@@ -5,6 +6,9 @@ from django.utils.translation import gettext_lazy as _
 from django.conf import settings
 from django.db.models import Count, Sum
 from django.core.validators import MinValueValidator
+from django.utils import timezone
+
+from courses.models import Course
 
 from .managers import CustomUserManager
 
@@ -85,3 +89,22 @@ class InstructorProfile(models.Model):
 
     def __str__(self):
         return f"{self.user.get_full_name}"
+
+
+class Meeting(models.Model):
+    host = models.ForeignKey(
+        settings.AUTH_USER_MODEL, related_name="host", on_delete=models.CASCADE
+    )
+    course = models.ForeignKey(Course, on_delete=models.CASCADE)
+    meeting_name = models.CharField(max_length=100, blank=True)
+    meeting_token = models.UUIDField(help_text="meeting token")
+    date_created = models.DateTimeField(auto_now_add=True)
+    updated = models.DateTimeField(auto_now=True)
+    only_enrolled_students = models.BooleanField(
+        default=True, help_text="allow only enrolled students in the meeting"
+    )
+    expires = models.DateTimeField(default=timezone.now() + timedelta(days=3))
+    about_message = models.TextField(blank=True)
+
+    def __str__(self):
+        return f"meeting hosted by {self.host.get_full_name}"

@@ -520,14 +520,16 @@ nav .fa {
 
 /* Discover SECTION */
 
-.discover {
+.discover,
+.query {
   position: relative;
   width: 90%;
   margin: 10vh auto;
   padding: 10px;
 }
 
-.discover h1 {
+.discover h1,
+.query h1 {
   font-size: 2.3rem;
   text-align: center;
 }
@@ -628,12 +630,14 @@ nav .fa {
 /* DISCOVER MEDIA QUERIES */
 
 @media (max-width: 700px) {
-  .discover {
+  .discover, 
+  .query {
     width: 95%;
     margin: 3vh auto;
   }
 
-  .discover h1 {
+  .discover h1,
+  .query h1 {
     font-size: 1.6rem;
   }
 
@@ -653,6 +657,34 @@ nav .fa {
     /* width: 100%; */
   }
 }
+
+
+
+/* Instructor queries */
+
+.instructor-content {
+  display: flex;
+  align-items: start;
+  gap: 10px;
+}
+
+.instructor-content img {
+  border-radius: 50%;
+  width: 80px;
+  height: 80px;
+  margin-bottom: 15px;
+}
+
+.stats p {
+  margin-bottom: 10px;
+  font-size: 15px;
+  /* margin-top: 20px; */
+}
+
+
+
+
+
 
 
 .hidden {

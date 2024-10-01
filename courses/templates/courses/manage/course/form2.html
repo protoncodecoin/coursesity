@@ -1,0 +1,30 @@
+{% extends 'base2.html' %}
+{% load static %}
+{% block title %}
+    {% if object %}
+        Edit course "{{ object.title }}"
+        {% else %}
+        Create a new course
+    {% endif %}
+
+{% endblock %}
+
+{% block content %}
+    <div id="content" class="content">
+      <h1>
+       {% if object %} Edit course "{{ object.title }}" {% else %} Create New Course {% endif %}
+      </h1>
+      <div class="module">
+        <h2>Course info</h2>
+        <form method="post" class='auto__gen__form'>
+          {{ form.as_p }} {% csrf_token %}
+          <p><input type="submit" class="big-btn" value="Save course" /></p>
+        </form>
+      </div>
+    </div>
+    
+{% endblock %}
+
+{% block include_js %}
+    <script src="{% static 'js/main.js' %}"></script>
+{% endblock %}

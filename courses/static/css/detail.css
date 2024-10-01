@@ -211,7 +211,21 @@ nav .fa {
 
 
 /* add to wish list */
-.add-to-wishlist {
+
+.go-to-course-2 {
+  display: inline-block;
+  background-color: #fff;
+  color: #5057bb;
+  padding: 5px;
+  transition: all 0.5s ease-in-out;
+}
+
+.go-to-course-2:hover {
+  padding: 7px;
+}
+
+
+.add-to-wishlist, .go-to-course {
   display: block;
   padding: 5px 10px;
   /* background-color: #5057bb; */
@@ -222,9 +236,10 @@ nav .fa {
   text-align: center;
   transition: all 0.5s;
   border: 2px solid #5057bb;
+  cursor: pointer;
 }
 
-.add-to-wishlist:hover {
+.add-to-wishlist:hover, .go-to-course:hover {
   background-color: #5057bb;
   color: #fff;
 }

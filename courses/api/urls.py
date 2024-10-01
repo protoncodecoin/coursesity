@@ -16,4 +16,9 @@ urlpatterns = [
     path(
         "rating_status/", views.CheckRatingStatus.as_view(), name="check_rating_status"
     ),
+    path(
+        "create_meeting/",
+        views.MeetingForCourse.as_view(),
+        name="create_new_course_meeting",
+    ),
 ]

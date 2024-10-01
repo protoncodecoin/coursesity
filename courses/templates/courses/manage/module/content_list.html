@@ -1,4 +1,5 @@
 {% extends "base.html" %}
+{% load static %}
 {% load course %}
 
 {% block title %}
@@ -65,14 +66,63 @@
       </li>
     </ul>
   </div>
+
+    <!-- show toast notification -->
+    <div class="toastBox">
+    </div>
+
+    <!-- show snack notification -->
+     <div id="snackbar"></div>
+
+
+     <!-- Trigger/Open The Modal -->
+<button id="myBtn">Create a meeting</button>
+
+     <div id="myModal", class="modal">
+
+        <div class="modal-content-2">
+            <span class="close">&times;</span>
+            
+
+          <div class="meeting-form">
+            <h2>Create a New Meeting</h2>
+
+            <form class="meeting" id="meeting__form">
+              
+             <div>
+               <label for="meetingName">Meeting Name</label>
+              <input type="text" id="meetingName" placeholder="meeting name", required>
+
+               
+              <label for="restriction">Only Students</label>
+              <input type="checkbox" id="restriction" value="yes">
+
+              <label>About Meeting</label>
+              <textarea id="about" colspan=5></textarea>
+             </div>
+             <input type="submit" value="create" />
+            </form>
+              
+          </div>
+
+        </div>
+
+     </div>
 {% endwith %}
 {% endblock %}
 
 {% block include_js %}
   <script src="https://cdnjs.cloudflare.com/ajax/libs/html5sortable/0.13.3/html5sortable.min.js"></script>
+
+  <script>
+    const token = "{{csrf_token}}";
+    const course_id ="{{module.course.id}}";
+  </script>
+  <script src="{% static 'js/meeting.js' %}"></script>
 {% endblock %}
 
 {% block domready %}
+console.log("hey there")
   var options = {
       method: 'POST',
       mode: 'same-origin'

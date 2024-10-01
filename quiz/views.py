@@ -121,6 +121,11 @@ class ManageQuizListView(OwnerQuizMixin, ListView):
     template_name = "quiz/manage/quiz/list.html"
     permission_required = "quiz.view_quiz"
 
+    def get_context_data(self, **kwargs) -> dict[str, Any]:
+        context = super().get_context_data(**kwargs)
+        context["style"] = "manage_course"
+        return context
+
     def get_queryset(self) -> QuerySet[Any]:
         qs = super().get_queryset()
         return qs.filter(owner=self.request.user)

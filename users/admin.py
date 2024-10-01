@@ -4,7 +4,7 @@ from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin
 
 from .forms import CustomUserCreationForm, CustomUserChangeForm
-from .models import CustomUser, InstructorProfile, Profile
+from .models import CustomUser, InstructorProfile, Meeting, Profile
 
 
 class CustomUserAdmin(UserAdmin):
@@ -91,4 +91,18 @@ class InstructorProfileAdmin(admin.ModelAdmin):
         "years_of_experience",
         "institution",
         "biography",
+    ]
+
+
+@admin.register(Meeting)
+class MeetingAdmin(admin.ModelAdmin):
+    list_display = [
+        "host",
+        "course",
+        "only_enrolled_students",
+        "meeting_token",
+        "date_created",
+        "updated",
+        "expires",
+        "about_message",
     ]

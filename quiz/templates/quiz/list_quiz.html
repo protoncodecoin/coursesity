@@ -1,18 +1,51 @@
-<h2>Quiz Information</h2>
-<h3>Course: {{ course.title }}</h3>
+{% extends 'quiz_base.html' %}
+{% block title %} {{ course.title}}'s Quizzes{% endblock %}
+{% load static %}
 
-{% for quiz in quizzes %}
-    {% if quiz.questions.count > 0 %}
-        <div style="border: 2px solid black; padding: 4px; margin: 20px; border-radius: 2px;">
-            <p>Title: {{quiz.title }}</p>
-            <p>Number of Questions: {{quiz.questions.count}}</p>
-            <p>Description: {{quiz.description}}</p>
-            <p>Pass Score: {{quiz.pass_score}}</p>
-            <p>Instructor: {{ quiz.owner.get_full_name }}</p>
-            <a href="{% url 'course_quiz' course.id quiz.id quiz.slug %}" style="text-decoration:none; background-color: skyblue; display: inline-block; padding: 4px 8px; margin-top: 3px;">Start</a>
+{% block content %}
+    <section class="quiz__section">
+      <div class="quiz__information">
+        <h2>Quiz Information</h2>
+        <p class="quiz__course__title">
+          <span class="course__title">Course</span>: Introduction to Python
+        </p>
+      </div>
+
+      {% for quiz in quizzes %}
+      <div class="list__quiz__container">
+        <div class="quiz__item">
+          <p><span>TITLE:</span>{{ quiz.title }}</p>
+          <p><span>NUMBER OF QUESTIONS:</span>{{ quiz.questions.count }}</p>
+          <p><span>DESCRIPTION:</span>{{quiz.description}}</p>
+          <p><span>PASS SCORE:</span>{{ quiz.pass_score }}</p>
+          <p><span>INSTRUCTOR:</span> {{quiz.owner.get_full_name}}</p>
+          <a href="{% url 'course_quiz' course.id quiz.id quiz.slug %}" class="start__btn">START</a>
         </div>
-    {% endif %}
+      </div>
+      {% empty %}
+        <p>No quiz added </p>
+      {% endfor %}
 
-    {% empty %}
-    <p>No quiz has been added for this course</p>
-{% endfor %}
+      {% comment %} <div class="list__quiz__container">
+        <div class="quiz__item">
+          <p><span>TITLE:</span>Introduction to Python</p>
+          <p><span>NUMBER OF QUESTIONS:</span>10</p>
+          <p><span>DESCRIPTION:</span>Test your python skills</p>
+          <p><span>PASS SCORE:</span>89</p>
+          <p><span>INSTRUCTOR:</span> Asante Prince</p>
+          <a href="#" class="start__btn">START</a>
+        </div>
+      </div>
+
+      <div class="list__quiz__container">
+        <div class="quiz__item">
+          <p><span>TITLE:</span>Introduction to Python</p>
+          <p><span>NUMBER OF QUESTIONS:</span>10</p>
+          <p><span>DESCRIPTION:</span>Test your python skills</p>
+          <p><span>PASS SCORE:</span>89</p>
+          <p><span>INSTRUCTOR:</span> Asante Prince</p>
+          <a href="#" class="start__btn">START</a>
+        </div>
+      </div> {% endcomment %}
+    </section>
+{% endblock %}

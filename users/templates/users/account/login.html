@@ -140,7 +140,7 @@
             Keep me logged in
           </div>
           <div class="right">
-            <a href="#">Forgot passsword</a>
+            <a href="{% url 'password_reset' %}">Forgot passsword</a>
           </div>
         </div>
         
@@ -148,6 +148,11 @@
           <button class="btn submit">Log in</button>
         </div>
       </form>
+
+      <div class="google-auth">
+              <img src="{% static 'assets/googlelogo.svg' %}" alt="google signup" />
+             <a href="{% url 'social:begin' 'google-oauth2' %}">Login with Google</a>
+        </div>
 
       {% comment %} <div class="google-auth">
       <a href="{% url 'social:begin' 'google-oauth2' %}">Google</a>

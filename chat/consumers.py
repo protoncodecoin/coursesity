@@ -41,6 +41,7 @@ class ChatConsumer(AsyncWebsocketConsumer):
                 "type": "chat_message",
                 "message": message,
                 "user_id": self.user.id,
+                "profile": self.user.photo.url,
                 "user": f"{self.user.first_name} {self.user.last_name}",
                 "datetime": now.isoformat(),
             },

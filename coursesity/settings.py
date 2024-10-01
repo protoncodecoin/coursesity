@@ -46,6 +46,7 @@ INSTALLED_APPS = [
     "quiz.apps.QuizConfig",
     "coupons.apps.CouponsConfig",
     "payment.apps.PaymentConfig",
+    "video_call.apps.VideoCallConfig",
     "django.contrib.admin",
     "django.contrib.auth",
     "django.contrib.contenttypes",

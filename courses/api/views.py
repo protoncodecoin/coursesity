@@ -1,5 +1,6 @@
+import uuid
 from django.db.models import Count
-from django.contrib import messages
+from django.contrib.auth import get_user_model
 
 from rest_framework import viewsets
 from rest_framework.response import Response
@@ -12,6 +13,7 @@ from rest_framework.permissions import IsAuthenticatedOrReadOnly
 
 from courses.api.pagination import StandardPagination
 from courses.api.serializers import (
+    MeetingSerializer,
     RatingSerializer,
     SubjectSerializer,
     CourseSerializer,
@@ -21,6 +23,7 @@ from courses.models import Subject, Course, Rating
 from courses.api.permissions import IsEnrolled
 from courses.api.serializers import CourseWithContentsSerializer
 from students.models import WishList
+from users.models import Meeting
 
 
 class SubjectViewSet(viewsets.ReadOnlyModelViewSet):
@@ -69,8 +72,6 @@ class RatingAPIView(views.APIView):
         course_id: int = request.data.get("course")
         rating_value: int = request.data.get("rating")
         comment: str = request.data.get("comment")
-
-        print(user, course_id, comment)
 
         # Validate rating_value
         if rating_value is None or rating_value not in [1, 2, 3, 4, 5]:
@@ -144,3 +145,43 @@ class WishAPIView(views.APIView):
         # add to wishlist
         WishList.objects.create(user=user, course=course_obj)
         return Response({"action": "created"}, status=status.HTTP_201_CREATED)
+
+
+class MeetingForCourse(views.APIView):
+    permission_classes = [IsAuthenticated]
+
+    def get(self, request, format=None):
+        meetings = Meeting.objects.all()
+        meetings_serializer = MeetingSerializer(meetings, many=True)
+        return Response(meetings_serializer.data)
+
+    def post(self, request):
+        user = request.user
+        course_id = request.data.get("course")
+        meeting_name = request.data.get("meeting_name")
+        restriction = request.data.get("is_restricted", True)
+        about_message = request.data.get("about_message", "No message added")
+
+        if user and user.is_instructor or user.is_admin:
+            course_obj = Course.objects.filter(id=course_id).first()
+            if course_obj:
+
+                if meeting_name == "" or meeting_name is None:
+                    meeting_name = course_obj.title
+                # create meeting
+                meeting_token = uuid.uuid4()
+                new_meeting = Meeting.objects.create(
+                    host=user,
+                    meeting_token=meeting_token,
+                    course=course_obj,
+                    only_enrolled_students=restriction,
+                    about_message=about_message,
+                    meeting_name=meeting_name,
+                )
+                new_meeting.save()
+
+                # send email notification to all enrolled students
+
+                return Response({"token": meeting_token})
+            return Response({"error": "course not found"})
+        return Response({"error": "Unauthorizied"})

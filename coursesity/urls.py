@@ -37,6 +37,7 @@ urlpatterns = [
     path("cart/", include("cart.urls", namespace="cart")),
     path("orders/", include("orders.urls", namespace="orders")),
     path("payment/", include("payment.urls", namespace="payment")),
+    path("meeting/", include("video_call.urls")),
     path("social-auth/", include("social_django.urls", namespace="social")),
     path("", CourseListView.as_view(), name="course_list"),
 ]

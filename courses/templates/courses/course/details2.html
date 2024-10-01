@@ -1,4 +1,5 @@
 {% extends 'base2.html' %}
+{% load cart_filter %}
 {% load static %}
 {% load wishlist_tags %}
 
@@ -28,14 +29,19 @@
 
         <h2 class="price">GH:{{object.price}}</h2>
 
+        
         <form action="{% url 'cart:cart_add' object.id %}" method="post">
           {% csrf_token %}
 
-        <button type="submit"> Add To Cart</button>          
+          {% if request.user in object.students.all %}
+          <a href="{% url 'student_course_detail' object.id %}" class="go-to-course" > Go to Course</a> 
+          {% elif  request|check_object_in_cart:object.id %}
+            <a href="{% url 'cart:cart_detail'%}" type="submit" class="go-to-course">Remove from Cart</a>
+        {% else %}
+        <button type="submit">Add To Cart</button>
+        {% endif %}            
         {% comment %} <button class="wishlist-btn">Add to Wishlist</button> {% endcomment %}
         <a href="#" class="add-to-wishlist {% if has_added_to_wishlist  %} added {% else %} "" {% endif %}" data-id="{{ object.id }}"> {% if has_added_to_wishlist %} Remove from Wishlist {% else %}Add to Wishlist {% endif %}</a>
-
-
         </form>
 
 
@@ -151,7 +157,11 @@
         <h3 id="buy-text">Buy course now!</h3>
         <form action="{% url 'cart:cart_add' object.id %}" method='post'>
           {% csrf_token %}
+           {% if  request|check_object_in_cart:object.id %}
+            <a href="{% url 'cart:cart_detail'%}" type="submit" class="go-to-course-2">Remove from Cart</a>
+            {% else %}
           <button id="add-to-cart" type="submit">Add to Cart</button>
+          {% endif %}
         </form>
       </div>
       {% comment %} {% else %}
@@ -163,6 +173,7 @@
 {% block include_js %}
 <script>
   const token = "{{ csrf_token }}";
+  const user = "{{request.user.id}}";
 </script>
   <script src="{% static 'js/add-to-wishlist.js' %}"></script>
   <!-- Accordion -->

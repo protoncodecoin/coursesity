@@ -1,0 +1,122 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Coursiy - Home</title>
+    <link rel="stylesheet" href="{% static 'css/list-quiz.css' %}" />
+    <link rel="icon" type="image/x-icon" href="{% static 'icons/coursitylogo.png' %}" />
+  </head>
+  <body>
+    <nav>
+      <div class="main-nav">
+        <a href="index.html"
+          ><img
+            src="{% static 'icons/coursitytextlogo2.png' %}"
+            alt="Coursity"
+            class="header-logo"
+        /></a>
+
+        <!-- <div class="searchbar">
+          <img src="/Icons/searchico.svg" alt="" class="search-icon" />
+          <input type="search" placeholder="Search" id="search-input" />
+
+          <ul class="search-results hidden">
+            <li>How to make a bomb</li>
+            <li>How to become rich</li>
+            <li>How to learn C++ and Assembly in 2 weeks</li>
+          </ul>
+        </div> -->
+
+        <div class="nav-links" id="navLinks">
+          <span class="fa" onclick="hideMenu()">X</span>
+          <div class="cart-user">
+            <div class="user-dp">
+              <img src="{{ request.user.photo.url }}" alt="Profile of {{ request.user.get_full_name }}" />
+              <a href="{% url 'show_profile' request.user.id request.user.slug %}" class="username"
+                >Sir Meowlington</a
+              >
+            </div>
+
+            <a href="login.html"
+              ><button type="button" class="user">Log In</button></a
+            >
+
+            <a href="cart.html" class="cart-container">
+              <img src="{% static 'cons/cartico.svg' %}" alt="Cart Icon" class="cart-icon" />
+              <div class="cart-badge">3</div>
+            </a>
+          </div>
+
+          <div class="more-drop">
+            <div class="more-dropdown">
+              <a href="/">Home</a><a href="#">Categories</a>
+              <a href="{% url 'student_course_list' %}">Learning</a>
+              <a href="{% url 'cart:cart_detail' %}" class="m-cart-container">
+                Cart
+                <div class="m-cart-badge">3</div>
+              </a>
+              <a href="{% url 'login' %}" class="m-login-btn"> Log In </a>
+              <!-- <a href="#" class="user-dp m-user-btn">
+                <img src="/Assets/sad cat.jpg" alt="Sir meowlingtom">
+                Sir Meowlington
+              </a> -->
+            </div>
+          </div>
+        </div>
+
+        <div class="m-search-hamburger">
+          <!-- <img src="/Icons/searchico.svg" alt="" class="m-search-icon" /> -->
+
+          <!-- <div class="m-searchbar hidden">
+            <input type="search" placeholder="Search" />
+
+            <ul class="search-results">
+              <li>How to make a bomb</li>
+              <li>How to become rich</li>
+              <li>How to learn C++ and Assembly in 2 weeks</li>
+            </ul>
+          </div> -->
+
+          <img
+            src="{% static 'icons/hamburger.svg' %}"
+            onclick="showMenu()"
+            alt="menu icon"
+            class="menu-icon fa"
+          />
+        </div>
+      </div>
+
+      <div class="secondary-nav">
+        <ul>
+          <li><a href="#">Categories</a></li>
+          <li><a href="{% url 'student_course_list' %}">Learning</a></li>
+        </ul>
+      </div>
+    </nav>
+{% block content %}
+
+{% endblock %}
+    <!-- footer -->
+    <section class="footer">
+      <div class="footer-top">
+        <img src="{% static 'icons/coursitylogo.png' %}" alt="" class="footer-logo" />
+
+        <div class="footer-title">Coursity © 2024</div>
+
+        <div class="address-contact-mail">
+          <div class="address"><span>🏨</span> Accra, Ghana.</div>
+          <div class="contact"><span>📞</span> 01 2345 6789</div>
+          <div class="mail"><span>📧</span> info@coursity.org</div>
+        </div>
+      </div>
+
+      <div class="footer-bottom">All Rights Reserved®</div>
+    </section>
+
+    <!-- SCRIPTS -->
+    <script src="{% static 'js/main.js' %}"></script>
+  </body>
+</html>

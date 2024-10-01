@@ -1,0 +1,29 @@
+{% extends 'base2.html' %}
+{% load static %}
+{% block title %}
+  {% if object %}
+    Edit content "{{ object.title }}"
+  {% else %}
+    Add new content
+  {% endif %}
+{% endblock %}
+
+{% block content %}
+<div id="content" class="content">
+      <h1>
+      {% if object %} Edit content "{{ object.title }}" {% else %} Add New Content {% endif %}
+      </h1>
+      <div class="module">
+        <h2>Course info</h2>
+        <form action="" method="post" enctype="multipart/form-data">
+          {{ form.as_p }}
+           {% csrf_token %}
+          <p><input class="big-btn" type="submit" value="Save content" /></p>
+        </form>
+      </div>
+    </div>
+{% endblock %}
+
+{% block include_js %}
+  <script src="{% static 'js/main.js' %}"></script>
+{% endblock %}

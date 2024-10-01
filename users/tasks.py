@@ -26,7 +26,7 @@ def send_welcome_email(user_id):
             message,
             from_email,
             [unverified_user.email],
-            fail_silently=False,
+            fail_silently=True,
         )
         return sent_email
     except Exception as e:
@@ -39,7 +39,7 @@ def send_activation_email(user_id, domain):
         unverified_user = get_user_model().objects.get(id=user_id)
 
         from_email = settings.EMAIL_HOST_USER
-        to_list = [unverified_user.email, "princeaffumasante@gmail.com"]
+        to_list = [unverified_user.email]
 
         email_subject = "Confirm Your Email Address"
         messages2 = render_to_string(

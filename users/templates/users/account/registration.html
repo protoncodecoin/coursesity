@@ -25,6 +25,12 @@
             poster="/Motion graphics/two-frame.png"
           ></video>
 
+
+          {% comment %} show notification {% endcomment %}
+              <div class="toastBox">
+            </div>
+
+
           <div class="overlay hidden"></div>
           <div class="sign-up-modal">
             <img src="{% static 'icons/coursitylogo.png' %}" class="app-logo" alt="" />
@@ -83,18 +89,22 @@
                 required
                 name="password2"
               />
-              <input
-                class="info"
-                type="checkbox"
-                placeholder=""
-                name="is_instructor"
-              />
+                <div class="join-as-instructor">
+                <input type="checkbox" name="is_instructor">
+                <label for="instructor-check">Sign up as an instructor</label>
+              </div>
+
               <div class="button-center">
                 <button type="submit" class="btn show-modal submit">
                   Create Account
                 </button>
               </div>
             </form>
+
+            <div class="google-auth">
+              <img src="{% static 'assets/googlelogo.svg' %}" alt="google signup" />
+              <a href="{% url 'social:begin' 'google-oauth2' %}">Signup with Google</a>
+            </div>
 
             <p>Have an account? Log in <a href="{% url 'login' %}">here</a></p>
           </div>

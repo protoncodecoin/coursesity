@@ -1,0 +1,57 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Coursiy | {% block title %} {% endblock %}</title>
+    <link rel="stylesheet" href="{% static 'css/forgotpassword.css' %}" />
+    <link rel="icon" type="image/x-icon" href="{% static 'icons/coursitylogo.png' %}" />
+  </head>
+  <body>
+    <nav>
+      <div class="main-nav">
+        <a href="/"
+          ><img
+            src="{% static 'icons/coursitytextlogo2.png' %}"
+            alt="Coursity"
+            class="header-logo"
+        /></a>
+
+        <div class="nav-links" id="navLinks">
+          <span class="fa" onclick="hideMenu()">X</span>
+          <div class="cart-user">
+            <a href="{% url 'user_registration' %}">
+              <button type="button" class="user">Sign Up</button>
+            </a>
+          </div>
+
+          <div class="more-drop">
+            <div class="more-dropdown">
+              <a href="/">Home</a><a href="#">Categories</a>
+              <a href="learning.html">Learning</a>
+            </div>
+          </div>
+        </div>
+
+        <div class="m-search-hamburger">
+          <img
+            src="{% static 'icons/hamburger.svg' %}"
+            onclick="showMenu()"
+            alt="menu icon"
+            class="menu-icon fa"
+          />
+        </div>
+      </div>
+    </nav>
+
+    {% block content %}
+
+    {% endblock %}
+        <!-- SCRIPTS -->
+    <script src="{% static 'js/main.js' %}"></script>
+    <!--  -->
+  </body>
+</html>

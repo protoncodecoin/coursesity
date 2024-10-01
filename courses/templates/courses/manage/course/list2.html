@@ -1,0 +1,51 @@
+{% extends 'base2.html' %}
+{% load static %}
+{% block title %} Manage Courses {% endblock %}
+
+{% block content %}
+
+    <div id="content" class="content">
+      <div class="top">
+        <h1>My courses</h1>
+
+        <a href="{% url "course_create" %}" class="big-btn">Create new course</a>
+        <a href="{% url "manage_quiz_list" %}" class="big-btn">Add new Quiz for Courses</a>
+      </div>
+      <div class="module">
+        {% if object_list %}
+          <div class="modules">
+            {% for course in object_list %}
+            <div class="course-info">
+                <img src="{{ course.image.url }}" alt="" />
+                <div class="details">
+                <h3>{{ course.title }}</h3>
+                <p>
+                    <a href="{% url "course_edit" course.id %}">Edit</a>
+                    <a href="{% url "course_delete" course.id %}">Delete</a>
+                    <a href="{% url "course_module_update" course.id %}">Edit modules</a>
+                        {% if course.modules.count > 0 %}
+                            <a href="{% url "module_content_list" course.modules.first.id %}"> Manage contents</a>
+                        {% endif %}
+                </p>
+                </div>
+            </div>
+            {% endfor %}
+
+        </div>
+
+        {% else %}
+        <!-- nocontent HTML -->
+        <!-- nocontent HTML -->
+        <!-- nocontent HTML -->
+
+        <div class="empty">
+          <img src="{% static 'assets/floating.svg' %}" alt="" />
+          <h4>You haven't created any courses yet.</h4>
+        </div>
+    {% endif %}
+      </div>
+
+    </div>
+
+
+{% endblock %}

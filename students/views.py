@@ -131,7 +131,7 @@ class StudentCourseListView(LoginRequiredMixin, ListView):
 
 class StudentCourseDetailView(LoginRequiredMixin, DetailView):
     model = Course
-    template_name = "students/course/detail.html"
+    template_name = "students/course/detail2.html"
 
     def get_queryset(self):
         qs = super().get_queryset()
@@ -141,6 +141,8 @@ class StudentCourseDetailView(LoginRequiredMixin, DetailView):
         context = super().get_context_data(**kwargs)
         # get course object
         course = self.get_object()
+        context["style"] = "content_list"
+        context["style2"] = "base2"
         if "module_id" in self.kwargs:
             # get current module
             context["module"] = course.modules.get(id=self.kwargs["module_id"])

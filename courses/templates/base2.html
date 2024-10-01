@@ -24,10 +24,20 @@
      <link rel="stylesheet" href="{% static 'css/student.css' %}">
   {% elif style == "search"%}
      <link rel="stylesheet" href="{% static 'css/search.css' %}">
+  {% elif style == "manage_course"%}
+     <link rel="stylesheet" href="{% static 'css/list2.css' %}">
+  {% elif style == "create_form"%}
+     <link rel="stylesheet" href="{% static 'css/logged_out.css' %}">
+  {% elif style == "room" %}
+     <link rel="stylesheet" href="{% static 'css/room.css' %}">
+  {% elif style == "content_list"%}
+     <link rel="stylesheet" href="{% static 'css/content_list.css' %}">
   {% else %}
     <link rel="stylesheet" href="{% static 'css/list.css' %}">
-
   {% endif %}
+  {% if style2 == "base2"%}
+     <link rel="stylesheet" href="{% static 'css/base2.css' %}">
+     {% endif %}
   <link rel="icon" type="image/x-icon" href="{% static 'icons/coursitylogo.png' %}" />
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
   <link rel="stylesheet" href=
@@ -87,10 +97,12 @@
             <div class="more-dropdown">
               <a href="/">Home</a>
               <a href="#">Categories</a>
-              <a href="learning.html">Learning</a>
-              <a href="cart.html" class="m-cart-container">
+              <a href="{% url 'student_course_list' %}">Learning</a>
+              <a href="{% url 'cart:cart_detail' %}" class="m-cart-container">
                 Cart
-                <div class="m-cart-badge">3</div>
+                {% with total_items=cart|length %}
+                <div class="m-cart-badge">{{total_items}}</div>
+                {% endwith %}
               </a>
               <form method="post" id="auth" action="{% url 'login' %}">
                 {% csrf_token %}
@@ -168,6 +180,14 @@
   {% block include_js %}
 
   {% endblock %}
+
+  <script>
+      document.addEventListener('DOMContentLoaded', (event) => {
+        // DOM loaded
+        {% block domready %}
+        {% endblock %}
+      })
+    </script>
   <script src="{% static 'js/search.js' %}"></script>
   </body>
 </html>

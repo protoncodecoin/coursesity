@@ -11,10 +11,11 @@ from django.contrib.auth.mixins import (
     LoginRequiredMixin,
     PermissionRequiredMixin,
 )
+from django.contrib.auth import get_user_model
 from django.contrib import messages
 from django.apps import apps
 from django.forms.models import modelform_factory
-from django.db.models import Count
+from django.db.models import Count, OuterRef, Subquery, Sum
 from django.core.cache import cache
 from django.shortcuts import render
 from django.contrib.postgres.search import (
@@ -64,12 +65,22 @@ class OwnerCourseEditMixin(OwnerCourseMixin, OwnerEditMixin):
     returns a form template to be used.
     """
 
-    template_name = "courses/manage/course/form.html"
+    template_name = "courses/manage/course/form2.html"
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context["style"] = "create_form"
+        return context
 
 
 class ManageCourseListView(OwnerCourseMixin, ListView):
-    template_name = "courses/manage/course/list.html"
+    template_name = "courses/manage/course/list2.html"
     permission_required = "courses.view_course"
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context["style"] = "manage_course"
+        return context
 
 
 class CourseCreateView(OwnerCourseEditMixin, CreateView):
@@ -95,9 +106,14 @@ class CourseDeleteView(OwnerCourseEditMixin, DeleteView):
 
     permission_required = "courses.delete_course"
 
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context["style"] = "create_form"
+        return context
+
 
 class CourseModuleUpdateView(TemplateResponseMixin, View):
-    template_name = "courses/manage/module/formset.html"
+    template_name = "courses/manage/module/formset2.html"
     course = None
 
     def get_formset(self, data=None):
@@ -109,21 +125,33 @@ class CourseModuleUpdateView(TemplateResponseMixin, View):
 
     def get(self, request, *args, **kwargs):
         formset = self.get_formset()
-        return self.render_to_response({"course": self.course, "formset": formset})
+        return self.render_to_response(
+            {
+                "course": self.course,
+                "formset": formset,
+                "style": "course_form",
+            }
+        )
 
     def post(self, request, *args, **kwargs):
         formset = self.get_formset(data=request.POST)
         if formset.is_valid():
             formset.save()
             return redirect("manage_course_list")
-        return self.render_to_response({"course": self.course, "formset": formset})
+        return self.render_to_response(
+            {
+                "course": self.course,
+                "formset": formset,
+                "style": "course_form",
+            }
+        )
 
 
 class ContentCreateUpdateView(TemplateResponseMixin, View):
     module = None
     model = None
     obj = None
-    template_name = "courses/manage/content/form.html"
+    template_name = "courses/manage/content/form2.html"
 
     def get_model(self, model_name):
         if model_name in ["text", "video", "file", "image"]:
@@ -153,7 +181,13 @@ class ContentCreateUpdateView(TemplateResponseMixin, View):
 
     def get(self, request, module_id, model_name, id=None):
         form = self.get_form(self.model, instance=self.obj)
-        return self.render_to_response({"form": form, "object": self.obj})
+        return self.render_to_response(
+            {
+                "form": form,
+                "object": self.obj,
+                "style": "create_form",
+            }
+        )
 
     def post(self, request, module_id, model_name, id=None):
         form = self.get_form(
@@ -167,7 +201,13 @@ class ContentCreateUpdateView(TemplateResponseMixin, View):
                 # new content
                 Content.objects.create(module=self.module, item=obj)
                 return redirect("module_content_list", self.module.id)
-            return self.render_to_response({"form": form, "object": self.obj})
+            return self.render_to_response(
+                {
+                    "form": form,
+                    "object": self.obj,
+                    "style": "create_form",
+                }
+            )
 
 
 class ContentDeleteView(View):
@@ -180,11 +220,17 @@ class ContentDeleteView(View):
 
 
 class ModuleContentListVIew(TemplateResponseMixin, View):
-    template_name = "courses/manage/module/content_list.html"
+    template_name = "courses/manage/module/content_list2.html"
 
     def get(self, request, module_id):
         module = get_object_or_404(Module, id=module_id, course__owner=request.user)
-        return self.render_to_response({"module": module})
+        return self.render_to_response(
+            {
+                "module": module,
+                "style": "content_list",
+                "style2": "base2",
+            }
+        )
 
 
 class ModuleOrderView(CsrfExemptMixin, JsonRequestResponseMixin, View):
@@ -249,6 +295,22 @@ class CourseListView(TemplateResponseMixin, View):
             )
             cache.set("highly_rated", highly_rated)
 
+        # get top instructors
+        top_instructors = cache.get("top_instructors")
+        if not top_instructors:
+            top_instructors = (
+                get_user_model()
+                .objects.filter(is_instructor=True)
+                .annotate(
+                    total_courses=Count("courses_created"),
+                    total_students=Sum("courses_created__students"),
+                )
+                .filter(total_students__gt=0)
+                .order_by("-total_students")
+            )
+            print(top_instructors)
+            print([s.total_students for s in top_instructors])
+
         if subject:
             subject = get_object_or_404(Subject, slug=subject)
             key = f"subject_{subject.id}_courses"
@@ -270,6 +332,7 @@ class CourseListView(TemplateResponseMixin, View):
                 "popular_courses": popular_courses,
                 "recently_added": recently_added,
                 "highly_rated": highly_rated,
+                "top_instructors": top_instructors,
                 "style": "index",
             }
         )
@@ -278,6 +341,7 @@ class CourseListView(TemplateResponseMixin, View):
 class CourseDetailView(DetailView):
     model = Course
     template_name = "courses/course/details2.html"
+    has_added_to_wishlist = []
 
     # render a form for user to add to cart
 
@@ -288,15 +352,17 @@ class CourseDetailView(DetailView):
         # context["enroll_form"] = CourseEnrollForm(initial={"course": self.object})
         course_obj = self.object.id
         course = Course.objects.get(id=course_obj)
-        has_added_to_wishlist = WishList.objects.filter(
-            user=self.request.user, course=course
-        ).exists()
+
+        if self.request.user.is_authenticated:
+            self.has_added_to_wishlist = WishList.objects.filter(
+                user=self.request.user, course=course
+            ).exists()
 
         r = Recommender()
         recommended_courses = r.suggest_courses_for([course], 4)
         context["recommended_courses"] = recommended_courses
         context["style"] = "detail"  # load specific css
-        context["has_added_to_wishlist"] = has_added_to_wishlist
+        context["has_added_to_wishlist"] = self.has_added_to_wishlist
         return context
 
 
