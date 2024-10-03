@@ -1,5 +1,4 @@
 
-
 let uid = userId
 
 if (!uid) {

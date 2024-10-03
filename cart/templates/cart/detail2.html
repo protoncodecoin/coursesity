@@ -38,60 +38,33 @@
                 <form action="{% url 'cart:cart_remove' course.id %}" method="post">
                         {% csrf_token %}
                             <button class="delete-button" type="submit">Remove</button>
-                    </form>
+                </form>
 
                     </div>
                 </div>
                 {% endwith %}
             {% endfor %}
 
-          {% comment %} <div class="course-row">
-            <div class="main">
-              <a href="/coursepage.html" class="course all language">
-                <img src="/Assets/223023222_571328.jpg" alt="" />
-                <div class="info">
-                  <div class="info-top">
-                    <p>3Hrs 0Mins</p>
-                    <p>7 Lessons</p>
-                  </div>
-                  <p class="info-bottom">Advanced Public Relations2</p>
-                </div>
-              </a>
-            </div>
-
-            <div class="price-del">
-              <div class="price">
-                <h3>GHC 99.99</h3>
-              </div>
-
-              <div class="delete-button">Remove</div>
-            </div>
-          </div>
-
-          <div class="course-row">
-            <div class="main">
-              <a href="/coursepage.html" class="course all language">
-                <img src="/Assets/223023222_571328.jpg" alt="" />
-                <div class="info">
-                  <div class="info-top">
-                    <p>3Hrs 0Mins</p>
-                    <p>7 Lessons</p>
-                  </div>
-                  <p class="info-bottom">Advanced Public Relations3</p>
-                </div>
-              </a>
-            </div>
-
-            <div class="price-del">
-              <div class="price">
-                <h3>GHC 99.99</h3>
-              </div>
-
-              <div class="delete-button">Remove</div>
-            </div>
-          </div> {% endcomment %}
         </div>
-        <a href="/" class="browse">Browse Courses</a>
+        {% if cart.coupon %}
+        <div>
+          <p> Subtotal: {{ cart.get_total_price|floatformat:2}}</p>
+          <p>"{{cart.coupon.code}}" coupon</p>
+          <p>"{{cart.coupon.discount}}"% off</p>
+          <p>- {{ cart.get_discount|floatformat:2}}</p>
+          <p>Total is now: {{cart.get_total_price_after_discount|floatformat:2}}</p>
+        </div>
+
+        {% endif %}
+        <a href="{% url 'course_list' %}" class="browse">Browse Courses</a>
+
+        {% comment %} Coupon forms {% endcomment %}
+        <form action="{% url 'coupon:apply' %}" method='post'>
+          {% csrf_token %}
+          <label for="coupon__field">Apply a Coupon </label>
+          <input type='text' id="coupon__field" placeholder="Enter coupon code" name='code' required />
+          <input type="submit" value="Apply" />
+        </form>
       </div>
 
       <div class="payment-view">

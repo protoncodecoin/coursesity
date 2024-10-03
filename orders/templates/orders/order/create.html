@@ -21,6 +21,13 @@
         <h2>
         Checkout
     </h2>
+    {% comment %} <div>
+
+        {% if order.coupon %}
+            <p>Subtotal: {{ order.get_total_cost_before_discount|floatformat:2}}</p>
+            <p>"{{order.coupon.code}}" coupon ({{ order.discount }})% off</p>
+            <p>- {{ order.get_discount|floatformat:2}}</p>
+    </div> {% endcomment %}
     <form method="post">
         {% csrf_token %}
         <input type="submit" value="Pay Now">

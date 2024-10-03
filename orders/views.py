@@ -57,6 +57,12 @@ def order_create(request):
             new_order_item = Order.objects.create(
                 first_name=user.first_name, last_name=user.last_name, email=user.email
             )
+            if cart.coupon:
+                new_order_item.coupon = cart.coupon
+                new_order_item.discountt = cart.coupon.discount
+
+                new_order_item.save()
+
             course_ids = list()
             for item in cart:
                 OrderItem.objects.create(
@@ -110,6 +116,15 @@ def order_create(request):
                     }
                 )
 
+            # stripe coupon
+            if new_order_item.coupon:
+                stripe_coupon = stripe.Coupon.create(
+                    name=new_order_item.coupon.code,
+                    percent_off=new_order_item.order.discount,
+                    duration="once",
+                )
+                session_data["discounts"] = [{"coupon": stripe_coupon.id}]
+
             # create stripe checkout session
             session = stripe.checkout.Session.create(**session_data)
             # redirect to stripe payment form
@@ -118,4 +133,10 @@ def order_create(request):
         request.session["next"] = request.path
         return redirect("user_registration")
 
-    return render(request, "orders/order/create.html", {"cart": cart})
+    return render(
+        request,
+        "orders/order/create.html",
+        {
+            "cart": cart,
+        },
+    )

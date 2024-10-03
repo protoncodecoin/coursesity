@@ -308,8 +308,6 @@ class CourseListView(TemplateResponseMixin, View):
                 .filter(total_students__gt=0)
                 .order_by("-total_students")
             )
-            print(top_instructors)
-            print([s.total_students for s in top_instructors])
 
         if subject:
             subject = get_object_or_404(Subject, slug=subject)

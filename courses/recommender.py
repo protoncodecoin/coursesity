@@ -27,7 +27,6 @@ class Recommender:
     def suggest_courses_for(self, courses, max_results=6):
         course_ids = [p.id for p in courses]
         if len(courses) == 1:
-            print("Yes the item is only one")
             # only 1 product
             suggestions = r.zrange(
                 self.get_course_key(course_ids[0]), 0, -1, desc=True
