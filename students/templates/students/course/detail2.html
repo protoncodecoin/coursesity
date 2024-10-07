@@ -12,14 +12,15 @@
       <div class="top">
         <h1>{{ module.title }}</h1>
 
-        {% comment %} <a href="#" class="big-btn">{{ random.button }}</a> {% endcomment %}
+
+        <a href="#" id="myBtn" class="big-btn show-modal">Leave a review</a>
       </div>
       <div class="contents">
         <h3>Modules</h3>
         <ul id="modules">
           {% for m in object.modules.all %}
           <li data-id="{{ m.id }}" {% if m == module %} class="selected"{% endif %}>
-            <a href="{% url 'student_course_detail_module' object.id m.id %}">
+            <a href="{% url 'student_course_detail_module' object.id m.id %}" class="check_status" data-module-id="{{m.id}}">
                         <span>
                             Module <span class="order">{{ m.order|add:1 }}</span>
                         </span>
@@ -47,6 +48,17 @@
         {% endcache %}
       </div>
 
+      {% comment %} progress bar {% endcomment %}
+       <div class="floater">
+         <div class="circular-progress" data-inner-circle-color="#5057bb" data-percentage="{{progress}}" data-progress-color="#000" data-bg-color="#fff">
+           <div class="inner-circle"></div>
+           <p class="percentage">0%</p>
+          </div>
+
+          <p class="info" style="display:block;">Course Progress<p>
+        </div>
+
+
       {% comment %} Toast Notification {% endcomment %}
      <div class="toastBox">
      </div>
@@ -54,10 +66,11 @@
       <!-- feedback modal -->
 
       <!-- Trigger/Open The Modal -->
-      <button id="myBtn">Open Modal</button>
-      <div id="myModal" class="feedback-modal">
-        <div class="modal-content hidden">
-          <span class="close">&times;</span>
+ <!-- modal -->
+      <div class=""></div>
+      <div id="myModal" class="feedback-modal hiddn">
+        <div class="modal-content">
+          <span class="close close-modal">&times;</span>
 
           <div class="feedback-form">
             <h2>Rate the course</h2>
@@ -87,34 +100,6 @@
           </div>
         </div>
       </div>
-
-      {% comment %} <!-- MODAL -->
-      <!-- add a 'hidden' class to hide the modal -->
-      <div class="pop-modal modal hid..">
-        <button class="close-modal">x</button>
-        <!-- <img src="/Assets/floating.svg" alt="" /> -->
-        <!-- <h2>
-          A verification link was sent to your email account! Please click it
-          to finish creating your account
-        </h2> -->
-
-        <input type="text" placeholder="Meeting name" />
-
-        <div class="enrolled">
-          <input name="enroll" type="checkbox" />
-          <label for="enroll">Only enrolled students</label>
-        </div>
-
-        <textarea
-          name="about"
-          id=""
-          cols="30"
-          rows="10"
-          placeholder="About meeting.."
-        ></textarea>
-
-        <button class="big-btn">Submit</button>
-      </div> {% endcomment %}
     </div>
 
 {% endblock %}
@@ -125,5 +110,6 @@
         const course_id = "{{object.id}}";
     </script>
      <script src="{% static 'js/ratings.js' %}"></script>
+     <script src="{% static 'js/progress_checker.js' %}"></script>
      
 {% endblock %}

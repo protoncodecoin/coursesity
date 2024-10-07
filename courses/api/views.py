@@ -1,6 +1,7 @@
 import uuid
+import redis
 from django.db.models import Count
-from django.contrib.auth import get_user_model
+from django.conf import settings
 
 from rest_framework import viewsets
 from rest_framework.response import Response
@@ -24,6 +25,14 @@ from courses.api.permissions import IsEnrolled
 from courses.api.serializers import CourseWithContentsSerializer
 from students.models import WishList
 from users.models import Meeting
+
+from courses.tasks import notify_meeting_participants
+
+r = redis.Redis(
+    host=settings.REDIS_HOST,
+    port=settings.REDIS_PORT,
+    db=settings.REDIS_DB,
+)
 
 
 class SubjectViewSet(viewsets.ReadOnlyModelViewSet):
@@ -161,6 +170,8 @@ class MeetingForCourse(views.APIView):
         meeting_name = request.data.get("meeting_name")
         restriction = request.data.get("is_restricted", True)
         about_message = request.data.get("about_message", "No message added")
+        sch_date = request.data.get("sch_date")
+        sch_time = request.data.get("sch_time")
 
         if user and user.is_instructor or user.is_admin:
             course_obj = Course.objects.filter(id=course_id).first()
@@ -177,11 +188,35 @@ class MeetingForCourse(views.APIView):
                     only_enrolled_students=restriction,
                     about_message=about_message,
                     meeting_name=meeting_name,
+                    sch_date=sch_date,
+                    sch_time=sch_time,
                 )
                 new_meeting.save()
 
                 # send email notification to all enrolled students
+                notify_meeting_participants.delay(course_id, new_meeting.id)
 
                 return Response({"token": meeting_token})
             return Response({"error": "course not found"})
         return Response({"error": "Unauthorizied"})
+
+
+class SaveStudentProgress(views.APIView):
+    """
+    Save student progress
+    """
+
+    permission_classes = [IsAuthenticated]
+
+    def post(self, request):
+        course_id = request.data.get("course_id")
+        module_id = request.data.get("module_id")
+
+        course = Course.objects.filter(id=course_id).first()
+
+        if module_id:
+            last_module_key = f"user:{request.user.id}:last_module:{course.id}"
+            r.set(last_module_key, module_id)
+
+            return Response({"progress_status": "saved"})
+        return Response({"progress_status": "error"})

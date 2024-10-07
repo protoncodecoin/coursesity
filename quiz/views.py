@@ -196,7 +196,6 @@ class AnswerCreateUpdateView(TemplateResponseMixin, View):
         self.question = get_object_or_404(Question, id=question_id)
         if id:  # id of the answer if it's none then we are creating a new answer
             self.answer = get_object_or_404(Answer, pk=id)
-            print(self.answer, id, "i came here")
 
         return super().dispatch(request, quiz_id, question_id, id)
 

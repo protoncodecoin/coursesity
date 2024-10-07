@@ -44,11 +44,11 @@ body::before {
   display: block;
 }
 
-  body::after {
-    content: "";
-    height: 250px;
-    display: block;
-  }
+body::after {
+  content: "";
+  height: 300px;
+  display: block;
+}
 
 .header-logo {
   width: 150px;
@@ -219,7 +219,6 @@ nav .fa {
 /* NAV MEDIA */
 
 @media (max-width: 700px) {
-
   body::before {
     height: 62px;
   }
@@ -398,10 +397,6 @@ nav .fa {
   }
 }
 
-
-
-
-
 /*Content */
 
 .content {
@@ -428,7 +423,7 @@ nav .fa {
   display: grid;
   grid-template-columns: auto auto auto;
   gap: 25px;
-  margin-bottom: 30px ;
+  margin-bottom: 30px;
 }
 
 .course-info {
@@ -482,12 +477,9 @@ nav .fa {
   background-color: #5962d4;
 }
 
-
-
 /* content MEDIA QUERIES */
 
 @media (max-width: 700px) {
-
   .top {
     margin-bottom: 10px;
   }
@@ -497,7 +489,7 @@ nav .fa {
   }
 
   .big-btn {
-    width: fit-content;
+    min-width: fit-content;
     background-color: #5057bb;
     color: white;
     outline: none;
@@ -508,13 +500,10 @@ nav .fa {
     transition: 0.3s;
   }
 
-.modules {
-  grid-template-columns: auto;
+  .modules {
+    grid-template-columns: auto;
+  }
 }
-
-}
-
-
 
 /* empty */
 .empty {
@@ -536,26 +525,19 @@ nav .fa {
   font-size: 1.3rem;
 }
 
-
 /* empty MEDIA QUERIES */
 
 @media (max-width: 700px) {
-  
   .empty {
     margin: 20px 0;
   }
 
-  .empty img{
+  .empty img {
     /* width: 50px; */
     width: 50%;
-  }}
+  }
+}
 
-
-
-
-
-
-  
 /* Foooter */
 
 .footer {
@@ -575,8 +557,8 @@ nav .fa {
   display: flex;
   align-items: center;
   flex-direction: column;
-  padding: 20px 10px  10px;
-  width:60%;
+  padding: 20px 10px 10px;
+  width: 60%;
   margin: 0 auto;
   gap: 10px;
 }
@@ -610,14 +592,13 @@ nav .fa {
 
 /* FOOTER MEDIA */
 @media (max-width: 700px) {
-  
   .footer-top {
     justify-content: start;
     align-items: start;
     /* width:100%; */
     margin: 0 10px;
   }
-  
+
   .footer-top img {
     width: 20%;
   }
@@ -625,19 +606,17 @@ nav .fa {
   .footer-title {
     font-size: 1.2rem;
   }
-  
+
   .address-contact-mail {
     flex-direction: column;
     align-items: start;
   }
-  
+
   .footer-bottom {
     padding-left: 20px;
     text-align: start;
   }
-  
 }
-
 
 .hidden {
   display: none;

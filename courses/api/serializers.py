@@ -127,6 +127,8 @@ class RatingSerializer(serializers.ModelSerializer):
 
 
 class MeetingSerializer(serializers.ModelSerializer):
+    """Serializer and Deserialize Meeting model"""
+
     host = serializers.ReadOnlyField(source="host.get_full_name")
     course = serializers.ReadOnlyField(source="course.title")
 
@@ -136,7 +138,9 @@ class MeetingSerializer(serializers.ModelSerializer):
             "host",
             "course",
             "meeting_token",
-            "date_created",
+            "sch_date",
+            "sch_time",
+            # "date_created",
             "only_enrolled_students",
             "updated",
             "expires",

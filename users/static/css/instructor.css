@@ -426,8 +426,8 @@ nav .fa {
 .middle img {
   border-radius: 50%;
   width: 130px;
-  margin-bottom: 15px;
   height: 130px;
+  margin-bottom: 15px;
 }
 
 .stats p {
@@ -640,7 +640,7 @@ nav .fa {
 }
 
 
-
+ 
 
 
 
@@ -703,6 +703,7 @@ nav .fa {
   background-color: #2c2c2c;
   color: white;
   box-shadow: 5px 5px 40px 0px rgba(0, 0, 0, 0.2);
+  margin-top: 100px;
 }
 
 .footer-top {

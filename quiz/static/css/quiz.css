@@ -209,39 +209,6 @@ nav .fa {
   display: none;
 }
 
-.total-questions {
-  font-size: 20px;
-  font-weight: bolder;
-}
-
- /* The alert message box */
-.alert {
-  padding: 20px;
-  background-color: #f44336; /* Red */
-  color: white;
-  margin-bottom: 15px;
-  display: none;
-}
-
-/* The close button */
-.closebtn {
-  margin-left: 15px;
-  color: white;
-  font-weight: bold;
-  float: right;
-  font-size: 22px;
-  line-height: 20px;
-  cursor: pointer;
-  transition: 0.3s;
-}
-
-/* When moving the mouse over the close button */
-.closebtn:hover {
-  color: black;
-} 
-
-
-
 /* NAV MEDIA */
 @media (max-width: 700px) {
   body::before {
@@ -657,6 +624,10 @@ nav .fa {
 /* Foooter */
 
 .footer {
+  /* position: absolute;
+  bottom: 0;
+  left: 0; */
+  margin-top: 100px;
   display: flex;
   flex-direction: column;
   width: 100%;
@@ -664,6 +635,12 @@ nav .fa {
   color: white;
   box-shadow: 5px 5px 40px 0px rgba(0, 0, 0, 0.2);
 }
+
+/* body::after {
+  content: "";
+  height: 230px;
+  display: block;
+} */
 
 .footer-top {
   display: flex;
@@ -729,6 +706,30 @@ nav .fa {
     padding-left: 20px;
     text-align: start;
   }
+}
 
+.alert {
+  display: none;
+  padding: 7px 15px;
+  border-radius: 5px;
+  font-weight: 500;
+  font-size: 1rem;
+  background-color: #ffd8d8;
+  color: #f33d3d;
+  cursor: pointer;
+}
 
+.submit-ans-btn {
+  border: none;
+  padding: 10px 25px;
+  background-color: #5057bb;
+  color: #fff;
+  font-size: 20px;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: all 0.3s ease-in-out;
+}
+
+.submit-ans-btn:hover {
+  background-color: #6a73e7;
 }

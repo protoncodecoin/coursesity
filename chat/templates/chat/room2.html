@@ -19,7 +19,10 @@
                {{ message.sent_on|date:"Y.m.d H:i A" }}
               </span>
             </div>
-           <p class="m-text">{{ message.content }}</p>
+           <div class="img-chat">
+              <p class="m-text">Oh, congratulations!</p>
+              <img src="{{ message.user.photo.url}}" alt="">
+            </div>
           </div>
         </div>
         {% else %}
@@ -37,8 +40,10 @@
                 {{ message.sent_on|date:"Y.m.d H:i A" }}
               </span>
             </div>
-
-             <p class="m-text">{{ message.content }}</p>
+              <div class="img-chat">
+              <img src="{{ message.user.photo.url}}" alt="" />
+              <p class="m-text">Hello, Im done with the course</p>
+            </div>
           </div>
         </div>
         {% endif %}
@@ -114,7 +119,10 @@
                     </span>
                     </div>
 
-                    <p class="m-text">${data.message}</p>
+                    <div class="img-chat">
+                      <img src="${data.profile}" alt="Profile of ${data.user}" />
+                      <p class="m-text">${data.message}</p>
+                    </div>
                 </div>
             </div>
 `

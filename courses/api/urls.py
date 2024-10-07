@@ -21,4 +21,5 @@ urlpatterns = [
         views.MeetingForCourse.as_view(),
         name="create_new_course_meeting",
     ),
+    path("save_progress/", views.SaveStudentProgress.as_view(), name="user_progress"),
 ]

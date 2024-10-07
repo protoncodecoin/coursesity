@@ -93,7 +93,7 @@ document.getElementById("meeting__form").addEventListener("submit", async functi
 
     let restriction = false;
     let checkBox = document.querySelector("#restriction");
-    console.log(checkBox)
+    console.log(checkBox.value)
 
     if (checkBox.checked == true){
       restriction = true;
@@ -101,6 +101,8 @@ document.getElementById("meeting__form").addEventListener("submit", async functi
 
     let meeting_name = document.querySelector("#meetingName").value
     let message = document.querySelector("#about").value;
+    let date = document.querySelector("#sch_date")
+    let time = document.querySelector("#sch_time")
 
     // remove modal
     modal.style.display = "none";
@@ -110,8 +112,12 @@ document.getElementById("meeting__form").addEventListener("submit", async functi
       "course": course_id,
       "is_restricted": restriction,
       "about_message": message,
-      "meeting_name": meeting_name
+      "meeting_name": meeting_name,
+      "sch_date": date.value,
+      "sch_time": time.value,
     }
+
+    console.log(data)
 
     // create meeting
     createMeeting(data);

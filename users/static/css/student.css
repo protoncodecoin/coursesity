@@ -414,10 +414,9 @@ nav .fa {
 }
 
 .img-button img {
-  width: 203px;
+  width: 70%;
   border-radius: 50%;
   transition: 0.3s;
-  height: 160px;
 }
 
 .img-button img:hover {

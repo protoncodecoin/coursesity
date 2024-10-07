@@ -247,6 +247,7 @@ nav .fa {
 .added {
   background-color: rgb(0, 99, 0);
   color: #fff;
+  border: none;
 }
 
 .added:hover {

@@ -99,6 +99,8 @@ class Meeting(models.Model):
     meeting_name = models.CharField(max_length=100, blank=True)
     meeting_token = models.UUIDField(help_text="meeting token")
     date_created = models.DateTimeField(auto_now_add=True)
+    sch_date = models.DateField(blank=True, null=True)
+    sch_time = models.TimeField(blank=True, null=True)
     updated = models.DateTimeField(auto_now=True)
     only_enrolled_students = models.BooleanField(
         default=True, help_text="allow only enrolled students in the meeting"

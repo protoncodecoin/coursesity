@@ -120,7 +120,7 @@ def order_create(request):
             if new_order_item.coupon:
                 stripe_coupon = stripe.Coupon.create(
                     name=new_order_item.coupon.code,
-                    percent_off=new_order_item.order.discount,
+                    percent_off=new_order_item.discountt,
                     duration="once",
                 )
                 session_data["discounts"] = [{"coupon": stripe_coupon.id}]

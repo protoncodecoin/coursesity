@@ -403,9 +403,9 @@ nav .fa {
 
 
 /* FORM */
-
+/* 
 .content {
-  width: 80%;
+  width: 90%;
   margin: 30px auto;
   display: flex;
   flex-direction: column;
@@ -417,66 +417,91 @@ nav .fa {
   margin-bottom: 10px;
   color: #5057bb;
 }
-/* 
+
 .module h2 {
   font-size: 1.5rem;
   text-align: center;
-} */
+}
 
-/* .module form {
+.module form {
   display: flex;
   flex-direction: column;
   gap: 10px;
-  align-items: center;
-  text-align: center;
+  /* align-items: left; */
+  /* text-align: left;
 } */
-.module {
-  width: 100%;
-}
 
-form{
-  margin: 10px auto;
-  width: 100%;
-  /* background-color: #b7badf; */
-  /* color: #fff; */
-}
-
-p label {
-  display: block;
-  padding: 10px 15px;
-    font-weight: bolder;
-    font-size: 20px;
-}
-
-p input, textarea {
-  padding: 10px 10px;
-  margin-left: 10px;
-  font-size: 20px;
-}
-
-p input[type='text']:focus, p textarea:focus, p input[type='number']:focus {
-  border: none;
-  border: 1px solid #5057bb;
-  outline: #5057bb;
-    padding: 10px 10px;
-}
-
-p select {
-    padding: 10px;
-    margin-left: 10px;
-    width: 200px;
-    font-size: 18px;
-}
-
-p select:focus {
+/* .module form input, textarea, select{
+  padding: 10px;
+  font-size: 15px;
+  border-radius: 5px;
   outline: none;
+  border: 1px solid #5962d4;
 }
 
-p select>option {
-  background-color: #5057bb;
-  color: #fff;
-  font-size: 18px;
+div label {
+  display: block;
 }
+
+div input, textarea {
+  display: block;
+} */
+
+.content h1 {
+  padding: 10px;
+  text-align: center;
+}
+
+.content h2 {
+  text-align: center;
+  margin-top: 15px;
+}
+
+.module form {
+  margin-top: 10px;
+  margin-bottom: 20px;
+  padding: 10px 5px;
+}
+
+form {
+  width: 95%;
+  margin: 5px auto;
+}
+
+form div label {
+  font-weight: bold;
+}
+
+form div label, form div input {
+  display: block;
+}
+
+form div input, form div select {
+  margin-bottom: 10px;
+}
+
+form div input, form div select, form div textarea {
+  padding: 10px;
+  font-size: 15px;
+  border-radius: 5px;
+  outline: none;
+  border: 1px solid #5057bb;
+}
+
+select option {
+  background-color: #5962d4;
+  color: #fff;
+}
+
+
+@media (min-width: 1024px){
+  .module form {
+    width: 70%;
+    margin-left: auto;
+    margin-right: auto;
+  }
+}
+
 
 
 .big-btn {
@@ -489,13 +514,11 @@ p select>option {
   padding: 5px 10px;
   font-size: 1.3rem;
   transition: 0.3s;
-  margin-top: 15px;
-  margin-bottom: 20px;
 }
 
 .big-btn:hover {
   background-color: #5962d4;
-}
+} */
 
 
 /* LOGIN LINK */
@@ -552,7 +575,7 @@ p select>option {
 /* Foooter */
 
 .footer {
-  /* position: absolute; */
+  position: absolute;
   bottom: 0;
   left: 0;
   display: flex;
@@ -634,11 +657,4 @@ p select>option {
 
 .hidden {
   display: none;
-}
-
-
-@media (max-width: 350px){
-  .module {
-    width: 100%;
-  }
 }

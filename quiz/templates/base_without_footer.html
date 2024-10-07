@@ -6,41 +6,10 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Coursiy |{% block title %} {% endblock %}</title>
-  {% if style == "detail"%}
-     <link rel="stylesheet" href="{% static 'css/detail.css' %}">
-  {% elif style == "student_content"%}
-     <link rel="stylesheet" href="{% static 'css/learning.css' %}">
-  {% elif style == "quiz_questions"%}
-     <link rel="stylesheet" href="{% static 'css/quiz.css' %}">
-  {% elif style == "signup"%}
-     <link rel="stylesheet" href="{% static 'css/signup.css' %}">
-  {% elif style == "login"%}
-     <link rel="stylesheet" href="{% static 'css/login.css' %}">
-  {% elif style == "cart"%}
-     <link rel="stylesheet" href="{% static 'css/cart.css' %}">
-  {% elif style == "instructor"%}
-     <link rel="stylesheet" href="{% static 'css/instructor.css' %}">
-  {% elif style == "student"%}
-     <link rel="stylesheet" href="{% static 'css/student.css' %}">
-  {% elif style == "search"%}
-     <link rel="stylesheet" href="{% static 'css/search.css' %}">
-  {% elif style == "manage_course"%}
-     <link rel="stylesheet" href="{% static 'css/list2.css' %}">
-  {% elif style == "create_form"%}
-     <link rel="stylesheet" href="{% static 'css/logged_out.css' %}">
-  {% elif style == "room" %}
-     <link rel="stylesheet" href="{% static 'css/room.css' %}">
-  {% elif style == "content_list"%}
-     <link rel="stylesheet" href="{% static 'css/content_list.css' %}">
-   {% elif style == "course_form"%}
-     <link rel="stylesheet" href="{% static 'css/formset.css' %}">
-  {% else %}
-    <link rel="stylesheet" href="{% static 'css/list.css' %}">
-  {% endif %}
-  {% if style2 == "base2"%}
-     <link rel="stylesheet" href="{% static 'css/base2.css' %}">
-  {% endif %}
-
+   <link rel="stylesheet" href="{% static 'css/list-quiz.css' %}" />
+    {% if style == "quiz_questions" %}
+      <link rel="stylesheet" href="{% static 'css/quiz.css' %}">
+    {% endif %}
   <link rel="icon" type="image/x-icon" href="{% static 'icons/coursitylogo.png' %}" />
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
@@ -162,22 +131,6 @@
   {% block content %}
 
   {% endblock %}
-
-  <!-- footer -->
-    <section class="footer">
-      <div class="footer-top">
-        <img src="{% static 'icons/coursitylogo.png' %}" alt="" class="footer-logo" />
-
-        <div class="footer-title">Coursity © 2024</div>
-
-        <div class="address-contact-mail">
-          <div class="address"><span>🏨</span> Accra, Ghana.</div>
-          <div class="contact"><span>📞</span> 01 2345 6789</div>
-          <div class="mail"><span>📧</span> info@coursity.org</div>
-        </div>
-      </div>
-
-      <div class="footer-bottom">All Rights Reserved®</div>
 
   {% block include_js %}
 
