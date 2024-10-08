@@ -6,6 +6,8 @@ from django.urls import reverse
 from courses.models import Course
 from orders.models import Order
 
+from .models import Payment, UserWallet
+
 
 # Create the stripe instance
 stripe.api_key = settings.STRIPE_SECRET_KEY
@@ -76,3 +78,35 @@ def payment_canceled(request):
     # clear courses from session
     del request.session["added_courses"]
     return render(request, "payment/canceled.html")
+
+
+def initiate_payment(request):
+    if request.method == "POST":
+        amount = request.POST["amount"]
+        email = request.user.email
+
+        pk = settings.PAYSTACK_PUBLIC_KEY
+        payment = Payment.objects.create(amount=amount, email=email, user=request.user)
+        payment.save()
+
+        context = {
+            "payment": payment,
+            "field_values": request.POST,
+            "paystack_pub_key": pk,
+            "amount_value": payment.amount_value(),
+        }
+        return render(request, "", context)
+    return render(request, "payment.html")
+
+
+def verify_payment(request, ref):
+    payment = Payment.objects.get(ref=ref)
+    verified = payment.verify_payment()
+
+    if verified:
+        user_wallet = UserWallet.objects.get(user=request.user)
+        user_wallet.balance += payment.amount
+        user_wallet.save()
+        print(request.user.get_full_name(), " paid for the course")
+        return render(request, "success.html")
+    return render(request, "failed.html")

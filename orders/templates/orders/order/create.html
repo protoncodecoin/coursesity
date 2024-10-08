@@ -30,6 +30,10 @@
     </div> {% endcomment %}
     <form method="post">
         {% csrf_token %}
+        <label if="stripe_payment">Stripe Payment</label>
+        <input type="checkbox" name="payment_option" id="stripe_payment" value="stripe"/>
+        <label id="paystack_payment">Paystack Payment</label>
+        <input type="checkbox" name="payment_option" id="paystack_payment" value="paystack"/>
         <input type="submit" value="Pay Now">
     </form>
 

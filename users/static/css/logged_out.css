@@ -658,3 +658,12 @@ select option {
 .hidden {
   display: none;
 }
+
+.module p {
+  text-align: center;
+}
+
+.goto-course {
+  color: #5057bb;
+  font-weight: bolder;
+}

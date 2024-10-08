@@ -63,7 +63,10 @@ Array.from(circularProgress).forEach((progressBar) => {
     speed = 50,
     progressColor = progressBar.getAttribute("data-progress-color");
 
-  const progress = setInterval(() => {
+    console.log(Number(progressBar.getAttribute("data-percentage")))
+
+    if (Number(progressBar.getAttribute("data-percentage")) > 0){
+const progress = setInterval(() => {
     startValue++;
     progressValue.textContent = `${startValue}%`;
     progressValue.style.color = `${progressColor}`;
@@ -79,9 +82,11 @@ Array.from(circularProgress).forEach((progressBar) => {
       clearInterval(progress);
     }
   }, speed);
+    }
+
+  
 });
 
-console.log(document.querySelector(".floater"))
 
 document.querySelector(".floater").addEventListener("onclick", function(e){
     console.log("clicked or hovered")

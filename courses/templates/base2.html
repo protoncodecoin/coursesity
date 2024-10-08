@@ -179,10 +179,11 @@
 
       <div class="footer-bottom">All Rights Reserved®</div>
 
+  {% comment %} <script> {% endcomment %}
   {% block include_js %}
 
   {% endblock %}
-
+  {% comment %} </script> {% endcomment %}
   <script>
       document.addEventListener('DOMContentLoaded', (event) => {
         // DOM loaded

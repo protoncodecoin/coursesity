@@ -923,3 +923,9 @@ nav .fa {
   }
 }
 
+.no-content {
+  text-align: center;
+  padding: 15px 30px;
+  font-size: 30px;
+  color: #5057bb;
+}
