@@ -484,7 +484,7 @@ nav .fa {
 
 .wishlist-btn {
   background-color: #fff !important;
-  border: 1px solid #5962d4!important;
+  border: 1px solid #5962d4 !important;
   color: #5962d4 !important;
 }
 
@@ -661,16 +661,14 @@ nav .fa {
 .middle img {
   border-radius: 50%;
   width: 130px;
-  margin-bottom: 15px;
-  object-fit: cover;
   height: 130px;
+  margin-bottom: 15px;
 }
 
 .about {
   color: blue;
   text-decoration: underline;
   font-size: 1.4rem;
-  
 }
 
 /* .stats p {
@@ -699,9 +697,76 @@ nav .fa {
   .top h2 a {
     font-size: 2rem;
   }
-
-  
 }
+
+
+
+
+
+
+/* reviews */
+
+.reviews {
+  position: relative;
+  width: 90%;
+  margin: 10vh auto;
+  padding: 10px;
+}
+
+.reviews h1 {
+  font-size: 1.7rem;
+  text-align: start;
+}
+
+.review {
+  display: flex;
+  align-items: start;
+  gap: 10px;
+  transition: 0.3s;
+  min-width: 30%;
+}
+
+.review img {
+  width: 100px;
+  height: 100px;
+  border-radius: 50%;
+}
+
+.review-text {
+  display: flex;
+  flex-direction: column;
+  /* gap: 5px; */
+  justify-content: center;
+  font-size: 1rem;
+}
+
+
+/* reviews mediaa */
+
+@media (max-width: 700px) {
+
+  .reviews {
+    width: 95%;
+    margin: 3vh auto;
+  }
+
+  .reviews h1 {
+    font-size: 1.6rem;
+  }
+
+  .review {
+    align-items: start;
+    min-width: 100%;
+  }
+
+  .review img {
+    width: 80px;
+  }
+
+}
+
+
+
 
 /* Discover SECTION */
 
@@ -863,12 +928,6 @@ nav .fa {
   display: none;
 }
 
-
-
-
-
-
-
 /* empty */
 .empty {
   display: flex;
@@ -899,19 +958,18 @@ nav .fa {
 
   .recommended-courses h2 {
     font-size: 1.5rem;
-    text-align: start ;
+    text-align: start;
   }
-  
+
   .empty {
     margin: 20px 0;
   }
 
-  .empty img{
+  .empty img {
     /* width: 50px; */
     width: 50%;
-  }}
-
-
+  }
+}
 
 /* Foooter */
 
@@ -922,14 +980,15 @@ nav .fa {
   background-color: #2c2c2c;
   color: white;
   box-shadow: 5px 5px 40px 0px rgba(0, 0, 0, 0.2);
+  margin-top: 100px;
 }
 
 .footer-top {
   display: flex;
   align-items: center;
   flex-direction: column;
-  padding: 20px 10px  10px;
-  width:60%;
+  padding: 20px 10px 10px;
+  width: 60%;
   margin: 0 auto;
   gap: 10px;
 }
@@ -963,7 +1022,6 @@ nav .fa {
 
 /* FOOTER MEDIA */
 @media (max-width: 700px) {
-
   .footer-top {
     justify-content: start;
     align-items: start;
@@ -983,14 +1041,13 @@ nav .fa {
     flex-direction: column;
     align-items: start;
   }
-  
+
   .footer-bottom {
     padding-left: 20px;
     text-align: start;
   }
-
-
 }
+
 
 /* toast notification */
 
