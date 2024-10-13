@@ -477,6 +477,8 @@ nav .fa {
   gap: 25px;
   margin: 20px 0;
   align-items: center;
+
+  justify-content: center;
 }
 
 .course {

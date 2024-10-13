@@ -1,0 +1,41 @@
+{% extends 'base.html' %}
+
+{% block title %} 
+    Checkout
+{% endblock %}
+
+{% block content  %}
+    
+        <div style="float:right; padding-right:70px;">
+            <h3>Your Order</h3>
+
+            <ul>
+                {% for item in cart %}
+                    <li> {{ item.course.title }}
+                        <span>GH{{ item.total_price }}</span>
+                    </li>
+                {% endfor %}
+            </ul>
+            <p>Total: GH{{ cart.get_total_price }}</p>
+        </div>
+        <h2>
+        Checkout
+    </h2>
+    {% comment %} <div>
+
+        {% if order.coupon %}
+            <p>Subtotal: {{ order.get_total_cost_before_discount|floatformat:2}}</p>
+            <p>"{{order.coupon.code}}" coupon ({{ order.discount }})% off</p>
+            <p>- {{ order.get_discount|floatformat:2}}</p>
+    </div> {% endcomment %}
+    <form method="post">
+        {% csrf_token %}
+        <label if="stripe_payment">Stripe Payment</label>
+        <input type="checkbox" name="payment_option" id="stripe_payment" value="stripe"/>
+        <label id="paystack_payment">Paystack Payment</label>
+        <input type="checkbox" name="payment_option" id="paystack_payment" value="paystack"/>
+        <input type="submit" value="Pay Now">
+    </form>
+
+    
+{% endblock %}

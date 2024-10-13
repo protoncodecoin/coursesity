@@ -11,7 +11,7 @@ class Paystack:
     base_url = "https://api.paystack.co/"
 
     def verify_payment(self, ref, *args, **kwargs):
-        path = f"transaction/verfiy/{ref}"
+        path = f"transaction/verify/{ref}"
         headers = {
             "Authorization": f"Bearer {self.PAYSTACK_SK}",
             "Content-Type": "application/json",
@@ -22,8 +22,9 @@ class Paystack:
 
         if response.status_code == 200:
             response_data = response.json()
+            print(
+                response_data, "this is the response data----------/-------------------"
+            )
             return response_data["status"], response_data["data"]
 
-        response_data = response.json()
-
-        return response_data["status"], response_data["message"]
+        return False, response.text

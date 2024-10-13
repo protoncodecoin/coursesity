@@ -57,19 +57,18 @@ class CustomUser(AbstractUser):
 
 class Profile(models.Model):
 
-    class Interest(models.TextChoices):
-        ANY = "any", "Any"
-        SCIENCE = "science", "science"
-        MATH = "mathematics", "Mathematics"
-        CYBERSECURITY = "cybersecurity", "Cybersecurity"
-        PROGRAMMING = "programming", "Programming"
+    # class Interest(models.TextChoices):
+    #     ANY = "any", "Any"
+    #     SCIENCE = "science", "science"
+    #     MATH = "mathematics", "Mathematics"
+    #     CYBERSECURITY = "cybersecurity", "Cybersecurity"
+    #     PROGRAMMING = "programming", "Programming"
 
     user = models.OneToOneField(
         settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name="profile"
     )
-    field_of_study = models.CharField(
-        max_length=100, choices=Interest, default=Interest.ANY
-    )
+    field_of_study = models.IntegerField(default=1)
+    # interest = models.CharField(max_length=100, choices=Interest, default=Interest.ANY)
 
     def __str__(self):
         return f"Profile of {self.user.email}"

@@ -1,0 +1,189 @@
+{% extends 'base2.html' %}
+{% load static %}
+{% block title %} Edit {{ request.user.get_full_name }}'s profile {% endblock %}
+{% block content %}
+    <!-- profile section -->
+       <!-- profile section -->
+    <section class="profile-main">
+
+      <h2>Edit Profile</h2>
+
+      <form method="post">
+        {% csrf_token %}
+
+        {% if messages %}
+         {% for message in messages %}
+          <div class="alert {{ message.tags }}">
+              <span class="closebtn" onclick="this.parentElement.style.display='none';">&times;</span>
+            {{ message }}
+           </div>
+        {% endfor %}
+        {% endif %}
+
+      <div class="profile">
+      
+      <div class="image-container">
+        <!-- Hidden file input for image preview -->
+        {% comment %} <input
+        type="file" 
+        id="imageInputFile"
+        accept="image/*"
+        style="display: none;" 
+        onchange="previewImage(event)"
+        /> {% endcomment %}
+        
+        <label for="imageInput" class="upload-button">
+          <input
+          type="image" 
+          id="imageInputBtn"
+          src=""
+          alt="Upload"
+          name="profile_image"
+          />
+        </label>
+        
+        <div class="image-preview" id="imagePreview"></div>
+      </div>
+      
+    
+
+      <div class="profile-content wide">
+        <!-- <h2 class="name">Edit Profile</h2> -->
+        <div class="content">
+          <div class="left">
+            <!-- <span>Phone:</span> -->
+            <!-- <p>0123456789</p> -->
+            <!-- <p><input type="tel" placeholder="0123456789"></p> -->
+
+            <!-- <span>City</span> -->
+            <!-- <p>Abidjan</p> -->
+            <!-- <p><input type="text" placeholder="Abidjan"></p> -->
+
+            <span>Interest</span>
+            <!-- <p>Science</p> -->
+            <p>
+              <select name="interest" required id="id_subject">
+                {% comment %} <option value="" selected>---------</option>
+
+                <option value="5">Coding</option>
+
+                <option value="4">CyberSecurity</option>
+
+                <option value="9">Design</option>
+
+                <option value="6">DevOps</option>
+
+                <option value="7">Finance</option>
+
+                <option value="1">Mathematics</option>
+
+                <option value="3">Programming</option>
+
+                <option value="8">Psychology</option>
+
+                <option value="2">Science</option> {% endcomment %}
+              </select>
+            </p>
+
+            
+          </div>
+
+
+          <div class="right">
+            <!-- <span>Email:</span> -->
+            <!-- <p><a href="mailto:kofibauherg@yahoo.com">kofibauher@yahoo.com</a></p> -->
+            <!-- <p><input type="email" placeholder="kofibauherg@yahoo.com"></p> -->
+            
+            <span>LinkedIn</span>
+            <!-- <p><a href="www.linkedin.com/user10010">Kofi Bauher</a></p> -->
+            <p><input type="url" placeholder="Kofi Bauher" name="linkedIn"></p>
+            
+            <span>X(Twitter):</span>
+            <!-- <p><a href="">@kofi_b3</a></p>/ -->
+            <p><input type="url" placeholder="@kofi_b3" name="x"></p>
+          </div>
+
+
+        </div>
+
+        
+        <button class="save-btn">
+          Save Changes
+        </button>
+      </div>
+      
+      </div>
+    </form>
+
+       <div class="toastBox">
+     </div>
+    
+  </section>
+{% endblock %}
+
+{% block include_js %}
+
+    <!-- image upload -->
+    <script>
+  document.getElementById("imageInputBtn").addEventListener("click", function (event) {
+    event.preventDefault(); // Prevent form submission
+    document.getElementById("imageInputFile").click(); // Open hidden file input
+  });
+
+  // Preview the selected image
+  function previewImage(event) {
+    var input = event.target;
+    var preview = document.getElementById("imagePreview");
+    var file = input.files[0];
+
+    if (file) {
+      var reader = new FileReader();
+
+      reader.onload = function (e) {
+        var img = document.createElement("img");
+        img.src = e.target.result;
+        preview.innerHTML = "";
+        preview.appendChild(img);
+      };
+
+      reader.readAsDataURL(file);
+    } else {
+      preview.innerHTML = "No image selected";
+    }
+  }
+    </script>
+
+    <script>
+        const Updated = 
+    '<i class="fas fa-check-circle"></i>Profile Updated Successfully!';
+        const Error = 
+    '<i class="fas fa-times-circle"></i>Failed to Update Profile';
+
+
+    /**
+    * 
+    * @param {HTMLElement} message 
+    * @param {String} type messag type
+    */
+    function showToast(message, type) {
+        const toast = document.createElement('div');
+        toast.classList.add('toast', type);
+        toast.innerHTML = 
+            '<button class="close-btn">X</button>' 
+                                        + message;
+        toastBox.appendChild(toast);
+
+        const closeButton = 
+                toast.querySelector('.close-btn');
+        closeButton.addEventListener('click', () => {
+            toast.remove();
+        });
+
+        setTimeout(() => {
+            toast.remove();
+        }, 3000);
+    }
+    </script>
+    <script src="{% static 'js/query_subjects.js' %}"></script>
+
+{% endblock %}

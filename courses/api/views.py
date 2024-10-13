@@ -1,3 +1,5 @@
+from decimal import Decimal
+import json
 import uuid
 import redis
 from django.db.models import Count
@@ -18,15 +20,25 @@ from courses.api.serializers import (
     RatingSerializer,
     SubjectSerializer,
     CourseSerializer,
+    SubjectTitleSerializer,
     WishListSerializer,
 )
 from courses.models import Subject, Course, Rating
 from courses.api.permissions import IsEnrolled
 from courses.api.serializers import CourseWithContentsSerializer
+from orders.tasks import course_order_created
+from orders.models import Order, OrderItem
 from students.models import WishList
 from users.models import Meeting
 
 from courses.tasks import notify_meeting_participants
+from cart.cart import Cart
+
+from payment.models import Payment
+from payment.paystack import Paystack
+from payment.tasks import payment_complete
+
+from courses.recommender import Recommender
 
 r = redis.Redis(
     host=settings.REDIS_HOST,
@@ -220,3 +232,125 @@ class SaveStudentProgress(views.APIView):
 
             return Response({"progress_status": "saved"})
         return Response({"progress_status": "error"})
+
+
+class CreateOrderAPI(views.APIView):
+    """
+    Create and save a new order item when paystack onload event is triggered
+    """
+
+    permission_classes = [IsAuthenticated]
+
+    def post(self, request):
+        user = request.user
+        cart = Cart(request)
+
+        new_order = Order.objects.create(
+            first_name=user.first_name, last_name=user.last_name, email=user.email
+        )
+
+        for item in cart:
+            order_item = OrderItem.objects.create(
+                order=new_order, course=item["course"], price=item["price"]
+            )
+            order_item.save()
+
+            course_order_created.delay(new_order.id)
+
+        if cart.coupon:
+            new_order.coupon = cart.coupon
+            new_order.discountt = cart.coupon.discount
+
+            new_order.save()
+
+        return Response(
+            {
+                "success": "ok",
+                "order_id": new_order.id,
+            },
+            status=200,
+        )
+
+
+class VerifyPayStackTransaction(views.APIView):
+    """
+    Verify transaction made through paystack and enroll student depending on the status of the transaction.
+    """
+
+    permission_classes = [IsAuthenticated]
+
+    def post(self, request):
+        cart = Cart(request)
+        user = request.user
+        transaction_ref = request.data.get("reference_code")
+        purchased_amount = request.data.get("purchased_amount")
+        order_id = request.data.get("order_id")
+
+        order_obj = Order.objects.filter(id=order_id).first()
+
+        if order_obj:
+            pass
+        else:
+            return Response({"error": "Order id does not exist"}, status=400)
+
+        if transaction_ref:
+            paystack_obj = Paystack()
+            state_of_verification, transaction_details = paystack_obj.verify_payment(
+                transaction_ref
+            )
+
+            purchased_amount = Decimal(purchased_amount)
+            transaction_amount = Decimal(transaction_details["amount"]) / Decimal(100)
+
+            rounded_purchased_amount = round(purchased_amount, 2)
+            rounded_transaction_amount = round(transaction_amount, 2)
+
+            if state_of_verification:
+                verification_status: bool = (
+                    True if transaction_details["status"] == "success" else False
+                )
+                # transaction_amount = transaction_details["amount"] / 100
+                if rounded_purchased_amount == rounded_transaction_amount:
+                    Payment.objects.create(
+                        user=user,
+                        verified=verification_status,
+                        email=transaction_details["customer"]["email"],
+                        reference_code=transaction_details["reference"],
+                        amount=rounded_purchased_amount,
+                    )
+
+                    # save courses bought for course reccomendations
+                    courses_ids = order_obj.items.values_list("course_id")
+                    courses = Course.objects.filter(id__in=courses_ids)
+                    r = Recommender()
+                    r.courses_bought(courses)
+
+                    order_obj.paid = True
+
+                    order_obj.save()
+                    # enroll student in course(s)
+                    for i in courses:
+                        course_obj = Course.objects.filter(id=i.id).first()
+                        course_obj.students.add(user)
+                        course_obj.save()
+
+                    cart.clear()
+
+                    payment_complete.delay(order_obj.id)
+
+                    return Response({"message": "success"}, status=200)
+
+                # amount was not full paid
+                # send notification to user
+            # amount was not paid
+            # send notification to user
+            return Response({"message": "failed"}, status=400)
+
+
+class SubjectTitleAPIView(views.APIView):
+    permission_classes = []
+
+    def get(self, request):
+        subjects = Subject.objects.all()
+        subject_serializer = SubjectTitleSerializer(subjects, many=True)
+        return Response(subject_serializer.data, status=status.HTTP_200_OK)

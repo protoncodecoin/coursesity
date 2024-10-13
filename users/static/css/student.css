@@ -414,7 +414,8 @@ nav .fa {
 }
 
 .img-button img {
-  width: 70%;
+  width: 140px;
+  height: 140px;
   border-radius: 50%;
   transition: 0.3s;
 }
@@ -434,6 +435,7 @@ nav .fa {
   font-size: 1rem;
   border: 1px solid #5962d4;
   transition: 0.3s;
+  text-align: center;
 }
 
 .log-out {

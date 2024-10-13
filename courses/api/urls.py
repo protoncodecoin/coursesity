@@ -21,5 +21,12 @@ urlpatterns = [
         views.MeetingForCourse.as_view(),
         name="create_new_course_meeting",
     ),
+    path(
+        "verify-transaction/",
+        views.VerifyPayStackTransaction.as_view(),
+        name="verify_transaction",
+    ),
+    path("create-order/", views.CreateOrderAPI.as_view(), name="create_order_api"),
     path("save_progress/", views.SaveStudentProgress.as_view(), name="user_progress"),
+    path("subject-titles/", views.SubjectTitleAPIView.as_view(), name="subject_titles"),
 ]

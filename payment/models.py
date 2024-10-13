@@ -8,17 +8,6 @@ from .paystack import Paystack
 
 
 # Create your models here.
-class UserWallet(models.Model):
-    user = models.OneToOneField(
-        settings.AUTH_USER_MODEL, on_delete=models.CASCADE, null=True
-    )
-    currency = models.CharField(max_length=50, default="GHS")
-    created_at = models.DateTimeField(default=timezone.now, null=True)
-
-    def __str__(self):
-        return self.user.get_full_name()
-
-
 class Payment(models.Model):
     user = models.ForeignKey(
         settings.AUTH_USER_MODEL, on_delete=models.CASCADE, blank=True, null=True
@@ -27,8 +16,7 @@ class Payment(models.Model):
     ref = models.CharField(max_length=200)
     email = models.EmailField()
     verified = models.BooleanField(default=False)
-    access_code = models.CharField(max_length=100)
-    authorization_url = models.URLField(blank=True, default="")
+    reference_code = models.CharField(max_length=100)
     date_created = models.DateTimeField(auto_now_add=True)
 
     class Meta:

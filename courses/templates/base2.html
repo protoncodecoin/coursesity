@@ -32,8 +32,12 @@
      <link rel="stylesheet" href="{% static 'css/room.css' %}">
   {% elif style == "content_list"%}
      <link rel="stylesheet" href="{% static 'css/content_list.css' %}">
-   {% elif style == "course_form"%}
+  {% elif style == "course_form"%}
      <link rel="stylesheet" href="{% static 'css/formset.css' %}">
+  {% elif style == "payment"%}
+     <link rel="stylesheet" href="{% static 'css/payment.css' %}">
+  {% elif style == "update"%}
+     <link rel="stylesheet" href="{% static 'css/update.css' %}">
   {% else %}
     <link rel="stylesheet" href="{% static 'css/list.css' %}">
   {% endif %}
@@ -68,7 +72,7 @@
           <div class="cart-user">
             {% if request.user.is_authenticated %}
             <div class="user-dp">
-                  <img src=" {% if request.user.photo.url %} {{ request.user.photo.url }} {% else %} {% static '/users/default.jpeg' %} {% endif %}" alt="" />
+                  <img src=" {% if request.user.photo %} {{ request.user.photo.url }} {% endif %}" alt="" />
                   <a href="{% url 'show_profile' request.user.id request.user.slug  %}" class="username">{{ request.user.get_full_name }}</a>
             </div>
             {% endif %}

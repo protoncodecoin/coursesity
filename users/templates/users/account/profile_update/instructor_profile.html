@@ -1,0 +1,106 @@
+{% extends 'base2.html' %}
+{% block title %} Edit {{ request.user.get_full_name }}'s profile {% endblock %}
+{% block content %}
+
+    <!-- profile section -->
+    <section class="profile-main">
+
+      <h2>Edit Profile</h2>
+    <form method="post">
+    {% csrf_token %}
+      <div class="profile">
+      
+        <div class="image-container">
+          <!-- Hidden file input for image preview -->
+          {% comment %} <input
+          type="file" 
+          id="imageInputFile"
+          accept="image/*"
+          style="display: none;" 
+          onchange="previewImage(event)"
+          /> {% endcomment %}
+          
+          <label for="imageInput" class="upload-button">
+            <input
+            type="image" 
+            id="imageInputBtn"
+            src=""
+            name="image"
+            alt="Upload"
+            />
+          </label>
+          
+          <div class="image-preview" id="imagePreview"></div>
+        </div>
+    
+
+      <div class="profile-content wide">
+        <!-- <h2 class="name">Edit Profile</h2> -->
+        <div class="content">
+          <div class="left">
+            <span>About:</span>
+            <p><textarea name="about" id="" cols="30" rows="10"></textarea></p>
+          </div>
+
+
+          <div class="right">
+            <span>Website:</span>
+            <p><input type="url" placeholder="kofibauher.com" name="website"></p>
+            
+            <span>LinkedIn</span>
+            <p><input type="url" placeholder="Kofi Bauher" name="linkedIn"></p>
+            
+            <span>X(Twitter):</span>
+            <p><input type="url" placeholder="@kofi_b3" name="x"></p>
+
+            <span>Years of Experience:</span>
+            <p><input type="number" placeholder="in months" name="experience"></p>
+
+            <span>Place of Work:</span>
+            <p><input type="text" name="work"></p>
+          </div>
+
+        </div>
+        <button type="submit" class="save-btn">
+          Save Changes
+        </button>
+      </div>
+      </div>
+    </form>
+
+  </section>
+{% endblock %}
+
+{% block include_js %}
+    <!-- image upload -->
+    <script>
+      
+document.getElementById("imageInputBtn").addEventListener("click", function (event) {
+  event.preventDefault(); // Prevent form submission
+  document.getElementById("imageInputFile").click(); // Open hidden file input
+});
+
+// Preview the selected image
+function previewImage(event) {
+  var input = event.target;
+  var preview = document.getElementById("imagePreview");
+  var file = input.files[0];
+
+  if (file) {
+    var reader = new FileReader();
+
+    reader.onload = function (e) {
+      var img = document.createElement("img");
+      img.src = e.target.result;
+      preview.innerHTML = "";
+      preview.appendChild(img);
+    };
+
+    reader.readAsDataURL(file);
+  } else {
+    preview.innerHTML = "No image selected";
+  }
+}
+
+    </script>
+{% endblock %}

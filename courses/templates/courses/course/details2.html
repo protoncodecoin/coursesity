@@ -120,6 +120,64 @@
       </p>
     </section>
 
+        <!-- reviews -->
+    <section class="reviews">
+      <h1>Reviews for this course</h1>
+
+      {% if course_reviews %}
+
+      {% for review in course_reviews %}
+      <div class="field-content">
+        <div class="review">
+          <img src="{{review.user.photo.url}}" alt="{{ review.user.get_full_name }}" />
+          <div class="review-text">
+            <h3>{{ review.user.get_full_name }}</h3>
+            <div class="middle">
+              Rating: {{ review.rating }} <span class="fa fa-star checked"></span> 
+            </div>
+            <p>
+              {% if review.comment %}
+                {{ review.comment }}
+              {% else %}
+              No Review comment
+              {% endif %}
+            </p>
+          </div>
+        </div>
+        {% endfor %}
+
+        {% else %}
+
+          <p>No reviews added</p>
+
+        {% endif %}
+
+        {% comment %} <div class="review">
+          <img src="/Assets/sad cat.jpg" alt="" />
+          <div class="review-text">
+            <h3>R Jenkins</h3>
+            <div class="middle">&#9733; &#9733; &#9733; &#9733;</div>
+            <p>
+              Lorem, ipsum dolor sit amet consectetur adipisicing elit. Pariatur
+              nihil, periores exercitationem aut. Porro, accusantium ratione?
+            </p>
+          </div>
+        </div>
+
+        <div class="review">
+          <img src="/Assets/sad cat.jpg" alt="" />
+          <div class="review-text">
+            <h3>R Jenkins</h3>
+            <div class="middle">&#9733; &#9733; &#9733; &#9733;</div>
+            <p>
+              Lorem, ipsum dolor sit amet consectetur adipisicing elit. Pariatur
+              nihil, periores exercitationem aut. Porro, accusantium ratione?
+            </p>
+          </div>
+        </div> {% endcomment %}
+      </div>
+    </section>
+
         {% comment %} Toast Notification {% endcomment %}
      <div class="toastBox">
      </div>

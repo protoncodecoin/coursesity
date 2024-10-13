@@ -172,6 +172,32 @@
       </div>
     </section>
 
+    {% if based_on_interest %}
+    <section class="discover">
+      <h1>Based on your Interest</h1>
+
+      <div class="field-content">
+      {% for course in based_on_interest %}
+        <a href="{% url 'course_detail' course.slug %}" class="course all language">
+          <img src="{{ course.image.url }}" alt="" />
+          <div class="info">
+            <div class="info-top">
+              <p>Module{{course.modules.count|pluralize}}: {{ course.modules.count }}</p>
+               <p>Instructor: {{ course.owner.get_full_name }}</p>
+            </div>
+            <div class="middle">
+            Ratings: {{course.average_rating }} <span class="fa fa-star checked"></span>
+            </div>
+            <p class="info-bottom">{{ course.title }}</p>
+          </div>
+        </a>
+        {% endfor %}
+
+      </div>
+    </section>
+
+    {% endif %}
+
         <!-- Instructors -->
     <section class="query">
       <h1>Top Instructors</h1>
@@ -202,8 +228,6 @@
         <h4>Nothing to see..👀</h4>
       </div> -->
     </section>
-
-
   
   {% endblock %}
 

@@ -18,7 +18,7 @@ from django.contrib.auth.models import Group
 from django.views.generic.detail import DetailView
 from django.views.generic.edit import UpdateView
 
-from courses.models import Course
+from courses.models import Course, Subject
 
 
 from .models import InstructorProfile, Profile
@@ -203,6 +203,7 @@ def showProfile(request, user_id, user_slug):
         )
     profile = Profile.objects.filter(user=user_obj).first()
     courses_completed = user_obj.courses_joined.filter(has_completed=True)
+    student_interest = Subject.objects.filter(id=profile.field_of_study).first()
     return render(
         request,
         "profile/student.html",
@@ -211,5 +212,85 @@ def showProfile(request, user_id, user_slug):
             "student": user_obj,
             "profile": profile,
             "courses_completed": courses_completed,
+            "student_interest": student_interest,
+        },
+    )
+
+
+def update_student_profile(request):
+    if request.method == "POST":
+        data = request.POST
+        user = request.user
+
+        profile_image = request.FILES.get("profile_image")
+        print(request.FILES.get("profile_image"))
+        print(request.FILES)
+        print(request)
+
+        user_obj = get_object_or_404(get_user_model(), id=user.id)
+        profile_obj = Profile.objects.filter(user=user).first()
+
+        if request.POST.get("interest") != "":
+            profile_obj.field_of_study = data["interest"]
+        if request.POST.get("linkedIn") != "":
+            user_obj.linkedIn = data["linkedIn"]
+        if request.POST.get("x") != "":
+            user_obj.x = data["x"]
+
+        if profile_image:
+            print("yes---------------")
+            profile_obj.photo = profile_image
+
+        user_obj.save()
+        profile_obj.save()
+
+        messages.success(request, "profile updated successfully")
+        # return redirect(f"show_profile/{user_obj.id}/{user_obj.slug}/")
+    return render(
+        request,
+        "users/account/profile_update/student_profile.html",
+        {
+            "style": "update",
+        },
+    )
+
+
+def update_instructor_profile(request):
+    if request.method == "POST":
+        data = request.POST
+        user = request.user
+
+        user_obj = get_object_or_404(get_user_model(), id=user.id)
+        profile_obj = InstructorProfile.objects.filter(user=user_obj).first()
+        print(profile_obj, user_obj.id, "------------------")
+
+        profile_image = request.FILES.get("image")
+
+        if request.POST.get("linkedIn") != "":
+            user_obj.linkedIn = data["linkedIn"]
+        if request.POST.get("website") != "":
+            user_obj.website = data["website"]
+        if request.POST.get("x") != "":
+            user_obj.x = data["x"]
+        if request.POST.get("about") != "":
+            profile_obj.biography = data["about"]
+        if request.POST.get("work") != "":
+            profile_obj.institution = data["work"]
+        if request.POST.get("experience") != "":
+            profile_obj.years_of_experience = data["experience"]
+
+        if profile_image:
+            user_obj.photo = profile_image
+
+        user_obj.save()
+        profile_obj.save()
+
+        messages.success(request, "profile updated successfully")
+        # return redirect(f"show_profile/{user_obj.id}/{user_obj.slug}/")
+    return render(
+        request,
+        "users/account/profile_update/instructor_profile.html",
+        {
+            "style": "update",
         },
     )

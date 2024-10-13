@@ -147,3 +147,9 @@ class MeetingSerializer(serializers.ModelSerializer):
             "about_message",
             "meeting_name",
         ]
+
+
+class SubjectTitleSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Subject
+        fields = ["id", "title"]

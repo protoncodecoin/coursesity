@@ -171,39 +171,3 @@ class Rating(models.Model):
 
     def __str__(self):
         return f"{self.course.title} - {self.rating}"
-
-
-# class CourseProgress(models.Model):
-#     student = models.ForeignKey(
-#         settings.AUTH_USER_MODEL,
-#         related_name="course_progress",
-#         on_delete=models.CASCADE,
-#     )
-#     course = models.ForeignKey(
-#         Course, related_name="progresses", on_delete=models.CASCADE
-#     )
-#     current_module = models.ForeignKey(
-#         Module,
-#         related_name="current_progress",
-#         on_delete=models.SET_NULL,
-#         null=True,
-#         blank=True,
-#     )
-#     completed_modules = models.ManyToManyField(
-#         Module, related_name="completed_progress", blank=True
-#     )
-#     completed = models.BooleanField(default=False)
-#     last_accessed = models.DateTimeField(auto_now=True)
-
-#     class Meta:
-#         unique_together = ("student", "course")
-
-#     def __str__(self):
-#         return f"{self.student} - {self.course}"
-
-#     def get_progress_percentage(self):
-#         total_modules = self.course.modules.count()
-#         if total_modules == 0:
-#             return 0
-#         completed_modules_count = self.completed_modules.count()
-#         return (completed_modules_count / total_modules) * 100

@@ -42,7 +42,7 @@ def stripe_webhook(request):
             order.stripe_id = session.payment_intent
             order.save()
 
-            # save courses bought for product reccomendataions
+            # save courses bought for course reccomendations
             courses_ids = order.items.values_list("course_id")
             courses = Course.objects.filter(id__in=courses_ids)
             r = Recommender()
