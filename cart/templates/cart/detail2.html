@@ -123,9 +123,8 @@
             </div>
 
             <div class="nav-buttons">
-              <a href="{% url 'course_list' %}" class="more">View more courses</a>
-
-              <a href="{% url 'orders:order_create' %}" class="">Checkout</a>
+              <a href="{% url 'course_list' %}" class="more">View more courses</a> {{ cart|length }}
+              <a href="{% url 'orders:order_create' %}" class="ckout">Checkout</a>
             </div>
           </div>
         </div>
@@ -169,7 +168,7 @@
             </div>
           </div>
 
-          <a href="{% url 'orders:order_create' %}" class="checkout-btn">CHECKOUT</a>
+          <a href="{% url 'orders:order_create' %}" class="checkout-btn ckout">CHECKOUT</a>
         </div>
       </div>
     </section>
@@ -271,4 +270,12 @@
 
 {% block include_js %}
     <script src="{% static 'js/main.js' %}"></script>
+    <script>
+      let cartItemCount = "{{ cart|length }}";
+      cartItemCount = Number(cartItemCount);
+
+      if (cartItemCount <= 0) {
+        document.querySelectorAll(".ckout").forEach((el) => el.href = "#")
+      }
+    </script>
 {% endblock %}

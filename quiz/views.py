@@ -134,6 +134,11 @@ class ManageQuizListView(OwnerQuizMixin, ListView):
 class QuizCreateView(OwnerQuizEditMixin, CreateView):
     permission_required = "quiz.add_quiz"
 
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context["style"] = "create_form"
+        return context
+
 
 class QuizUpdateView(OwnerQuizEditMixin, UpdateView):
     permission_required = "quiz.change_quiz"
@@ -205,6 +210,7 @@ class AnswerCreateUpdateView(TemplateResponseMixin, View):
             {
                 "form": form,
                 "object": self.answer,
+                "style": "create_form",
             }
         )
 
@@ -220,6 +226,7 @@ class AnswerCreateUpdateView(TemplateResponseMixin, View):
             {
                 "form": form,
                 "object": self.answer,
+                "style": "create_form",
             }
         )
 
@@ -237,3 +244,11 @@ class AnswerContentListView(TemplateResponseMixin, View):
                 "quiz": quiz_obj,
             }
         )
+
+
+class DeleteQuizAnswerView(View):
+    def post(self, request, quiz_id, id):
+        quiz = get_object_or_404(Quiz, id=quiz_id, owner=request.user)
+        answer_obj = Answer.objects.filter(question__quiz=quiz, id=id)
+        answer_obj.delete()
+        return redirect("quiz_answer_list", quiz.id)

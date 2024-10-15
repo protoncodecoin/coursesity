@@ -1,6 +1,6 @@
 {% extends "quiz_base.html" %}
 {% block title %}
-    {{ quiz_obj.title }}
+    {{ quiz.title }}
 {% endblock %}
 
 
@@ -21,15 +21,23 @@
                     <span class="question">Answer: </span>
                     <p>{{answer}}</p>
                 </div>
+                <div class="ans-item flex">
+                    <span class="question">Is Correct Answer: </span>
+                    <p>{% if answer.is_correct %} Yes {% else %} No {% endif %}</p>
+                </div>
                 <div class="ans-actions">
                     <a href="{% url 'answer_content_update' q.quiz.id answer.id q.id %}" class="edit actions__btn">Edit</a>
-                    <a href="#" class="delete actions__btn">Delete</a>
+                  <form method="post" action={% url 'quiz_answer_delete' q.quiz.id answer.id%}>
+                      <input class="delete actions__btn remove-border" type="submit" value="Delete" />
+                    {% csrf_token %}
+                  </form>
+                    {% comment %} <a href="{% url 'quiz_answer_delete' q.quiz.id answer.id %}" class="delete actions__btn">Delete</a> {% endcomment %}
                 </div>
                 </div>
 
                 <div class="score flex">
                 <span class="question">Score:</span>
-                <p>10</p>
+                <p>{{ q.score }}</p>
                 </div>
             {% endfor %}
         {% endwith %}

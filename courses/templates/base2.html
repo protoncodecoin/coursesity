@@ -79,7 +79,7 @@
 
               
               {% if request.user.is_authenticated %}
-              <form method='post' id="auth-user" action="{% url 'logout' %}" url="{% url 'course_search' %}">
+              <form method='post' id="auth-user" action="{% url 'logout' %}">
                  {% csrf_token %}
                   <button type="submit" class="user">Log out</button>
                 </form>
@@ -101,9 +101,13 @@
 
           <div class="more-drop">
             <div class="more-dropdown">
-              <a href="/">Home</a>
+              <a href="{% url 'course_list' %}">Home</a>
               <a href="#">Categories</a>
+              {% if request.user.is_instructor %}
+              <a href="{% url 'manage_course_list' %}">Courses Created</a>
+              {% else %}
               <a href="{% url 'student_course_list' %}">Learning</a>
+              {% endif %}
               <a href="{% url 'cart:cart_detail' %}" class="m-cart-container">
                 Cart
                 {% with total_items=cart|length %}
@@ -149,7 +153,7 @@
     </div>
   
 
-    <div class="secondary-nav">
+    {% comment %} <div class="secondary-nav">
       <ul>
         <li><a href="#">Categories</a></li>
        {% if request.user.is_instructor %}
@@ -158,8 +162,25 @@
         <li><a href="{% url 'student_course_list' %}">Learining</a></li>
       {% endif %}
       </ul>
-    </div>
+    </div> {% endcomment %}
 
+    <div class="secondary-nav">
+        <ul>
+          <div class="hover-menu">
+            <li class="more"><a href="#">Categories</a></li>
+            <div class="hover-dropdown">
+              <a href="{% url 'register_meeting' %}">Start a meeting</a>
+              <a href="{% url 'join_meeting' %}">Join a meeting</a>
+            </div>
+          </div>
+
+          {% if request.user.is_instructor %}
+        <li><a href="{% url 'manage_course_list' %}">Courses Created</a></li>
+      {% else %}
+        <li><a href="{% url 'student_course_list' %}">Learining</a></li>
+      {% endif %}
+        </ul>
+      </div>
   </nav>
 
 
@@ -172,7 +193,7 @@
       <div class="footer-top">
         <img src="{% static 'icons/coursitylogo.png' %}" alt="" class="footer-logo" />
 
-        <div class="footer-title">Coursity © 2024</div>
+        <div class="footer-title" id="footer__year">Coursity © 2024</div>
 
         <div class="address-contact-mail">
           <div class="address"><span>🏨</span> Accra, Ghana.</div>
@@ -196,5 +217,10 @@
       })
     </script>
   <script src="{% static 'js/search.js' %}"></script>
+
+  <script>
+      let year = new Date().getFullYear()
+      document.querySelector("#footer__year").textContent = `Coursity © ${year}`;
+    </script>
   </body>
 </html>

@@ -9,7 +9,7 @@
       <div class="top">
         <h1>My Quizzes</h1>
 
-        <a href="{% url "course_create" %}" class="big-btn">Create new Quiz</a>
+        <a href="{% url "quiz_create" %}" class="big-btn">Create new Quiz</a>
       </div>
       <div class="module">
         {% if object_list %}
@@ -23,9 +23,10 @@
                     <a href="{% url "quiz_edit" quiz.id %}">Edit</a>
                     <a href="{% url "quiz_delete" quiz.id %}">Delete</a>
                     <a href="{% url "quiz_question_update" quiz.id %}">Edit answers</a>
-                        {% if quiz.modules.count > 0 %}
-                            <a href="{% url "quiz_answer_list" quiz.id %}"> Manage answers</a>
-                        {% endif %}
+                   
+                  {% if quiz.course.modules.count > 0 %}
+                      <a href="{% url "quiz_answer_list" quiz.id %}"> Manage answers</a>
+                  {% endif %}
                 </p>
                 </div>
             </div>

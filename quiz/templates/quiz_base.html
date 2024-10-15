@@ -5,14 +5,18 @@
     <meta charset="UTF-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Coursiy - Home</title>
-    <link rel="stylesheet" href="{% static 'css/list-quiz.css' %}" />
+    <title> Coursiy |{% block title %} {% endblock %} </title>
     <link rel="icon" type="image/x-icon" href="{% static 'icons/coursitylogo.png' %}" />
+    {% if style == "manage__answers" %}
+    <link rel="stylesheet" href="{% static 'css/list-quiz.css' %}" />
+    {% else %}
+    <link rel="stylesheet" href="{% static 'css/manage-answers.css' %}" />
+    {% endif %}
   </head>
   <body>
     <nav>
       <div class="main-nav">
-        <a href="index.html"
+        <a href="{% url 'course_list' %}"
           ><img
             src="{% static 'icons/coursitytextlogo2.png' %}"
             alt="Coursity"
@@ -33,30 +37,49 @@
         <div class="nav-links" id="navLinks">
           <span class="fa" onclick="hideMenu()">X</span>
           <div class="cart-user">
+            {% if request.user.is_authenticated %}
             <div class="user-dp">
               <img src="{{ request.user.photo.url }}" alt="Profile of {{ request.user.get_full_name }}" />
               <a href="{% url 'show_profile' request.user.id request.user.slug %}" class="username"
-                >Sir Meowlington</a
+                >{{ request.user.get_full_name }}</a
               >
             </div>
+            {% endif %}
 
-            <a href="login.html"
-              ><button type="button" class="user">Log In</button></a
-            >
+            {% if request.user.is_authenticated %}
+              <form method='post' id="auth-user" action="{% url 'logout' %}">
+                 {% csrf_token %}
+                  <button type="submit" class="user">Log out</button>
+                </form>
+              {% else %}
+                <form method='post' action="{% url 'login' %}">
+                  {% csrf_token %}
+                  <button type="submit" class="user">Log in</button>
+                </form>
+              {% endif %}
 
-            <a href="cart.html" class="cart-container">
-              <img src="{% static 'cons/cartico.svg' %}" alt="Cart Icon" class="cart-icon" />
-              <div class="cart-badge">3</div>
+            <a href="{% url 'cart:cart_detail' %}" class="cart-container">
+              <img src="{% static 'icons/cartico.svg' %}" alt="Cart Icon" class="cart-icon" />
+              {% with total_items=cart|length %}
+              <div class="cart-badge">{{ total_items }}</div>
+              {% endwith %}
             </a>
           </div>
 
           <div class="more-drop">
             <div class="more-dropdown">
-              <a href="/">Home</a><a href="#">Categories</a>
-              <a href="{% url 'student_course_list' %}">Learning</a>
+              <a href="{% url 'course_list' %}">Home</a><a href="#">Categories</a>
+              {% if request.user.is_instructor %}
+                <a href="{% url 'manage_course_list' %}">Courses Created</a>
+                {% else %}
+                
+                <a href="{% url 'student_course_list' %}">Learning</a>
+              {% endif %}
               <a href="{% url 'cart:cart_detail' %}" class="m-cart-container">
                 Cart
-                <div class="m-cart-badge">3</div>
+                {% with total_items=cart|length %}
+                <div class="m-cart-badge">{{ total_items }}</div>
+                {% endwith %}
               </a>
               <a href="{% url 'login' %}" class="m-login-btn"> Log In </a>
               <!-- <a href="#" class="user-dp m-user-btn">
@@ -92,7 +115,11 @@
       <div class="secondary-nav">
         <ul>
           <li><a href="#">Categories</a></li>
+          {% if request.user.is_instructor %}
+          <li><a href="{% url 'manage_course_list' %}">Courses Created</a></li>
+          {% else %}
           <li><a href="{% url 'student_course_list' %}">Learning</a></li>
+          {% endif %}
         </ul>
       </div>
     </nav>
@@ -102,9 +129,9 @@
     <!-- footer -->
     <section class="footer">
       <div class="footer-top">
-        <img src="{% static 'icons/coursitylogo.png' %}" alt="" class="footer-logo" />
+        <img src="{% static 'icons/coursitylogo.png' %}" alt="coursity logo" class="footer-logo" />
 
-        <div class="footer-title">Coursity © 2024</div>
+        <div class="footer-title" id="footer__year">Coursity © 2025</div>
 
         <div class="address-contact-mail">
           <div class="address"><span>🏨</span> Accra, Ghana.</div>
@@ -121,5 +148,9 @@
     {% block include_js %}
 
     {% endblock %}
+    <script>
+      let year = new Date().getFullYear()
+      document.querySelector("#footer__year").textContent = `Coursity © ${year}`;
+    </script>
   </body>
 </html>
