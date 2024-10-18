@@ -73,11 +73,15 @@ def meeting_room(request, meeting_id):
         return redirect("join_meeting")
 
     user = request.user
-    context = {
-        "uid": user.id,
-        "displayName": user.get_full_name(),
-        "style": "room",
-        "room_info": meeting_token,
-    }
+    # context =
 
-    return render(request, "video_call/room.html", context)
+    return render(
+        request,
+        "video_call/room.html",
+        {
+            "uid": user.id,
+            "displayName": user.get_full_name(),
+            "style": "meeting_room",
+            "room_info": meeting_token,
+        },
+    )

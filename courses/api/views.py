@@ -1,6 +1,7 @@
 from decimal import Decimal
 import json
 import uuid
+import random
 import redis
 from django.db.models import Count
 from django.conf import settings
@@ -40,11 +41,36 @@ from payment.tasks import payment_complete
 
 from courses.recommender import Recommender
 
+from agora_token_builder import RtcTokenBuilder
+import time
+
 r = redis.Redis(
     host=settings.REDIS_HOST,
     port=settings.REDIS_PORT,
     db=settings.REDIS_DB,
 )
+
+
+class RTCTokenBuilderView(views.APIView):
+    permission_classes = [IsAuthenticated]
+
+    def get(self, request):
+        appId = "51ddb6452e2c48299be5caee0e467b04"
+        appCertificate = "b19c0564bb5142d28c79d431045e3f96"
+        channelName = request.query_params.get("channelName")  # room name
+        uid = str(random.randint(1, 230))
+        expirationTimeInSeconds = 3600 * 24
+        currentTimeStamp = time.time()
+        privilegeExpiredTs = currentTimeStamp + expirationTimeInSeconds
+        role = 1  # host
+        token = RtcTokenBuilder.buildTokenWithUid(
+            appId, appCertificate, channelName, uid, role, privilegeExpiredTs
+        )
+
+        if channelName == None:
+            return Response({"error": "channel name not provided"}, status=400)
+
+        return Response({"token": token, "uid": uid, "app_id": appId})
 
 
 class SubjectViewSet(viewsets.ReadOnlyModelViewSet):

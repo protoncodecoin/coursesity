@@ -297,12 +297,15 @@ class CourseListView(TemplateResponseMixin, View):
             cache.set("highly_rated", highly_rated)
 
         # courses based on student interest
-        interest = Profile.objects.filter(user=request.user).first()
         based_on_interest = []
-        if interest:
-            filtered_courses = all_courses.filter(subject__id=interest.field_of_study)
-            # based_on_interest = []
-            based_on_interest = [s for s in filtered_courses if s != request.user]
+        if request.user.is_authenticated:
+            interest = Profile.objects.filter(user=request.user).first()
+            if interest:
+                filtered_courses = all_courses.filter(
+                    subject__id=interest.field_of_study
+                )
+                # based_on_interest = []
+                based_on_interest = [s for s in filtered_courses if s != request.user]
 
         # get top instructors
         top_instructors = cache.get("top_instructors")

@@ -1,12 +1,12 @@
-
-let uid = userId
+APP_ID = '94fbe6a7fbc84cd98f8e8a498b7b5696'
+let uid = "128"
 
 if (!uid) {
   uid = String(Math.floor(Math.random() * 1_000_000)); // uid to user
   sessionStorage.setItem("uid", uid);
 }
 
-let token = null;
+let token = null
 let client; // store information about the user to used in the streaming
 
 let rtmClient;
@@ -14,10 +14,11 @@ let channel;
 
 const queryString = window.location.search;
 const urlParams = new URLSearchParams(queryString);
-let roomId = urlParams.get("room");
+// let roomId = urlParams.get("room");
+let roomId = "prince";
 
 if (!roomId) {
-  roomId = "main";
+  roomId = "prince";
 }
 
 // let displayName = sessionStorage.getItem("displayName");
@@ -25,6 +26,7 @@ let displayName = userName;
 if (!displayName) {
   window.location = "lobby.html";
 }
+
 
 let localTracks = [];
 let remoteUsers = {};
@@ -38,7 +40,7 @@ let joinRoomInit = async () => {
   rtmClient = await AgoraRTM.createInstance(APP_ID);
   await rtmClient.login({ uid, token });
 
-  await rtmClient.addOrUpdateLocalUserAttributes({ name: displayName });
+  await rtmClient.addOrUpdateLocalUserAttributes({ "name": displayName });
 
   channel = await rtmClient.createChannel(roomId);
   await channel.join();
