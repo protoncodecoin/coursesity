@@ -10,9 +10,9 @@
       <div class="img-button">
         <img src="{{ student.photo.url }}" alt="">
 
-        <button class="edit-btn">
+        <a  href="{% url 'update_student_profile' %}" class="edit-btn">
           Edit profile
-        </button>
+        </a>
 
         <button class="log-out">
           Log Out
@@ -30,19 +30,18 @@
             <p>Abidjan</p> {% endcomment %}
 
             <span>Interest</span>
-            <p>{{profile.field_of_study}}</p>
+            <p>{{student_interest.title}}</p>
           </div>
           <div class="right">
             {% comment %} <span>Email:</span>
             <p><a href="mailto:kofibauherg@yahoo.com">kofibauher@yahoo.com</a></p> {% endcomment %}
             
             <span>LinkedIn</span>
-            <p><a href="{{student.linkedIn}}">{{ student.get_full_name }}</a></p>
+            <p><a href="{{student.linkedIn}}">{{ student.linkedIn }}</a></p>
             
             <span>X(Twitter):</span>
-            <p><a href="{{ student.x }}">{{ student.get_full_name }}</a></p>
+            <p><a href="{{ student.x }}">{{ student.x }}</a></p>
           </div>
-
 
         </div>
       </div>
@@ -64,7 +63,7 @@
                 <p>Abidjan</p>
     
                 <span>Interest</span>
-                <p>Science</p>
+                <p>{{student_interest}}</p>
               </div>
               <div class="right">
                 <span>Email:</span>

@@ -1,6 +1,132 @@
-{% extends "base.html" %}
-{% block title %}Payment successful{% endblock %}
-{% block content %}
-<h1>Your payment was successful</h1>
-<p>Your payment has been processed successfully.</p>
-{% endblock %}
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Coursity | Payment Successful</title>
+    <link rel="icon" type="image/x-icon" href="{% static 'icons/coursitylogo.png' %}" />
+    <link href="{% static 'css/logged_out.css' %}" rel="stylesheet" />
+  </head>
+  <body>
+    <nav>
+      <div class="main-nav">
+        <a href="/"
+          ><img
+            src="{% static 'icons/coursitytextlogo2.png' %}"
+            alt="Coursity"
+            class="header-logo"
+        /></a>
+
+        <div class="searchbar">
+          <img src="{% static 'icons/searchico.svg' %}" alt="" class="search-icon" />
+          <input type="search" placeholder="Search" id="search-input" />
+
+          <ul class="search-results hidden">
+            <li>How to make a bomb</li>
+            <li>How to become rich</li>
+            <li>How to learn C++ and Assembly in 2 weeks</li>
+          </ul>
+        </div>
+
+        <div class="nav-links" id="navLinks">
+          <span class="fa" onclick="hideMenu()">X</span>
+          <div class="cart-user">
+            {% comment %} <div class="user-dp">
+              <img src="/Assets/sad cat.jpg" alt="Sir meowlingtom" />
+              <a href="userprofilepage.html" class="username"
+                >Sir Meowlington</a
+              >
+            </div> {% endcomment %}
+
+            <a href="{% url 'login' %}"
+              ><button type="button" class="user">Log In</button></a
+            >
+
+            <a href="{% url 'cart:cart_detail' %}" class="cart-container">
+              {% with total_items=cart|length %}
+              <img src="{% static 'icons/cartico.svg' %}" alt="Cart Icon" class="cart-icon" />
+              <div class="cart-badge">{{ total_items }}</div>
+              {% endwith %}
+            </a>
+          </div>
+
+          <div class="more-drop">
+            <div class="more-dropdown">
+              <a href="/">Home</a><a href="#">Categories</a>
+              <a href="{% url 'student_course_list' %}">Learning</a>
+              <a href="{% url 'cart:cart_detail' %}" class="m-cart-container">
+                Cart
+                {% with total_items=cart|length %}
+                <div class="m-cart-badge">{{total_items}}</div>
+                {% endwith %}
+              </a>
+              <a href="{% url 'login' %}" class="m-login-btn"> Log In </a>
+              <!-- <a href="#" class="user-dp m-user-btn">
+                <img src="/Assets/sad cat.jpg" alt="Sir meowlingtom">
+                Sir Meowlington
+              </a> -->
+            </div>
+          </div>
+        </div>
+
+        <div class="m-search-hamburger">
+          <img src="{% static 'icons/searchico.svg' %}" alt="" class="m-search-icon" />
+
+          <div class="m-searchbar hidden">
+            <input type="search" placeholder="Search" />
+
+            <ul class="search-results">
+              <li>How to make a bomb</li>
+              <li>How to become rich</li>
+              <li>How to learn C++ and Assembly in 2 weeks</li>
+            </ul>
+          </div>
+
+          <img
+            src="{% static 'icons/hamburger.svg' %}"
+            onclick="showMenu()"
+            alt="menu icon"
+            class="menu-icon fa"
+          />
+        </div>
+      </div>
+
+      <div class="secondary-nav">
+        <ul>
+          <li><a href="#">Categories</a></li>
+          <li><a href="{% url 'student_course_list' %}">Learning</a></li>
+        </ul>
+      </div>
+    </nav>
+
+    <div id="content" class="content">
+      <h1>Payment Successful</h1>
+      <div class="module">
+        <p>
+         payment was successful
+          <a class="goto-course"  class="login-link" href="{% url 'student_course_list' %}">Go to Course</a> again.
+        </p>
+      </div>
+    </div>
+
+    <!-- footer -->
+    <section class="footer">
+      <div class="footer-top">
+        <img src="{% static 'icons/coursitylogo.png' %}" alt="" class="footer-logo" />
+
+        <div class="footer-title">Coursity © 2024</div>
+
+        <div class="address-contact-mail">
+          <div class="address"><span>🏨</span> Accra, Ghana.</div>
+          <div class="contact"><span>📞</span> 01 2345 6789</div>
+          <div class="mail"><span>📧</span> info@coursity.org</div>
+        </div>
+      </div>
+
+      <div class="footer-bottom">All Rights Reserved®</div>
+    </section>
+  </body>
+  <script src="{% static 'js/main.js' %}"></script>
+</html>

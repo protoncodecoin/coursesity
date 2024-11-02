@@ -28,6 +28,7 @@ from django.contrib.postgres.search import (
 
 from braces.views import CsrfExemptMixin, JsonRequestResponseMixin
 from courses.recommender import Recommender
+from users.models import Profile
 from quiz.models import Quiz
 from students.forms import CourseEnrollForm
 from students.models import WishList
@@ -295,6 +296,17 @@ class CourseListView(TemplateResponseMixin, View):
             )
             cache.set("highly_rated", highly_rated)
 
+        # courses based on student interest
+        based_on_interest = []
+        if request.user.is_authenticated:
+            interest = Profile.objects.filter(user=request.user).first()
+            if interest:
+                filtered_courses = all_courses.filter(
+                    subject__id=interest.field_of_study
+                )
+                # based_on_interest = []
+                based_on_interest = [s for s in filtered_courses if s != request.user]
+
         # get top instructors
         top_instructors = cache.get("top_instructors")
         if not top_instructors:
@@ -331,6 +343,7 @@ class CourseListView(TemplateResponseMixin, View):
                 "recently_added": recently_added,
                 "highly_rated": highly_rated,
                 "top_instructors": top_instructors,
+                "based_on_interest": based_on_interest[:9],
                 "style": "index",
             }
         )
@@ -351,6 +364,9 @@ class CourseDetailView(DetailView):
         course_obj = self.object.id
         course = Course.objects.get(id=course_obj)
 
+        # get reviews
+        reviews = Rating.objects.filter(course=course_obj)
+
         if self.request.user.is_authenticated:
             self.has_added_to_wishlist = WishList.objects.filter(
                 user=self.request.user, course=course
@@ -361,6 +377,7 @@ class CourseDetailView(DetailView):
         context["recommended_courses"] = recommended_courses
         context["style"] = "detail"  # load specific css
         context["has_added_to_wishlist"] = self.has_added_to_wishlist
+        context["course_reviews"] = reviews
         return context
 
 

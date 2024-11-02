@@ -27,4 +27,9 @@ urlpatterns = [
         views.AnswerContentListView.as_view(),
         name="quiz_answer_list",
     ),
+    path(
+        "quiz/<int:quiz_id>/delete/<int:id>/",
+        views.DeleteQuizAnswerView.as_view(),
+        name="quiz_answer_delete",
+    ),
 ]

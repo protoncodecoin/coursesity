@@ -391,6 +391,14 @@ nav .fa {
 
 
 
+
+
+
+
+
+
+
+
 /* Cart SECTION */
 
 .cart {
@@ -487,6 +495,7 @@ nav .fa {
   color: #fff;
   transition: 0.3s;
   cursor: pointer;
+  border: none;
 }
 
 .delete-button:hover {
@@ -545,6 +554,86 @@ nav .fa {
   text-wrap: nowrap;
 }
 
+
+
+/* subsection */
+
+.sub-total,
+.discounts, 
+.sum-total {
+  background-color: #ccc;
+  padding: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-radius: 5px;
+}
+
+.sub-total h4 {
+  color: #5057bb;
+}
+
+.discounts {
+  background-color: #fff;
+}
+
+.discounts h4 {
+  color: red
+}
+
+.sum-total {
+  background-color: #5057bb;
+  color: #fff;
+}
+
+.coupon-nav {
+  margin-top: 20px;
+  display: flex;
+  align-items: end;
+  justify-content: space-between;
+}
+
+.coupon p {
+  margin-bottom: 5px;
+}
+
+.coupon input {
+  border: 1px solid #5057bb;
+  border-radius: 5px;
+  height: 30px;
+  padding: 5px;
+  outline: none;
+}
+
+.coupon button,
+.nav-buttons a,
+.nav-buttons button {
+  background-color: #5057bb;
+  border: none;
+  color: #fff;
+  padding: 5px 8px;
+  border-radius: 5px;
+  transition: 0.3s;
+  font-size: 0.9rem;
+}
+
+.nav-buttons a {
+  background-color: #ccc;
+  color: #2c2c2c;
+}
+
+.coupon button:hover,
+.nav-buttons button:hover {
+  background-color: #5962d4;
+}
+
+.nav-buttons a:hover {
+  background-color: #b4b4b4;
+  color: #000000;
+}
+
+
+
 /* cOUrse MEDIA QUERIES */
 
 @media (max-width: 700px) {
@@ -555,11 +644,62 @@ nav .fa {
   .info-bottom {
     width: 220px;
   }
+
+  .sub-section {
+    margin-top: 30px;
+  }
+
+  .sub-section h3{
+    font-size: 1.05rem;
+  }
+
+  .sub-section h4 {
+    font-size: 0.9rem;
+  }
+
+  .coupon-nav {
+    flex-direction: column;
+    align-items: start;
+    gap: 10px;
+  }
+
+  .coupon {
+    width: 100%;
+  }
+
+  .coupon input{
+    width: 75%;
+  }
+
+  .coupon button {
+    width: 22%;
+  }
+
+  .nav-buttons {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+  }
+
 }
 
-.hidden {
-  display: none;
-}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 /* Payment view */
@@ -623,6 +763,15 @@ text-align: center;
   background-color: #868ef5;
 }
 
+.more {
+  background-color: #5962d4!important;
+  color: white!important;
+}
+
+.nav-buttons a:hover {
+  cursor: pointer;
+}
+
 /* CART MEDIA */
 
 @media (max-width: 700px) {
@@ -635,6 +784,7 @@ text-align: center;
   .course-view {
     display: grid;
     grid-template-rows: 4% auto;
+    grid-template-rows: none;
     gap: 0%;
   }
 
@@ -851,6 +1001,7 @@ text-align: center;
   background-color: #2c2c2c;
   color: white;
   box-shadow: 5px 5px 40px 0px rgba(0, 0, 0, 0.2);
+  margin-top: 100px;
 }
 
 .footer-top {
@@ -919,4 +1070,10 @@ text-align: center;
   }
 
 
+}
+
+
+
+.hidden {
+  display: none;
 }

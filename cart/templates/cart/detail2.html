@@ -4,7 +4,7 @@
 
 {% block content %}
 
-<!-- CArT -->
+    <!-- CArT -->
     <section class="cart">
       <div class="course-view">
         <div class="top">
@@ -14,57 +14,120 @@
         </div>
 
         <div class="course-rows">
-            {% for item in cart%}
-                {% with course=item.course %}
-                <div class="course-row">
-                    <div class="main">
-                        <a href="{{ course.get_absolute_url }}" class="course all language">
-                            <img src="{{ course.image.url }}" alt="" />
-                            <div class="info">
-                            <div class="info-top">
-                                <p>Modules: {{ course.modules.count }}</p>
-                                <p>Instructor: {{ course.owner.get_full_name }}</p>
-                            </div>
-                            <p class="info-bottom">{{ course.title }}</p>
-                            </div>
-                        </a>
-                    </div>
+           {% for item in cart %}
+              {% with course=item.course %}
+          <div class="course-row">
+            <div class="main">
+              <a href="{{ course.get_absolute_url }}" class="course all language">
+               <img src="{{ course.image.url }}" alt="" />
+                <div class="info">
+                  <div class="info-top">
+                   <p>Modules: {{ course.modules.count }}</p>
+                  <p>Instructor: {{ course.owner.get_full_name }}</p>
+                  </div>
+                  <p class="info-bottom">{{ course.title }}</p>
+                </div>
+              </a>
+            </div>
 
-                    <div class="price-del">
-                    <div class="price">
-                        <h3>GHC {{ course.price }}</h3>
-                    </div>
+            <div class="price-del">
+              <div class="price">
+                <h3>GHC {{ course.price }}</h3>
+              </div>
 
-                <form action="{% url 'cart:cart_remove' course.id %}" method="post">
+              <form action="{% url 'cart:cart_remove' course.id %}" method="post">
                         {% csrf_token %}
                             <button class="delete-button" type="submit">Remove</button>
                 </form>
-
-                    </div>
-                </div>
+            </div>
+          </div>
                 {% endwith %}
             {% endfor %}
 
-        </div>
-        {% if cart.coupon %}
-        <div>
-          <p> Subtotal: {{ cart.get_total_price|floatformat:2}}</p>
-          <p>"{{cart.coupon.code}}" coupon</p>
-          <p>"{{cart.coupon.discount}}"% off</p>
-          <p>- {{ cart.get_discount|floatformat:2}}</p>
-          <p>Total is now: {{cart.get_total_price_after_discount|floatformat:2}}</p>
+          <!-- <div class="course-row">
+            <div class="main">
+              <a href="/coursepage.html" class="course all language">
+                <img src="/Assets/223023222_571328.jpg" alt="" />
+                <div class="info">
+                  <div class="info-top">
+                    <p>3Hrs 0Mins</p>
+                    <p>7 Lessons</p>
+                  </div>
+                  <p class="info-bottom">Advanced Public Relations2</p>
+                </div>
+              </a>
+            </div>
+
+            <div class="price-del">
+              <div class="price">
+                <h3>GHC 99.99</h3>
+              </div>
+
+              <div class="delete-button">Remove</div>
+            </div>
+          </div>
+
+          <div class="course-row">
+            <div class="main">
+              <a href="/coursepage.html" class="course all language">
+                <img src="/Assets/223023222_571328.jpg" alt="" />
+                <div class="info">
+                  <div class="info-top">
+                    <p>3Hrs 0Mins</p>
+                    <p>7 Lessons</p>
+                  </div>
+                  <p class="info-bottom">Advanced Public Relations3</p>
+                </div>
+              </a>
+            </div>
+
+            <div class="price-del">
+              <div class="price">
+                <h3>GHC 99.99</h3>
+              </div>
+
+              <div class="delete-button">Remove</div>
+            </div>
+          </div> -->
         </div>
 
-        {% endif %}
-        <a href="{% url 'course_list' %}" class="browse">Browse Courses</a>
+        <div class="sub-section">
+          {% if cart.coupon %}
+          <div class="sub-total">
+            <h3>Subtotal</h3>
 
-        {% comment %} Coupon forms {% endcomment %}
-        <form action="{% url 'coupon:apply' %}" method='post'>
-          {% csrf_token %}
-          <label for="coupon__field">Apply a Coupon </label>
-          <input type='text' id="coupon__field" placeholder="Enter coupon code" name='code' required />
-          <input type="submit" value="Apply" />
-        </form>
+            <h4>{{ cart.get_total_price|floatformat:2 }}</h4>
+          </div>
+
+          <div class="discounts">
+            <h3>{{ cart.coupon.code }} ({{cart.coupon.discount}}% off)</h3>
+
+            <h4>-{{ cart.get_discount|floatformat:2}}</h4>
+          </div>
+
+          <div class="sum-total">
+            <h3>Total</h3>
+
+            <h4>GHC {{cart.get_total_price_after_discount|floatformat:2}}</h4>
+          </div>
+          {% endif %}
+
+          <div class="coupon-nav">
+            <div class="coupon">
+              <p>Apply a coupon code</p>
+              <form action="{% url 'coupon:apply' %}" method='post'>
+                {% csrf_token %}
+                <input type="text" placeholder="Enter coupon code" name="code" required/>
+                <button type="submit">Apply</button>
+              </form>
+            </div>
+
+            <div class="nav-buttons">
+              <a href="{% url 'course_list' %}" class="more">View more courses</a> {{ cart|length }}
+              <a href="{% url 'orders:order_create' %}" class="ckout">Checkout</a>
+            </div>
+          </div>
+        </div>
       </div>
 
       <div class="payment-view">
@@ -75,51 +138,48 @@
         <div class="order-details">
           <div class="order-rows">
             <div class="order-row">
-              <div class="order-left">Course(s)</div>
+              <div class="order-left">Courses</div>
               <div class="order-right">
                 {% with total_items=cart|length %}
-                    {% if total_items > 0  %}
-                        {{  total_items }}
-                    {% else %}
-                     0
-                    {% endif %}
-                {% endwith %}
-                </div>
+                      {% if total_items > 0  %}
+                          {{  total_items }}
+                      {% else %}
+                      0
+                      {% endif %}
+                  {% endwith %}
+              </div>
             </div>
 
-            {% comment %} <div class="order-row">
-              <div class="order-left">Discount (GHC)</div>
-              <div class="order-right">30.00</div>
-            </div> {% endcomment %}
+            {% if cart.coupon %}
+            <div class="order-row">
+              <div class="order-left">Discount</div>
+              <div class="order-right">{{ cart.coupon.discount }}%</div>
+            </div>
+
+            <div class="order-row">
+              <div class="order-left">{{ cart.coupon.code }} ({{ cart.coupon.discount }}% off)</div>
+              <div class="order-right">-{{ cart.get_discount|floatformat:2}}</div>
+            </div>
             <hr />
+            {% endif %}
             <div class="order-row total">
               <div class="order-left">Total (GHC)</div>
-              <div class="order-right">{{cart.get_total_price}}</div>
+              <div class="order-right"> {{cart.get_total_price_after_discount|floatformat:2}}</div>
             </div>
           </div>
 
-          {% with total_items=cart|length %}
-                    {% if total_items > 0  %}
-                    <a href="{% url 'orders:order_create' %}" class="checkout-btn">CHECKOUT</a>
-                        
-                    {% else %}
-                       <a href="{% url 'orders:order_create' %}" style="pointer-events: none" class="checkout-btn">NO ITEMS ADDED</a>
-                    {% endif %}
-                {% endwith %}
-
+          <a href="{% url 'orders:order_create' %}" class="checkout-btn ckout">CHECKOUT</a>
         </div>
       </div>
     </section>
 
     <section class="recommended-courses discover">
-      {% if recommended_courses %}
+        {% if recommended_courses %}
       <h2>Other students also bought...</h2>
 
       <div class="field-content">
-
         {% for course in recommended_courses %}
-        
-            <a href="{{ course.get_absolute_url }}" class="r-course all design">
+        <a href="{{ course.get_absolute_url }}" class="r-course all design">
             <img src="{{ course.image.url }}" alt="{{course.title}}" />
             <div class="info">
                 <div class="info-top">
@@ -130,18 +190,18 @@
                 <p class="info-bottom">{{ course.title }}</p>
             </div>
             </a>
-        
-            {% endfor %}
 
-        {% comment %} <a href="/coursepage.html" class="r-course all">
+        {% endfor %}
+
+        <!-- <a href="/coursepage.html" class="r-course all design">
           <img src="/Assets/223023222_571328.jpg" alt="" />
           <div class="info">
             <div class="info-top">
-              <p>3Hrs 0Mins</p>
-              <p>7 Lessons</p>
+              <p>14Hrs 27Mins</p>
+              <p>16 Lessons</p>
             </div>
-            <div class="middle">&#9733; &#9733; &#9733;</div>
-            <p class="info-bottom">How To Make Money in Crypto</p>
+            <div class="middle">&#9733; &#9733; &#9733; &#9733; &#9733;</div>
+            <p class="info-bottom">Art & Design</p>
           </div>
         </a>
 
@@ -179,7 +239,19 @@
             <div class="middle">&#9733; &#9733; &#9733;</div>
             <p class="info-bottom">How To Make Money in Crypto</p>
           </div>
-        </a> {% endcomment %}
+        </a>
+
+        <a href="/coursepage.html" class="r-course all">
+          <img src="/Assets/223023222_571328.jpg" alt="" />
+          <div class="info">
+            <div class="info-top">
+              <p>3Hrs 0Mins</p>
+              <p>7 Lessons</p>
+            </div>
+            <div class="middle">&#9733; &#9733; &#9733;</div>
+            <p class="info-bottom">How To Make Money in Crypto</p>
+          </div>
+        </a> -->
       </div>
       {% else %}
 
@@ -198,4 +270,12 @@
 
 {% block include_js %}
     <script src="{% static 'js/main.js' %}"></script>
+    <script>
+      let cartItemCount = "{{ cart|length }}";
+      cartItemCount = Number(cartItemCount);
+
+      if (cartItemCount <= 0) {
+        document.querySelectorAll(".ckout").forEach((el) => el.href = "#")
+      }
+    </script>
 {% endblock %}

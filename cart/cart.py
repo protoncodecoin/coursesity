@@ -94,3 +94,14 @@ class Cart:
 
     def get_total_price_after_discount(self):
         return self.get_total_price() - self.get_discount()
+
+    def get_courses_id(self):
+        ids = str()
+        keys = list(self.cart.keys())
+        for index, value in enumerate(keys):
+            print(value, index)
+            if index == 0:
+                ids += f"{value}"
+            else:
+                ids += f"-{value}"
+        return ids

@@ -414,10 +414,10 @@ nav .fa {
 }
 
 .img-button img {
-  width: 203px;
+  width: 140px;
+  height: 140px;
   border-radius: 50%;
   transition: 0.3s;
-  height: 160px;
 }
 
 .img-button img:hover {
@@ -435,6 +435,7 @@ nav .fa {
   font-size: 1rem;
   border: 1px solid #5962d4;
   transition: 0.3s;
+  text-align: center;
 }
 
 .log-out {
@@ -857,3 +858,47 @@ nav .fa {
 
 
 }
+
+
+
+/* DROP DOWN */
+.hover-menu {
+  position: relative;
+  display: inline-block;
+}
+
+.hover-dropdown {
+  display: none;
+  position: absolute;
+  left: -25%;
+  background-color: #676fe7;
+  min-width: 150px;
+  text-align: center;
+  z-index: 2;
+  color: #ffffff;
+  transition: 0.3s;
+}
+
+.hover-dropdown a {
+  font-size: 14px;
+  padding: 8px 5px 5px;
+  display: block;
+  color: inherit;
+  text-decoration: none;
+  text-transform: capitalize;
+  transition: 0.3s;
+}
+
+.hover-dropdown a:hover {
+  background-color: #8990f5;
+  font-size: 16px;
+}
+
+.hover-menu:hover .hover-dropdown {
+  display: block;
+  transition: 0.3s;
+}
+
+
+
+

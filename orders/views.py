@@ -11,8 +11,12 @@ from django.template.loader import render_to_string
 from django.http import HttpResponse
 
 import stripe
+import requests
 
 from cart.cart import Cart
+from payment.models import Payment
+
+
 from .forms import OrderCreateForm
 from .models import OrderItem, Order
 from .tasks import course_order_created
@@ -69,16 +73,16 @@ def order_create(request):
                     order=new_order_item, course=item["course"], price=item["price"]
                 )
                 course_ids.append(item["course"].id)
-            request.session["added_courses"] = course_ids
-            # clear the cart
-            cart.clear()
+                request.session["added_courses"] = course_ids
+                # clear the cart
+                cart.clear()
 
-            # launch asychronous task
-            course_order_created.delay(new_order_item.id)
+                # launch asychronous task
+                course_order_created.delay(new_order_item.id)
 
-            # set the order in the session
-            # request.session["order_id"] = new_order_item.id
-            # return redirect("payment:process")
+                # set the order in the session
+                request.session["order_id"] = new_order_item.id
+                # return redirect("payment:process")
 
             # get the order id
             # build success url
@@ -116,19 +120,19 @@ def order_create(request):
                     }
                 )
 
-            # stripe coupon
-            if new_order_item.coupon:
-                stripe_coupon = stripe.Coupon.create(
-                    name=new_order_item.coupon.code,
-                    percent_off=new_order_item.order.discount,
-                    duration="once",
-                )
-                session_data["discounts"] = [{"coupon": stripe_coupon.id}]
+                # stripe coupon
+                if new_order_item.coupon:
+                    stripe_coupon = stripe.Coupon.create(
+                        name=new_order_item.coupon.code,
+                        percent_off=new_order_item.discountt,
+                        duration="once",
+                    )
+                    session_data["discounts"] = [{"coupon": stripe_coupon.id}]
 
-            # create stripe checkout session
-            session = stripe.checkout.Session.create(**session_data)
-            # redirect to stripe payment form
-            return redirect(session.url, code=303)
+                # create stripe checkout session
+                session = stripe.checkout.Session.create(**session_data)
+                # redirect to stripe payment form
+                return redirect(session.url, code=303)
 
         request.session["next"] = request.path
         return redirect("user_registration")
@@ -138,5 +142,17 @@ def order_create(request):
         "orders/order/create.html",
         {
             "cart": cart,
+            "style": "payment",
         },
     )
+
+
+def paystack_payment(request):
+    # initialize transaction
+    secret_key = settings.PAYSTACK_SECRET_KEY
+    headers = {
+        "authorization": f"Bearer {secret_key}",
+        "content-type": "application/json",
+    }
+
+    body = {"amount": "", "currency": "GHS", "email": "useremail"}

@@ -1,37 +1,224 @@
-{% extends 'base.html' %}
+{% extends 'base2.html' %}
+{% load static %}
+{% block title %} Pay your Order{% endblock %}
+{% block content %}
+    <section class="checkout-section">
+      <h1>CHECKOUT</h1>
 
-{% block title %} 
-    Checkout
+      <div class="left-right">
+        <div class="summary">
+          <h2>Summary</h2>
+
+          <div class="sum-details">
+            <div>
+              <h3>No. of Courses:</h3>
+              <h4>{{cart|length }}</h4>
+            </div>
+
+            <div>
+              <h3>Total Amount:</h3>
+              <h4>GHC {{ cart.get_total_price }}</h4>
+            </div>
+
+            <div>
+              <h3>Discounts:</h3>
+              <h4>-GHC {{ cart.get_discount }}</h4>
+            </div>
+
+            <hr />
+            <div>
+              <h3>Amount Payable:</h3>
+              <h4>GHC {{ cart.get_total_price_after_discount }}</h4>
+            </div>
+          </div>
+        </div>
+
+        <div class="payment-option">
+          <h2>Select your preferred payment option:</h2>
+           <form method="post">
+            {% csrf_token %}
+            <button type="submit">
+              <img src="{% static 'assets/stripelogo.png' %}" alt="stripe-logo" />
+              Pay With Stripe
+            </button>
+          </form>
+
+          <button class="paystack">
+            <img src="{% static 'assets/Paystack-logo.png' %}" alt="paystac-logo" />
+            Pay With Paystack
+          </button>
+
+          {% comment %} <form method="post">
+            {% csrf_token %}
+            <div>
+              <input type="radio" name="payment_option" value="stripe" />
+              <label for="pay">Stripe</label>
+            </div>
+
+            <div>
+              <input type="radio" name="payment_option" value="paystack" />
+              <label for="pay">Paystack</label>
+            </div>
+
+            <button type="submit">Pay Now</button>
+          </form> {% endcomment %}
+          {% comment %} <button class="paystack"> Paystack Payment</button> {% endcomment %}
+        </div>
+      </div>
+    </section>
+
 {% endblock %}
 
-{% block content  %}
-    
-        <div style="float:right; padding-right:70px;">
-            <h3>Your Order</h3>
+{% block include_js %}
+    <script src="https://js.paystack.co/v2/inline.js"></script>
+    <script>
+      const token = "{{csrf_token}}";
+      const amount = "{{cart.get_total_price_after_discount}}";
+      const email = "{{request.user.email}}";
+      const first_name = "{{request.user.first_name}}";
+      const last_name = "{{request.user.last_name}}";
+      let courses = "{{cart.get_courses_id}}";
+      let orderID = null;
+      
+      courses = courses.split("-").map((id) => Number(id))
 
-            <ul>
-                {% for item in cart %}
-                    <li> {{ item.course.title }}
-                        <span>GH{{ item.total_price }}</span>
-                    </li>
-                {% endfor %}
-            </ul>
-            <p>Total: GH{{ cart.get_total_price }}</p>
-        </div>
-        <h2>
-        Checkout
-    </h2>
-    {% comment %} <div>
+      console.log("=========== total amount to be paid:=", Number(amount), first_name, last_name)
+      console.log(+amount)
 
-        {% if order.coupon %}
-            <p>Subtotal: {{ order.get_total_cost_before_discount|floatformat:2}}</p>
-            <p>"{{order.coupon.code}}" coupon ({{ order.discount }})% off</p>
-            <p>- {{ order.get_discount|floatformat:2}}</p>
-    </div> {% endcomment %}
-    <form method="post">
-        {% csrf_token %}
-        <input type="submit" value="Pay Now">
-    </form>
+    </script>
 
-    
+    <script>
+          /**
+    * 
+    * order items to create 
+    */
+    const createOrder = async () => {
+        const URL = `/api/create-order/`;
+
+        try {
+            const response = await fetch(URL, {
+                headers: {
+                    "X-CSRFToken": token,
+                    "Content-Type": "application/json",
+                },
+                method: "POST",
+                // body: JSON.stringify(data)
+            })
+
+            if (!response.ok) throw new Error(response)
+            
+            const resData = await response.json()
+            const {success, order_id} = resData;
+
+            console.log(order_id, "this is the order id")
+
+            if (success === "ok"){
+              orderID = order_id
+              console.log("assignment done")
+            }
+
+        } catch (error) {
+            console.log("error: ", error)
+        }
+    }
+
+
+
+    /**
+    * 
+    * @param {Object} data transaction information to verify transaction 
+    */
+    const verifyTransaction = async (data) => {
+        const URL = "/api/verify-transaction/";
+
+        try {
+            const response = await fetch(URL, {
+                headers: {
+                    "X-CSRFToken": token,
+                    "Content-Type": "application/json",
+                },
+                method: "POST",
+                body: JSON.stringify(data)
+            })
+
+            if (!response.ok) throw new Error(response)
+            
+            const resData = await response.json()
+            
+            if (resData["message"] == "success"){
+              window.location.href = "/payment/completed/"
+            }
+        } catch (error) {
+            console.log("error: ", error)
+        }
+    }
+</script>
+
+      <script src="{% static 'js/main.js' %}"></script>
+{% endblock %}
+
+{% block domready %}
+document.querySelector(".paystack").addEventListener("click", function(e){
+   
+    const popup = new PaystackPop();
+
+      popup.newTransaction({
+
+        key: 'pk_test_17f45c77fbf0880f64302e5ac67425741af647fa',
+
+        email: email,
+
+        first_name:first_name,
+
+        last_name: last_name,
+
+        amount:  ((+amount) * 100),
+
+        onSuccess: (transaction) => {
+
+          if(transaction.status === "success"){
+
+            const data = {
+              "reference_code": transaction.reference,
+              "purchased_amount":amount,
+              "order_id": orderID,
+              // "courses_id": courses
+            }
+
+            // post transaction information to api endpoint and redirect user to payment complete page if successful
+            verifyTransaction(data);
+
+          } else {
+            window.location.href = "/payment/canceled/"
+          }
+
+        },
+
+        onLoad: (response) => {
+
+         {% comment %} // console.log("onLoad: ", response); {% endcomment %}
+
+          // create order item
+          createOrder();
+
+        },
+
+        onCancel: () => {
+          // redirect user to payment failed page
+          window.location.href = "/payment/canceled/"
+
+        },
+
+        onError: (error) => {
+          // redirect user to payment failed page
+          console.log("Error: ", error.message);
+          window.location.href = "/payment/canceled/"
+
+        }
+
+      })
+     }  
+
+     {% comment %} myPaymentGateway(); {% endcomment %}
+)
 {% endblock %}

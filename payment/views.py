@@ -6,6 +6,8 @@ from django.urls import reverse
 from courses.models import Course
 from orders.models import Order
 
+from .models import Payment
+
 
 # Create the stripe instance
 stripe.api_key = settings.STRIPE_SECRET_KEY
@@ -62,13 +64,14 @@ def payment_completed(request):
     # get the id of the courses and and the current user
     # add current user to courses they paid for
     curr_user = request.user
-    for i in courses:
-        course_obj = Course.objects.filter(id=i).first()
-        course_obj.students.add(curr_user)
-        course_obj.save()
+    if courses:
+        for i in courses:
+            course_obj = Course.objects.filter(id=i).first()
+            course_obj.students.add(curr_user)
+            course_obj.save()
 
-    # clear courses from session
-    del request.session["added_courses"]
+        # clear courses from session
+        del request.session["added_courses"]
     return render(request, "payment/completed.html")
 
 

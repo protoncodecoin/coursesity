@@ -8,6 +8,7 @@
 
 body {
   position: relative;
+  min-height: 100vh;
   /* padding-bottom: 35px; */
 }
 
@@ -209,7 +210,100 @@ nav .fa {
   display: none;
 }
 
+/* Manage Answers */
+.manage__answers {
+  /* width: 100%; */
+  /* background-color: #bfc2e6; */
+  padding: 10px 5px;
+  margin-top: 20px;
+  margin-bottom: 20px;
+}
+
+.question {
+  font-weight: bolder;
+}
+
+.answer__item {
+  margin: 10px auto;
+  background-color: #bfc2e6;
+  padding: 10px 15px;
+}
+
+.new__ans {
+  display: flex;
+  align-items: center;
+  justify-content: right;
+}
+
+.add__ans {
+  display: inline-block;
+  padding: 7px 15px;
+  width: 160px;
+  background-color: green;
+  color: white;
+  text-align: center;
+}
+
+.add__ans:hover {
+  background-color: rgb(77, 150, 77);
+}
+
+.ans-actions {
+  display: flex;
+  justify-content: right;
+  gap: 15px;
+  align-items: center;
+  padding-right: 5px;
+  padding-top: 5px;
+}
+
+.edit {
+  background-color: #5057bb;
+  color: white;
+  transition: all 0.5s ease-in-out;
+}
+
+.edit:hover {
+  background-color: #bfc2e6;
+}
+
+.delete {
+  background-color: rgb(211, 2, 2);
+  color: #fff;
+}
+
+.delete:hover {
+  background-color: rgb(226, 71, 71);
+}
+
+.actions__btn {
+  display: inline-block;
+  padding: 5px 10px;
+}
+
+.flex {
+  display: flex;
+  gap: 5px;
+  justify-items: center;
+  align-items: start;
+}
+
+.padding__bottom {
+  padding-bottom: 7px;
+}
+
+/* Manage answers */
+@media (min-width: 768px) {
+  .answer__item {
+    width: 90%;
+    margin: 10px auto;
+    background-color: #bfc2e6;
+    padding: 10px 15px;
+  }
+}
+
 /* NAV MEDIA */
+
 @media (max-width: 700px) {
   body::before {
     height: 62px;
@@ -389,230 +483,12 @@ nav .fa {
   }
 }
 
-/* HERO SECTION */
-/* HERO SECTION */
-/* HERO SECTION */
-
-.hero-section {
-  position: relative;
-  width: 100%;
-  margin-bottom: 30px;
-}
-
-.overlay {
-  position: absolute;
-  width: 100%;
-  height: 100%;
-  backdrop-filter: blur(2px);
-}
-
-.banner {
-  display: grid;
-  height: 70vh;
-  place-items: center;
-  overflow: hidden;
-}
-
-.banner img {
-  position: absolute;
-  object-fit: cover;
-  width: 100%;
-  height: 70vh;
-  top: 0;
-  left: 0;
-  z-index: -1;
-}
-
-.banner h1 {
-  font-size: 3rem;
-  color: rgb(255, 255, 255);
-  width: 40%;
-  text-align: center;
-}
-
-.hero-section h3 {
-  font-size: 2rem;
-  text-align: center;
-  color: #5962d4;
-  margin: 0 auto;
-}
-
-/* HERO MEDIA */
-@media (max-width: 700px) {
-  .banner {
-    height: 50vh;
-  }
-
-  .banner img {
-    height: 50vh;
-  }
-
-  .banner h1 {
-    font-size: 2.5rem;
-    width: 70%;
-  }
-
-  .hero-section h3 {
-    font-size: 1.2rem;
-  }
-}
-
-/* My Courses SECTION */
-
-.my-courses {
-  position: relative;
-  width: 90%;
-  margin: 10vh auto;
-  padding: 10px;
-}
-
-.my-courses h1 {
-  font-size: 2.3rem;
-  text-align: center;
-}
-
-.field-content {
-  display: grid;
-  grid-template-columns: auto auto auto;
-  gap: 25px;
-  margin: 20px 0;
-  align-items: center;
-}
-
-.course {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  transition: 0.3s;
-}
-
-.course:hover {
-  transform: scale(1.02);
-}
-
-.course img {
-  width: 160px;
-  border-radius: 10px;
-}
-
-.info {
-  display: flex;
-  flex-direction: column;
-  justify-content: start;
-  font-size: 0.8rem;
-}
-
-.info-top {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-}
-
-.info-top p {
-  font-weight: 600;
-  color: rgb(126, 126, 126);
-}
-
-.middle {
-  color: #5962d4;
-  font-size: 20px;
-}
-
-.info-bottom {
-  font-weight: 700;
-  font-size: 1.1rem;
-  width: 185px;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  text-wrap: nowrap;
-}
-
-/* my-courses MEDIA QUERIES */
-
-@media (max-width: 700px) {
-  .my-courses {
-    width: 95%;
-    margin: 3vh auto;
-  }
-
-  .my-courses h1 {
-    font-size: 1.6rem;
-  }
-
-  .field-content {
-    grid-template-columns: auto;
-    gap: 25px;
-  }
-
-  .course img {
-    width: 130px;
-  }
-
-  .info-bottom {
-    /* width: 100%; */
-  }
-}
-
-.hidden {
-  display: none;
-}
-
-
-
-
-
-
-
-
-
-/* empty */
-.empty {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  width: 100%;
-  margin: 50px 0;
-}
-
-.empty img {
-  width: 20%;
-  margin-bottom: 20px;
-}
-
-.empty h4 {
-  text-align: center;
-  color: gray;
-  font-size: 1.3rem;
-}
-
-/* empty MEDIA QUERIES */
-
-@media (max-width: 700px) {
-  .recommended-courses {
-    width: 95%;
-    margin: 3vh auto;
-  }
-
-  .recommended-courses h2 {
-    font-size: 1.5rem;
-    text-align: start ;
-  }
-  
-  .empty {
-    margin: 20px 0;
-  }
-
-  .empty img{
-    /* width: 50px; */
-    width: 50%;
-  }}
-
-
-
-
 /* Foooter */
 
 .footer {
+  position: absolute;
+  left: 0;
+  bottom: 0;
   display: flex;
   flex-direction: column;
   width: 100%;
@@ -625,8 +501,8 @@ nav .fa {
   display: flex;
   align-items: center;
   flex-direction: column;
-  padding: 20px 10px  10px;
-  width:60%;
+  padding: 20px 10px 10px;
+  width: 60%;
   margin: 0 auto;
   gap: 10px;
 }
@@ -660,7 +536,6 @@ nav .fa {
 
 /* FOOTER MEDIA */
 @media (max-width: 700px) {
-
   .footer-top {
     justify-content: start;
     align-items: start;
@@ -680,11 +555,66 @@ nav .fa {
     flex-direction: column;
     align-items: start;
   }
-  
+
   .footer-bottom {
     padding-left: 20px;
     text-align: start;
   }
-
-
 }
+
+.hidden {
+  display: none;
+}
+
+.remove-border {
+  border: none;
+  cursor: pointer;
+  padding: 5px 10px;
+  transition: background-color 0.3s ease-in-out;
+}
+
+.remove-border:hover {
+  background-color: rgb(255, 203, 203);
+}
+
+/* DROP DOWN */
+.hover-menu {
+  position: relative;
+  display: inline-block;
+}
+
+.hover-dropdown {
+  display: none;
+  position: absolute;
+  left: -25%;
+  background-color: #676fe7;
+  min-width: 150px;
+  text-align: center;
+  z-index: 2;
+  color: #ffffff;
+  transition: 0.3s;
+}
+
+.hover-dropdown a {
+  font-size: 14px;
+  padding: 8px 5px 5px;
+  display: block;
+  color: inherit;
+  text-decoration: none;
+  text-transform: capitalize;
+  transition: 0.3s;
+}
+
+.hover-dropdown a:hover {
+  background-color: #8990f5;
+  font-size: 16px;
+}
+
+.hover-menu:hover .hover-dropdown {
+  display: block;
+  transition: 0.3s;
+}
+
+
+
+

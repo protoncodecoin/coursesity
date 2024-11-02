@@ -1,4 +1,4 @@
-{% extends 'base2.html' %}
+{% extends 'base_without_footer.html' %}
 {% load static %}
 
 {% block title %} Results {% endblock %}
@@ -25,7 +25,7 @@
 
       <div class="course-nav">
         <a href="/">Home</a>
-        <a href="{% url 'student_course_list' %}">Continue</a>
+        <a href="{% url 'student_course_detail' quiz.course.id %}">Continue</a>
       </div>
     </section>
 

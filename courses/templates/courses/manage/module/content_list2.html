@@ -6,9 +6,14 @@
 {% endblock %}
 
 {% block content %}
-{% with course=module.course %}
-<h1>Course "{{ course.title }}"</h1>
-    <div id="content" class="content">
+  {% with course=module.course %}
+      <div id="content" class="content">
+      <div class="top">
+        <h1>Course "{{ course.title }}"</h1>
+
+        <a href="#" id="meeting__btn" class="big-btn show-modal">Schedule Meeting</a>
+      </div>
+
       <div class="contents">
         <h3>Modules</h3>
         <ul id="modules">
@@ -26,18 +31,17 @@
           <li>No modules yet.</li>
           {% endfor %}
         </ul>
-         <p><a href="{% url "course_module_update" course.id %}">
-    Edit modules</a></p>
+        {% comment %} <p><a href="{% url "course_module_update" course.id %}"> Edit modules</a></p> {% endcomment %}
       </div>
       <div class="module">
         <h2>Module {{ module.order|add:1 }}: {{ module.title }}</h2>
-         <h3>Module contents:</h3>
+        <h3>Module contents:</h3>
         <div id="module-contents">
           {% for content in module.contents.all %}
           <div data-id="{{ content.id }}">
             {% with item=content.item %}
-            <p>{{ item }} ({{ item|model_name }})</p>
-            <a href="{% url "module_content_update" module.id item|model_name item.id %}">
+           <p>{{ item }} ({{ item|model_name }})</p>
+             <a href="{% url "module_content_update" module.id item|model_name item.id %}">
               Edit
             </a>
             <form action="{% url "module_content_delete" content.id %}" method="post">
@@ -67,60 +71,95 @@
         </ul>
       </div>
 
-      <div class="meeting__btn">
-        <button id="meeting__btn" class="big-btn">Create New Meeting</button>
-    </div>
-        {% endwith %}
-
-
-
-
       <!-- MODAL -->
-      <!-- add a 'hidden' class to hide the modal -->
-      <div class="pop-modal modal hid.." id="myModal">
-        <button class="close-modal close">x</button>
+      <div id="myModal" class="overlay hidden">
+        <!-- add a 'hidden' class to hide the modal -->
+        <form action="post" class="pop-modal modal" id="meeting__form">
+          <button class="close-modal close">x</button>
 
-        <form id="meeting__form">
-        <input type="text" id="meetingName" placeholder="Meeting name" required/>
+          <h2>Schedule a Meeting</h2>
 
-        <div class="enrolled">
-          <input name="enroll" type="checkbox" id='restriction' value='yes' />
-          <label for="enroll">Only enrolled students</label>
-        </div>
+          <input type="text" placeholder="Meeting name" id="meetingName" />
 
-        <textarea
-          name="about"
-          id="about"
-          cols="30"
-          rows="10"
-          placeholder="About meeting.."
-        ></textarea>
+          <div class="date-time">
+            <input type="date" name="sch_date" id="sch_date" required/>
+            <input type="time" name="sch_time" id="sch_time" required/>
+          </div>
 
-        <button type="submit" class="big-btn">Submit</button>
+          <div class="enrolled">
+            <input name="enroll" type="checkbox" id="restriction" />
+            <label for="enroll">Only enrolled students</label>
+          </div>
+
+          <textarea
+            name="about"
+            id="about"
+            cols="30"
+            rows="10"
+            placeholder="About meeting.."
+            name="about"
+          ></textarea>
+
+          <button class="big-btn">Submit</button>
+        </form>
       </div>
-    </form>
+
       <!-- show snack notification -->
       <!-- I set the visibilty to visible in the css, you can just comment it -->
       <div id="snackbar">So this is a snack bar</div>
-
-          <!-- show toast notification -->
-    <div class="toastBox">
     </div>
-        {% endblock %}
-
-      {% block include_js %}
-      <script src="https://cdnjs.cloudflare.com/ajax/libs/html5sortable/0.13.3/html5sortable.min.js"></script>
-
-      <script src="{% static 'js/main.js' %}"></script>
-
-<script>
-    const token = "{{csrf_token}}";
-    const course_id ="{{module.course.id}}";
-  </script>
-  <script src="{% static 'js/meeting.js' %}"></script>
+  {% endwith %}
 {% endblock %}
 
+
+{% block include_js %}
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html5sortable/0.13.3/html5sortable.min.js">
+  </script>
+
+<script>
+  const token = "{{csrf_token}}";
+  const course_id ="{{module.course.id}}";
+</script>
+<script src="{% static 'js/meeting.js' %}"></script>
+
+            <!-- modal script -->
+      <script>
+        // MODAL VARIABLES
+        // ///////////////
+        const overlay = document.querySelector(".overlay");
+        const btnCloseModal = document.querySelector(".close-modal");
+        const btnOpenModal = document.querySelector(".show-modal");
+
+        const openModal = function () {
+          overlay.classList.remove("hidden");
+        };
+
+        const closeModal = function () {
+          overlay.classList.add("hidden");
+        };
+
+        btnCloseModal.addEventListener("click", function () {
+          if (true) closeModal();
+        });
+
+        btnOpenModal.addEventListener("click", function () {
+          if (true) openModal();
+        });
+
+        document.addEventListener("keydown", function (e) {
+          // console.log(e.key);
+
+          if (e.key === "Escape" && !modal.classList.contains("hidden")) {
+            closeModal();
+          }
+        });
+      </script>
+
+{% endblock %}
+
+
 {% block domready %}
+console.log("hey there")
   var options = {
       method: 'POST',
       mode: 'same-origin'

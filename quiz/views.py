@@ -116,6 +116,17 @@ class OwnerQuizMixin(OwnerMixin, LoginRequiredMixin, PermissionRequiredMixin):
 class OwnerQuizEditMixin(OwnerQuizMixin, OwnerEditMixin):
     template_name = "quiz/manage/quiz/form.html"
 
+    def get_form(self, form_class=None):
+        form = super().get_form(form_class)
+
+        form.fields["course"].queryset = Course.objects.filter(owner=self.request.user)
+        return form
+
+    def get_context_data(self, **kwargs) -> dict[str, Any]:
+        context = super().get_context_data(**kwargs)
+        context["style"] = "create_form"
+        return context
+
 
 class ManageQuizListView(OwnerQuizMixin, ListView):
     template_name = "quiz/manage/quiz/list.html"
@@ -133,6 +144,17 @@ class ManageQuizListView(OwnerQuizMixin, ListView):
 
 class QuizCreateView(OwnerQuizEditMixin, CreateView):
     permission_required = "quiz.add_quiz"
+
+    def get_form(self, form_class=None):
+        form = super().get_form(form_class)
+        # Filter the course field to show only courses created by the current user
+        form.fields["course"].queryset = Course.objects.filter(owner=self.request.user)
+        return form
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context["style"] = "create_form"
+        return context
 
 
 class QuizUpdateView(OwnerQuizEditMixin, UpdateView):
@@ -162,10 +184,7 @@ class QuizQuestionUpdateView(TemplateResponseMixin, View):
     def get(self, request, *args, **kwargs):
         formset = self.get_formset()
         return self.render_to_response(
-            {
-                "quiz": self.quiz,
-                "formset": formset,
-            }
+            {"quiz": self.quiz, "formset": formset, "style": "course_form"}
         )
 
     def post(self, request, *args, **kwargs):
@@ -177,6 +196,7 @@ class QuizQuestionUpdateView(TemplateResponseMixin, View):
             {
                 "quiz": self.quiz,
                 "formset": formset,
+                # "style": "form_course",
             }
         )
 
@@ -196,7 +216,6 @@ class AnswerCreateUpdateView(TemplateResponseMixin, View):
         self.question = get_object_or_404(Question, id=question_id)
         if id:  # id of the answer if it's none then we are creating a new answer
             self.answer = get_object_or_404(Answer, pk=id)
-            print(self.answer, id, "i came here")
 
         return super().dispatch(request, quiz_id, question_id, id)
 
@@ -206,6 +225,8 @@ class AnswerCreateUpdateView(TemplateResponseMixin, View):
             {
                 "form": form,
                 "object": self.answer,
+                "question_object": self.question,
+                "style": "create_form",
             }
         )
 
@@ -221,6 +242,7 @@ class AnswerCreateUpdateView(TemplateResponseMixin, View):
             {
                 "form": form,
                 "object": self.answer,
+                "style": "create_form",
             }
         )
 
@@ -236,5 +258,14 @@ class AnswerContentListView(TemplateResponseMixin, View):
             {
                 "questions": questions,
                 "quiz": quiz_obj,
+                "style": "answer_list",
             }
         )
+
+
+class DeleteQuizAnswerView(View):
+    def post(self, request, quiz_id, id):
+        quiz = get_object_or_404(Quiz, id=quiz_id, owner=request.user)
+        answer_obj = Answer.objects.filter(question__quiz=quiz, id=id)
+        answer_obj.delete()
+        return redirect("quiz_answer_list", quiz.id)

@@ -44,4 +44,14 @@ urlpatterns = [
     ),
     # activate account
     path("activate/<uidb64>/<token>/", views.activate_account, name="activate"),
+    path(
+        "update-student-profile/",
+        views.update_student_profile,
+        name="update_student_profile",
+    ),
+    path(
+        "update-instructor-profile/",
+        views.update_instructor_profile,
+        name="update_instructor_profile",
+    ),
 ]

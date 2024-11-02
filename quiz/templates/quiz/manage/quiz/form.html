@@ -1,27 +1,26 @@
-{% extends "base.html" %}
+{% extends 'base_without_footer.html' %}
 
 {% block title %}
   {% if object %}
-    Edit "{{object.question.quiz.title }}"
+    Edit "{{object.questions.quiz.title }}"
   {% else %}
-    Create a new Quiz Answer
+    Create a new Quiz
   {% endif %}
 {% endblock %}
 
 {% block content %}
+<div id="content" class="content">
   <h1>
-    {% if object %}
-      Edit answer for "{{ object.question.question_text }}"
-    {% else %}
-      Add new Quiz Answer
-    {% endif %}
+    {% if object %} Edit Quiz for "{{ object.question_text}}" {% else %} Add new Quiz for "{{question_object.question_text}}" {% endif %}
   </h1>
   <div class="module">
     <h2>Quiz info</h2>
-    <form method="post">
-      {{ form.as_p }}
-      {% csrf_token %}
-      <p><input type="submit" value="Save quiz"></p>
-    </form>
-  </div>
+        <form method="post" class='auto__gen__form'>
+          {{ form.as_div }} {% csrf_token %}
+          <p><input type="submit" class="big-btn" value="Save Quiz" /></p>
+        </form>
+      </div>
+    </div>
 {% endblock %}
+
+

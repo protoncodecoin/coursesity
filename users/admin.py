@@ -80,6 +80,7 @@ class ProfileAdmin(admin.ModelAdmin):
     list_display = [
         "id",
         "user",
+        # "interest",
         "field_of_study",
     ]
 

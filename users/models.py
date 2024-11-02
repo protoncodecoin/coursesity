@@ -57,19 +57,18 @@ class CustomUser(AbstractUser):
 
 class Profile(models.Model):
 
-    class Interest(models.TextChoices):
-        ANY = "any", "Any"
-        SCIENCE = "science", "science"
-        MATH = "mathematics", "Mathematics"
-        CYBERSECURITY = "cybersecurity", "Cybersecurity"
-        PROGRAMMING = "programming", "Programming"
+    # class Interest(models.TextChoices):
+    #     ANY = "any", "Any"
+    #     SCIENCE = "science", "science"
+    #     MATH = "mathematics", "Mathematics"
+    #     CYBERSECURITY = "cybersecurity", "Cybersecurity"
+    #     PROGRAMMING = "programming", "Programming"
 
     user = models.OneToOneField(
         settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name="profile"
     )
-    field_of_study = models.CharField(
-        max_length=100, choices=Interest, default=Interest.ANY
-    )
+    field_of_study = models.IntegerField(default=1)
+    # interest = models.CharField(max_length=100, choices=Interest, default=Interest.ANY)
 
     def __str__(self):
         return f"Profile of {self.user.email}"
@@ -95,10 +94,12 @@ class Meeting(models.Model):
     host = models.ForeignKey(
         settings.AUTH_USER_MODEL, related_name="host", on_delete=models.CASCADE
     )
-    course = models.ForeignKey(Course, on_delete=models.CASCADE)
+    course = models.ForeignKey(Course, on_delete=models.SET_NULL, null=True, blank=True)
     meeting_name = models.CharField(max_length=100, blank=True)
-    meeting_token = models.UUIDField(help_text="meeting token")
+    meeting_token = models.CharField(help_text="meeting token")
     date_created = models.DateTimeField(auto_now_add=True)
+    sch_date = models.DateField(blank=True, null=True)
+    sch_time = models.TimeField(blank=True, null=True)
     updated = models.DateTimeField(auto_now=True)
     only_enrolled_students = models.BooleanField(
         default=True, help_text="allow only enrolled students in the meeting"

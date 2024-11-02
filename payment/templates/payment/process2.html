@@ -1,0 +1,58 @@
+{% extends 'base2.html' %}
+{% block title %} Pay your Order{% endblock %}
+{% block content %}
+    <section class="checkout-section">
+      <h1>CHECKOUT</h1>
+
+      <div class="left-right">
+        <div class="summary">
+          <h2>Summary</h2>
+
+          <div class="sum-details">
+            <div>
+              <h3>No. of Courses:</h3>
+              <h4>{{order.items.count }}</h4>
+            </div>
+
+            <div>
+              <h3>Total Amount:</h3>
+              <h4>GHC {{ order.get_total_cost_before_discount }}</h4>
+            </div>
+
+            <div>
+              <h3>Discounts:</h3>
+              <h4>-GHC {{ order.get_discount }}</h4>
+            </div>
+
+            <hr />
+            <div>
+              <h3>Amount Payable:</h3>
+              <h4>GHC {{ order.get_total_cost }}</h4>
+            </div>
+          </div>
+        </div>
+
+        <div class="payment-option">
+          <h2>Select your preferred payment option:</h2>
+          <form method="post">
+            {% csrf_token %}
+            <div>
+              <input type="radio" name="payment_option" />
+              <label for="pay">Stripe</label>
+            </div>
+
+            <div>
+              <input type="radio" name="payment_option" />
+              <label for="pay">Paystack</label>
+            </div>
+
+            <button type="submit">Pay Now</button>
+          </form>
+        </div>
+      </div>
+    </section>
+
+{% endblock %}
+{% include_js %}
+    <script src="{% static 'js/main.js' %}"></script>
+{% endblock %}

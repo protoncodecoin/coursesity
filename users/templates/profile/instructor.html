@@ -19,17 +19,20 @@
         </div>
       </div>
 
+        <a  href="{% url 'update_instructor_profile' %}" class="edit-btn">
+          Edit profile
+        </a>
       <p class="about">
         <h3>About Me</h3>
         {{ profile.biography }}
       </p>
 
       <div class="links">
-        <a href="{{ instructor.website }}">Website &rarr;</a>
+        <a href="{% if instructor.website %} {{ instructor.website }} {% else %} # {% endif %}">Website &rarr;</a>
         
-        <a href="{{ instructor.x }}">(X) Twitter &rarr;</a>
+        <a href="{% if instructor.x %} {{ instructor.x }} {% else %} # {% endif %}">(X) Twitter &rarr;</a>
         
-        <a href="{{ instructor.linkedIn }}">LinkedIn &rarr;</a>
+        <a href="{% if instructor.linkedIn %} {{ instructor.linkedIn }} {% else %} # {% endif %}">LinkedIn &rarr;</a>
       </div>
     </section>
 
