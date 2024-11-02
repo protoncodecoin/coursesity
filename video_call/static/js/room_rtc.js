@@ -1,13 +1,20 @@
-APP_ID = '94fbe6a7fbc84cd98f8e8a498b7b5696'
-let uid = "128"
+const APP_ID = "51ddb6452e2c48299be5caee0e467b04"
+let uid = Number(userId)
+let token = gtoken
+let roomId = roomName
+let displayName = userName;
+// let uid = sessionStorage.getItem("uid");
 
-if (!uid) {
-  uid = String(Math.floor(Math.random() * 1_000_000)); // uid to user
-  sessionStorage.setItem("uid", uid);
-}
+// if (!uid) {
+//   uid = String(Math.floor(Math.random() * 1_000_000)); // uid to user
+//   sessionStorage.setItem("uid", uid);
+// }
 
-let token = null
 let client; // store information about the user to used in the streaming
+
+console.log(gtoken)
+
+
 
 let rtmClient;
 let channel;
@@ -15,14 +22,14 @@ let channel;
 const queryString = window.location.search;
 const urlParams = new URLSearchParams(queryString);
 // let roomId = urlParams.get("room");
-let roomId = "prince";
+// let roomId = "prince";
+// let roomId = roomName;
 
-if (!roomId) {
-  roomId = "prince";
-}
+// if (!roomId) {
+//   roomId = "prince";
+// }
 
 // let displayName = sessionStorage.getItem("displayName");
-let displayName = userName;
 if (!displayName) {
   window.location = "lobby.html";
 }
@@ -33,16 +40,18 @@ let remoteUsers = {};
 let localScreenTracks;
 let sharingScreen = false;
 
+console.log(uid, token, roomId)
+
 /**
  * Let user join a room and display their stream
  */
 let joinRoomInit = async () => {
   rtmClient = await AgoraRTM.createInstance(APP_ID);
-  await rtmClient.login({ uid, token });
+  await rtmClient.login({ uid:uid, token:token });
 
   await rtmClient.addOrUpdateLocalUserAttributes({ "name": displayName });
 
-  channel = await rtmClient.createChannel(roomId);
+  channel = await rtmClient.createChannel("prince");
   await channel.join();
 
   channel.on("MemberJoined", handleMemberJoined);

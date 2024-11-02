@@ -1,5 +1,4 @@
 from decimal import Decimal
-import json
 import uuid
 import random
 import redis
@@ -32,7 +31,7 @@ from orders.models import Order, OrderItem
 from students.models import WishList
 from users.models import Meeting
 
-from courses.tasks import notify_meeting_participants
+from courses.tasks import notify_meeting_participants, notify_meeting_creator
 from cart.cart import Cart
 
 from payment.models import Payment
@@ -40,8 +39,9 @@ from payment.paystack import Paystack
 from payment.tasks import payment_complete
 
 from courses.recommender import Recommender
+from video_call.token_generator import video_token_generator
 
-from agora_token_builder import RtcTokenBuilder
+from agora_token_builder import RtcTokenBuilder, RtmTokenBuilder
 import time
 
 r = redis.Redis(
@@ -55,22 +55,57 @@ class RTCTokenBuilderView(views.APIView):
     permission_classes = [IsAuthenticated]
 
     def get(self, request):
-        appId = "51ddb6452e2c48299be5caee0e467b04"
-        appCertificate = "b19c0564bb5142d28c79d431045e3f96"
-        channelName = request.query_params.get("channelName")  # room name
-        uid = str(random.randint(1, 230))
+        appId = settings.APP_ID
+        appCertificate = settings.APP_CERTIFICATE
+        channelName = request.query_params.get("channelName")
+        uid = random.randrange(1, 232)
         expirationTimeInSeconds = 3600 * 24
         currentTimeStamp = time.time()
         privilegeExpiredTs = currentTimeStamp + expirationTimeInSeconds
         role = 1  # host
+        account = request.user.email
+
+        if channelName == None:
+            return Response({"error": "channel name must be provided"}, status=400)
+
         token = RtcTokenBuilder.buildTokenWithUid(
             appId, appCertificate, channelName, uid, role, privilegeExpiredTs
+        )
+
+        # Build token with userAccount
+        # token = RtcTokenBuilder.buildTokenWithAccount(
+        #     appId, appCertificate, channelName, account, role, privilegeExpiredTs
+        # )
+
+        return Response(
+            {"token": token, "uid": uid, "app_id": appId, "roomId": channelName}
+        )
+
+
+class RTMTokenBuilderView(views.APIView):
+    permission_classes = [IsAuthenticated]
+
+    def get(self, request):
+        appID = settings.APP_ID
+        appCertificate = settings.APP_CERTIFICATE
+        channelName = request.query_params.get("channelName")  # room name
+        uid = random.randrange(1, 232)
+        expirationTimeInSeconds = 3600 * 24
+        currentTimeStamp = time.time()
+        privilegeExpiredTs = currentTimeStamp + expirationTimeInSeconds
+        role = 1  # host
+        userAccount = request.user.email
+
+        token = RtmTokenBuilder.buildToken(
+            appID, appCertificate, userAccount, role, privilegeExpiredTs
         )
 
         if channelName == None:
             return Response({"error": "channel name not provided"}, status=400)
 
-        return Response({"token": token, "uid": uid, "app_id": appId})
+        return Response(
+            {"token": token, "uid": uid, "app_id": appID, "roomId": "princex"}
+        )
 
 
 class SubjectViewSet(viewsets.ReadOnlyModelViewSet):
@@ -213,12 +248,13 @@ class MeetingForCourse(views.APIView):
 
         if user and user.is_instructor or user.is_admin:
             course_obj = Course.objects.filter(id=course_id).first()
+            # meetings created from api cannot have course model set to None
             if course_obj:
 
                 if meeting_name == "" or meeting_name is None:
                     meeting_name = course_obj.title
                 # create meeting
-                meeting_token = uuid.uuid4()
+                meeting_token: str = video_token_generator()
                 new_meeting = Meeting.objects.create(
                     host=user,
                     meeting_token=meeting_token,
@@ -233,8 +269,10 @@ class MeetingForCourse(views.APIView):
 
                 # send email notification to all enrolled students
                 notify_meeting_participants.delay(course_id, new_meeting.id)
+                # notify meeting creator
+                notify_meeting_creator.delay(user.id, course_obj.id, new_meeting.id)
 
-                return Response({"token": meeting_token})
+                return Response({"token": new_meeting.meeting_token})
             return Response({"error": "course not found"})
         return Response({"error": "Unauthorizied"})
 

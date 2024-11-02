@@ -1,4 +1,4 @@
-{% extends 'base2.html' %}
+{% extends 'base_without_footer.html' %}
 
 {% block title %}
   {% if object %}
@@ -11,7 +11,7 @@
 {% block content %}
 <div id="content" class="content">
   <h1>
-    {% if object %} Edit course "{{ object.questions.question_text }}" {% else %} Add new Quiz {% endif %}
+    {% if object %} Edit Quiz for "{{ object.question_text}}" {% else %} Add new Quiz for "{{question_object.question_text}}" {% endif %}
   </h1>
   <div class="module">
     <h2>Quiz info</h2>

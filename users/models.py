@@ -94,9 +94,9 @@ class Meeting(models.Model):
     host = models.ForeignKey(
         settings.AUTH_USER_MODEL, related_name="host", on_delete=models.CASCADE
     )
-    course = models.ForeignKey(Course, on_delete=models.CASCADE)
+    course = models.ForeignKey(Course, on_delete=models.SET_NULL, null=True, blank=True)
     meeting_name = models.CharField(max_length=100, blank=True)
-    meeting_token = models.UUIDField(help_text="meeting token")
+    meeting_token = models.CharField(help_text="meeting token")
     date_created = models.DateTimeField(auto_now_add=True)
     sch_date = models.DateField(blank=True, null=True)
     sch_time = models.TimeField(blank=True, null=True)

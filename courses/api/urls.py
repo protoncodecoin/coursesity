@@ -34,4 +34,9 @@ urlpatterns = [
         views.RTCTokenBuilderView.as_view(),
         name="token_builder",
     ),
+    path(
+        "message-token-builder/",
+        views.RTMTokenBuilderView.as_view(),
+        name="token_builder",
+    ),
 ]

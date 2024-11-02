@@ -30,7 +30,7 @@ SECRET_KEY = "django-insecure-mkf^t=9!eojqz4ch(c^vonpwr9_w!_0cu*&xcelt+-hwyzw!8r
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ["mysite.com", "localhost", "127.0.0.1"]
+ALLOWED_HOSTS = ["mysite.com", "localhost", "127.0.0.1", "*"]
 
 
 # Application definition
@@ -297,3 +297,8 @@ REDIS_DB = 1
 # Paystack
 PAYSTACK_SECRET_KEY = os.environ.get("PAYSTACK_SECRET_KEY")
 PAYSTACK_PUBLIC_KEY = os.environ.get("PAYSTACK_PUBLIC_KEY")
+
+
+# AGORA
+APP_ID = os.environ.get("appId")
+APP_CERTIFICATE = os.environ.get("appCertificate")

@@ -6,11 +6,19 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Coursiy |{% block title %} {% endblock %}</title>
-   <link rel="stylesheet" href="{% static 'css/list-quiz.css' %}" />
-    {% if style == "quiz_questions" %}
-      <link rel="stylesheet" href="{% static 'css/quiz.css' %}">
+  {% if style == "quiz_questions" %}
+  <link rel="stylesheet" href="{% static 'css/quiz.css' %}">
     {% elif style == "manage__answers" %}
     <link rel="stylesheet" href="{% static 'css/manage-answers.css' %}" />
+    {% elif style == "create_form" %}
+    <link rel="stylesheet" href="{% static 'css/logged_out.css' %}" />
+    {% elif style == "course_form" %}
+    <link rel="stylesheet" href="{% static 'css/formset.css' %}" />
+    {% elif style == "answer_list" %}
+    <link rel="stylesheet" href="{% static 'css/manage-answers.css' %}" />
+    {% else %}
+    <link rel="stylesheet" href="{% static 'css/list-quiz.css' %}" />
+    
     {% endif %}
   <link rel="icon" type="image/x-icon" href="{% static 'icons/coursitylogo.png' %}" />
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">

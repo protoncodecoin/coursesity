@@ -1,9 +1,31 @@
-{% extends 'base.html' %}
+{% extends 'base_without_footer.html' %}
+{% load static %}
 
 {% block title %}
     Edit "{{ quiz.title }}"
 {% endblock %}
 
+
+{% block content %}
+        <div id="content" class="content">
+      <h1>Edit "{{quiz.title}}"</h1>
+      <div class="module">
+        <h2>Course Questions</h2>
+        <form method="post">
+          {{ formset }} {{ formset.management_form }} {% csrf_token %}
+          <input type="submit" class="big-btn" value="Save modules" />
+        </form>
+      </div>
+    </div>
+{% endblock %}
+
+
+{% block include_js %}
+  <script src="{% static 'js/main.js' %}"></script>
+{% endblock %}
+
+
+{% comment %} 
 {% block content %}
     <h1>Edit "{{ quiz.title }}"</h1>
     <div class="module">
@@ -15,5 +37,4 @@
             <input type="submit" value="Save Questions">
             </form>
   </div>
-{% endblock %}
-
+{% endblock %} {% endcomment %}

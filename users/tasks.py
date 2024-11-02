@@ -11,8 +11,8 @@ from .tokens import generate_token
 # logger = logging.getLogger(__name__)
 
 
-@shared_task
-def send_welcome_email(user_id):
+@shared_task(bind=True)
+def send_welcome_email(self, user_id):
     try:
         unverified_user = get_user_model().objects.get(id=user_id)
         # logger.info(f"Unverified user is {unverified_user}")
@@ -30,11 +30,12 @@ def send_welcome_email(user_id):
         )
         return sent_email
     except Exception as e:
-        print(str(e))  # should be logged not printed
+        # print(str(e))  # should be logged not printed
+        raise self.retry(exc=e, countdown=5)
 
 
-@shared_task
-def send_activation_email(user_id, domain):
+@shared_task(bind=True)
+def send_activation_email(self, user_id, domain):
     try:
         unverified_user = get_user_model().objects.get(id=user_id)
 
@@ -59,4 +60,5 @@ def send_activation_email(user_id, domain):
         return mail_sent
     except Exception as e:
         # logger.error(f"Couldn't send the mail: {e}")
-        print(str(e))
+        # print(str(e))
+        raise self.retry(exc=e, countdown=True)
