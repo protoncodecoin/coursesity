@@ -44,11 +44,15 @@ from video_call.token_generator import video_token_generator
 from agora_token_builder import RtcTokenBuilder, RtmTokenBuilder
 import time
 
-r = redis.Redis(
-    host=settings.REDIS_HOST,
-    port=settings.REDIS_PORT,
-    db=settings.REDIS_DB,
-)
+# r = redis.Redis(
+#     host=settings.REDIS_HOST,
+#     port=settings.REDIS_PORT,
+#     db=settings.REDIS_DB,
+# )
+
+REDIS_URL = getattr(settings, "REDIS_URL", "redis://localhost:6379/1")
+
+r = redis.Redis.from_url(REDIS_URL)
 
 
 class RTCTokenBuilderView(views.APIView):

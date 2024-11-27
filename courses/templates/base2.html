@@ -61,10 +61,10 @@
         {% comment %} <form> {% endcomment %}
 
          <ul class="search-results hidden">
-            <li>How to make a bomb</li>
+            {% comment %} <li>How to make a bomb</li>
             <li>How to become rich</li>
             <li>How to learn C++ and Assembly in 2 weeks</li>
-          </ul>
+          </ul> {% endcomment %}
       </div>
 
         <div class="nav-links" id="navLinks">
@@ -136,11 +136,11 @@
           <div class="m-searchbar hidden">
             <input type="search" placeholder="Search" />
 
-            <ul class="search-results">
+            {% comment %} <ul class="search-results">
               <li>How to make a bomb</li>
               <li>How to become rich</li>
               <li>How to learn C++ and Assembly in 2 weeks</li>
-            </ul>
+            </ul> {% endcomment %}
           </div>
 
           <img
@@ -191,7 +191,7 @@
   <!-- footer -->
     <section class="footer">
       <div class="footer-top">
-        <img src="{% static 'icons/coursitylogo.png' %}" alt="" class="footer-logo" />
+        <img src="{% static 'icons/coursitylogo.png' %}" alt="coursity logo" class="footer-logo" />
 
         <div class="footer-title" id="footer__year">Coursity © 2024</div>
 

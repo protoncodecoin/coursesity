@@ -1,6 +1,6 @@
-const APP_ID = "51ddb6452e2c48299be5caee0e467b04"
-let uid = Number(userId)
-let token = gtoken
+const APP_ID = "94fbe6a7fbc84cd98f8e8a498b7b5696"
+let uid = String(userId)
+let token =  null
 let roomId = roomName
 let displayName = userName;
 // let uid = sessionStorage.getItem("uid");
@@ -12,7 +12,7 @@ let displayName = userName;
 
 let client; // store information about the user to used in the streaming
 
-console.log(gtoken)
+// console.log(gtoken)
 
 
 
@@ -47,11 +47,11 @@ console.log(uid, token, roomId)
  */
 let joinRoomInit = async () => {
   rtmClient = await AgoraRTM.createInstance(APP_ID);
-  await rtmClient.login({ uid:uid, token:token });
+  await rtmClient.login({ "uid":uid, "token":token });
 
   await rtmClient.addOrUpdateLocalUserAttributes({ "name": displayName });
 
-  channel = await rtmClient.createChannel("prince");
+  channel = await rtmClient.createChannel(roomId);
   await channel.join();
 
   channel.on("MemberJoined", handleMemberJoined);

@@ -16,7 +16,7 @@
       </h1>
       <div class="module">
         <h2>Course info</h2>
-        <form method="post" class='auto__gen__form'>
+        <form method="post" class='auto__gen__form' enctype="multipart/form-data">
           {{ form.as_div }} {% csrf_token %}
           <p><input type="submit" class="big-btn" value="Save course" /></p>
         </form>

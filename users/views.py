@@ -221,37 +221,36 @@ def update_student_profile(request):
     if request.method == "POST":
         data = request.POST
         user = request.user
+        profile_image = request.FILES.get("photo")
 
-        profile_image = request.FILES.get("profile_image")
-        print(request.FILES.get("profile_image"))
-        print(request.FILES)
-        print(request)
+        print("File received in request.FILES:", profile_image)  # Debugging print
 
         user_obj = get_object_or_404(get_user_model(), id=user.id)
         profile_obj = Profile.objects.filter(user=user).first()
 
-        if request.POST.get("interest") != "":
+        # Update fields based on form data
+        if data.get("interest"):
             profile_obj.field_of_study = data["interest"]
-        if request.POST.get("linkedIn") != "":
+        if data.get("linkedIn"):
             user_obj.linkedIn = data["linkedIn"]
-        if request.POST.get("x") != "":
+        if data.get("x"):
             user_obj.x = data["x"]
 
+        # Update profile image if provided
         if profile_image:
-            print("yes---------------")
             profile_obj.photo = profile_image
+            print("Saving image:", profile_image)  # Debugging print
 
+        # Save changes
         user_obj.save()
         profile_obj.save()
 
-        messages.success(request, "profile updated successfully")
-        # return redirect(f"show_profile/{user_obj.id}/{user_obj.slug}/")
+        messages.success(request, "Profile updated successfully")
+
     return render(
         request,
         "users/account/profile_update/student_profile.html",
-        {
-            "style": "update",
-        },
+        {"style": "update"},
     )
 
 

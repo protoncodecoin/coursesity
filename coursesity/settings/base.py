@@ -25,7 +25,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent.parent
 # See https://docs.djangoproject.com/en/5.0/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = "django-insecure-mkf^t=9!eojqz4ch(c^vonpwr9_w!_0cu*&xcelt+-hwyzw!8r"
+SECRET_KEY = "ldff)9-:ksd+=}@23k_023us(&$sdfkj3493=345mkf^t=9!eojqz4ch(c^vonpwr9_w!_0cu*&xcelt+-hwyzw!8r"
 
 # SECURITY WARNING: don't run with debug turned on in production!
 # DEBUG = True
@@ -163,12 +163,12 @@ STATIC_URL = "static/"
 STATIC_ROOT = BASE_DIR / "static"
 
 MEDIA_URL = "media/"
-MEDIA_ROOT = BASE_DIR / "media"
+# MEDIA_ROOT = BASE_DIR / "/media/"
+MEDIA_ROOT = os.path.join(BASE_DIR, "media/")
 
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.0/ref/settings/#default-auto-field
-
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
 LOGIN_REDIRECT_URL = reverse_lazy("student_course_list")
@@ -289,10 +289,11 @@ STRIPE_API_VERSION = "2024-04-10"
 STRIPE_WEBHOOK_SECRET = os.environ.get("STRIPE_WEBHOOK_SECRET")
 
 # Redis Settings
-REDIS_HOST = "localhost"
-REDIS_PORT = 6379
-REDIS_DB = 1
+# REDIS_HOST = "localhost"
+# REDIS_PORT = 6379
+# REDIS_DB = 1
 
+REDIS_URL = "redis://localhost:6379/1"
 
 # Paystack
 PAYSTACK_SECRET_KEY = os.environ.get("PAYSTACK_SECRET_KEY")
@@ -302,3 +303,7 @@ PAYSTACK_PUBLIC_KEY = os.environ.get("PAYSTACK_PUBLIC_KEY")
 # AGORA
 APP_ID = os.environ.get("appId")
 APP_CERTIFICATE = os.environ.get("appCertificate")
+
+"""
+
+"""

@@ -8,7 +8,7 @@
 
       <h2>Edit Profile</h2>
 
-      <form method="post">
+      <form method="post" enctype="multipart/form-data">
         {% csrf_token %}
 
         {% if messages %}
@@ -24,13 +24,14 @@
       
       <div class="image-container">
         <!-- Hidden file input for image preview -->
-        {% comment %} <input
+        <input
         type="file" 
         id="imageInputFile"
         accept="image/*"
         style="display: none;" 
+        name="photo"
         onchange="previewImage(event)"
-        /> {% endcomment %}
+        />
         
         <label for="imageInput" class="upload-button">
           <input
@@ -38,7 +39,7 @@
           id="imageInputBtn"
           src=""
           alt="Upload"
-          name="profile_image"
+          name="photo"
           />
         </label>
         
@@ -104,10 +105,8 @@
           </div>
 
 
-        </div>
-
-        
-        <button class="save-btn">
+        </div>       
+        <button class="save-btn" type="submit">
           Save Changes
         </button>
       </div>

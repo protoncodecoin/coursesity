@@ -3,11 +3,17 @@ from django.conf import settings
 from .models import Course
 
 # connect to redis
-r = redis.Redis(
-    host=settings.REDIS_HOST,
-    port=settings.REDIS_PORT,
-    db=settings.REDIS_DB,
-)
+# r = redis.Redis(
+#     host=settings.REDIS_HOST,
+#     port=settings.REDIS_PORT,
+#     db=settings.REDIS_DB,
+# )
+
+
+REDIS_URL = getattr(settings, "REDIS_URL", "redis://localhost:6379/1")
+
+
+r = redis.Redis.from_url(REDIS_URL)
 
 
 class Recommender:

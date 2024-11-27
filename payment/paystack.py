@@ -22,9 +22,6 @@ class Paystack:
 
         if response.status_code == 200:
             response_data = response.json()
-            print(
-                response_data, "this is the response data----------/-------------------"
-            )
             return response_data["status"], response_data["data"]
 
         return False, response.text
