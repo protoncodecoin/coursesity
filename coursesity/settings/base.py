@@ -30,7 +30,12 @@ SECRET_KEY = "ldff)9-:ksd+=}@23k_023us(&$sdfkj3493=345mkf^t=9!eojqz4ch(c^vonpwr9
 # SECURITY WARNING: don't run with debug turned on in production!
 # DEBUG = True
 
-ALLOWED_HOSTS = ["mysite.com", "localhost", "127.0.0.1", "*"]
+ALLOWED_HOSTS = [
+    "mysite.com",
+    "localhost",
+    "127.0.0.1",
+    "*",
+]
 
 
 # Application definition

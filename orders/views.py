@@ -75,7 +75,12 @@ def order_create(request):
                 course_ids.append(item["course"].id)
                 request.session["added_courses"] = course_ids
                 # clear the cart
-                cart.clear()
+                # cart.clear()
+                print(
+                    request.session["cart"], "this is the cartt ====================="
+                )
+                del request.session["cart"]
+                request.session.modified = True
 
                 # launch asychronous task
                 course_order_created.delay(new_order_item.id)

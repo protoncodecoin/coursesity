@@ -367,6 +367,11 @@ class VerifyPayStackTransaction(views.APIView):
                 transaction_ref
             )
 
+            print(
+                transaction_details,
+                "this is the transaction details \n================================",
+            )
+
             purchased_amount = Decimal(purchased_amount)
             transaction_amount = Decimal(transaction_details["amount"]) / Decimal(100)
 

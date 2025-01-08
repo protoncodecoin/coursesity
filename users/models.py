@@ -87,7 +87,7 @@ class InstructorProfile(models.Model):
     institution = models.CharField(max_length=500, blank=True)
 
     def __str__(self):
-        return f"{self.user.get_full_name}"
+        return f"{self.user.get_full_name()}"
 
 
 class Meeting(models.Model):
@@ -96,7 +96,7 @@ class Meeting(models.Model):
     )
     course = models.ForeignKey(Course, on_delete=models.SET_NULL, null=True, blank=True)
     meeting_name = models.CharField(max_length=100, blank=True)
-    meeting_token = models.CharField(help_text="meeting token")
+    meeting_token = models.CharField(help_text="meeting token", max_length=30)
     date_created = models.DateTimeField(auto_now_add=True)
     sch_date = models.DateField(blank=True, null=True)
     sch_time = models.TimeField(blank=True, null=True)

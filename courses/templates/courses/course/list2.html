@@ -94,6 +94,9 @@
             </div>
           </a>
           {% endwith %}
+
+          {% comment %} {% empty %}
+          <p>No Course available</p> {% endcomment %}
         {% endfor %}
     </div>
   </section>
@@ -148,6 +151,7 @@
     {% endif %}
 
 
+    {% if highly_rated %}
     <section class="discover">
       <h1>Highly Rated</h1>
 
@@ -171,6 +175,7 @@
 
       </div>
     </section>
+    {% endif %}
 
     {% if based_on_interest %}
     <section class="discover">
@@ -199,6 +204,7 @@
     {% endif %}
 
         <!-- Instructors -->
+    {% if top_instructors %}
     <section class="query">
       <h1>Top Instructors</h1>
 
@@ -228,7 +234,7 @@
         <h4>Nothing to see..👀</h4>
       </div> -->
     </section>
-  
+  {% endif %}
   {% endblock %}
 
   {% block include_js %}

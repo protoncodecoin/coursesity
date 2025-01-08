@@ -84,7 +84,7 @@
                   <button type="submit" class="user">Log out</button>
                 </form>
               {% else %}
-                <form method='post' action="{% url 'login' %}">
+                <form method='get' action="{% url 'login' %}">
                   {% csrf_token %}
                   <button type="submit" class="user">Log in</button>
                 </form>

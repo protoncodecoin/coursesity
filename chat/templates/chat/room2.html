@@ -1,6 +1,6 @@
 {% extends "base2.html" %}
 {% load static %}
-{% block   title %}Chat room for "{{ course.title }}"{% endblock %}
+{% block   title %} Chat room for "{{ course.title }}"{% endblock %}
 
 {% block content %}
     <div id="content" class="content">
@@ -20,7 +20,7 @@
               </span>
             </div>
            <div class="img-chat">
-              <p class="m-text">Oh, congratulations!</p>
+              <p class="m-text">{{message.content}}</p>
               <img src="{{ message.user.photo.url}}" alt="">
             </div>
           </div>
@@ -42,7 +42,7 @@
             </div>
               <div class="img-chat">
               <img src="{{ message.user.photo.url}}" alt="" />
-              <p class="m-text">Hello, Im done with the course</p>
+              <p class="m-text">{{message.content}}</p>
             </div>
           </div>
         </div>
@@ -87,7 +87,7 @@
     const requestUser = JSON.parse(document.getElementById("request-user").textContent);
 
    
-    const url = 'wss://' + window.location.host + '/ws/chat/room/' + courseId + "/";
+    const url = 'ws://' + window.location.host + '/ws/chat/room/' + courseId + "/";
     const chatSocket = new WebSocket(url);
 
     chatSocket.onmessage = function(event){
